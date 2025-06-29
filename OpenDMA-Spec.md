@@ -396,7 +396,7 @@ The `opendma:Repository` class extends the `opendma:Object` class and has these 
 | Name         | String    | S     | N     | The internal technical name of this repository                                                                               |
 | DisplayName  | String    | S     | N     | The name of this Repository displayed to users                                                                               |
 | RootClass    | Reference | S     | N     | Reference to the class hierarchy root class as defined in §8.1. Must not be null. Reference class: `opendma:Class`             |
-| RootAspects  | Reference | M     | Y     | Reference to all valid aspect objects that do not inherit another valid aspect Reference class: `opendma:Class`                |
+| RootAspects  | Reference | M     | Y     | Reference to all valid aspect objects that do not inherit another valid aspect. Reference class: `opendma:Class`                |
 | RootFolder   | Reference | S     | Y     | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. Reference class: `opendma:Folder` |
 
 ##### §13.1 Repository reflection in the objects
@@ -405,7 +405,7 @@ The `opendma:Object` class is extended as follows to reflect the Repository they
 
 | **Property** | **Type**  | **C** | **N** | **Contents**                                                              |
 |:-------------|:----------|:------|:------|:--------------------------------------------------------------------------|
-| Repository   | Reference | S     | N     | The repository this object belongs to Reference class: `opendma:Repository` |
+| Repository   | Reference | S     | N     | The repository this object belongs to. Reference class: `opendma:Repository` |
 
 #### §14 Global unique identification
 
@@ -470,8 +470,8 @@ The `opendma:VersionCollection` aspect is defined as:
 
 | **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                                                          |
 |:-------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Versions     | Reference | M     | N     | List of all versions of this Document Reference class: `opendma:Document`                                                                               |
-| Latest       | Reference | S     | Y     | Reference to the latest version of the Document collection Reference class: `opendma:Document`                                                          |
+| Versions     | Reference | M     | N     | List of all versions of this Document. Reference class: `opendma:Document`                                                                               |
+| Latest       | Reference | S     | Y     | Reference to the latest version of the Document collection. Reference class: `opendma:Document`                                                          |
 | Released     | Reference | S     | Y     | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. Reference class: `opendma:Document` |
 | InProgress   | Reference | S     | Y     | Reference to the InProgress Document while this document is checked out. Reference class: `opendma:Document`                                            |
 | CreatedAt    | DateTime  | S     | N     | When this document has been created                                                                                                                   |
@@ -484,8 +484,8 @@ The `opendma:Container` aspect is defined as:
 | **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                           |
 |:---------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------|
 | Title          | String    | S     | Y     | The title of this container                                                                            |
-| Containees     | Reference | M     | Y     | The containable objects contained in this container Reference class: `opendma:Containable`               |
-| Associations   | Reference | M     | Y     | The associations between this container and the contained objects Reference class: `opendma:Association` |
+| Containees     | Reference | M     | Y     | The containable objects contained in this container. Reference class: `opendma:Containable`               |
+| Associations   | Reference | M     | Y     | The associations between this container and the contained objects. Reference class: `opendma:Association` |
 | CreatedAt      | DateTime  | S     | N     | When this container has been created                                                                   |
 | CreatedBy      | String    | S     | N     | User who created this container                                                                        |
 | LastModifiedAt | DateTime  | S     | N     | When this container has been modified the last time                                                    |
@@ -497,8 +497,8 @@ The `opendma:Folder` aspect extends the `opendma:Container` by these additional 
 
 | **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                 |
 |:-------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------------|
-| Parent       | Reference | S     | Y     | The parent folder this folder is contained in Reference class: `opendma:Folder`                                |
-| SubFolders   | Reference | M     | Y     | All Folder objects that contain this folder in their `opendma:Parent` property Reference class: `opendma:Folder` |
+| Parent       | Reference | S     | Y     | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                |
+| SubFolders   | Reference | M     | Y     | All Folder objects that contain this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
 
 The Parent property of all Folder objects in the repository, except for the Folder referenced in the RootFolder property of the Repository (§13), must not be null. The parent property of the Folder referenced in the RootFolder property of the Repository (§13) must be null.
 
@@ -515,8 +515,8 @@ The `opendma:Containable` aspect is defined as:
 
 | **Property**            | **Type**  | **C** | **N** | **Contents**                                                                                              |
 |:------------------------|:----------|:------|:------|:----------------------------------------------------------------------------------------------------------|
-| ContainedIn             | Reference | M     | Y     | The container objects this Containable is contained in Reference class: `opendma:Container`                 |
-| ContainedInAssociations | Reference | M     | Y     | The associations that bind this Containable in the Conatiner objects Reference class: `opendma:Association` |
+| ContainedIn             | Reference | M     | Y     | The container objects this Containable is contained in. Reference class: `opendma:Container`                 |
+| ContainedInAssociations | Reference | M     | Y     | The associations that bind this Containable in the Conatiner objects. Reference class: `opendma:Association` |
 
 #### §20 Association aspect
 
@@ -525,8 +525,8 @@ The `opendma:Association` aspect is defined as:
 | **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                    |
 |:---------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------|
 | Name           | String    | S     | N     | The name of this association                                                                    |
-| Container      | Reference | S     | N     | The source of this directed association Reference class: `opendma:Container`                      |
-| Containable    | Reference | S     | N     | The destination of this directed association Reference class: `opendma:Containable`               |
+| Container      | Reference | S     | N     | The source of this directed association. Reference class: `opendma:Container`                      |
+| Containable    | Reference | S     | N     | The destination of this directed association. Reference class: `opendma:Containable`               |
 | CreatedAt      | DateTime  | S     | N     | When this document has been created                                                             |
 | CreatedBy      | String    | S     | N     | User who created this document                                                                  |
 | LastModifiedAt | DateTime  | S     | N     | When *this version* of the document has been created, i.e. when this document has been modified |
