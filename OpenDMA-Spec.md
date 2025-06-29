@@ -1,8 +1,8 @@
 |                           |                          |
 |---------------------------|-------------------------:|
 | xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |              Version 0.6 |
-|                           | Release date: 09/18/2011 |
+| Editor: Stefan Kopf       |            Version 0.6.1 |
+|                           | Release date: 11/08/2011 |
 
 # OpenDMA – Class architecture
 
@@ -528,7 +528,7 @@ The `opendma:Association` aspect is defined as:
 |:---------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------|
 | Name           | String    | S     | N     | The name of this association                                                                    |
 | Container      | Reference | S     | N     | The source of this directed association Reference class: `opendma:Container`                      |
-| Containment    | Reference | S     | N     | The destination of this directed association Reference class: `opendma:Containable`               |
+| Containable    | Reference | S     | N     | The destination of this directed association Reference class: `opendma:Containable`               |
 | CreatedAt      | DateTime  | S     | N     | When this document has been created                                                             |
 | CreatedBy      | String    | S     | N     | User who created this document                                                                  |
 | LastModifiedAt | DateTime  | S     | N     | When *this version* of the document has been created, i.e. when this document has been modified |
