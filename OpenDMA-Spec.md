@@ -12,7 +12,7 @@ The Open document management architecture (OpenDMA) is based on an *abstract* ar
 
 ## Section I: Object oriented OpenDMA model
 
-OpenDMA uses a strongly typed reflective object oriented data model with a class hierarchy. Section I.1 first defines a *simple object model* that has as less constraints as possible. Section I.2 then adds the constraints and reflection needed by OpenDMA.
+OpenDMA uses a strongly typed reflective object oriented data model with a class hierarchy. Section I.1 first defines a *simple object model* that has as few constraints as possible. Section I.2 then adds the constraints and reflection needed by OpenDMA.
 
 ### Section I.1: Simple object model
 
