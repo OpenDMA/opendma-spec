@@ -1,8 +1,8 @@
 |                           |                          |
 |---------------------------|-------------------------:|
 | xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |              Version 0.3 |
-|                           | Release date: 01/10/2009 |
+| Editor: Stefan Kopf       |              Version 0.4 |
+|                           | Release date: 01/15/2009 |
 
 # OpenDMA – Class architecture
 
@@ -23,7 +23,7 @@ This first subsection defines an object model without any constraints. Those obj
 The OpenDMA architecture uses only qualified names. Each consists of
 
 1.  a qualifier (Unicode text string with 1 or more characters; may be null), and
-2.  a name (Unicode text string with 1 or more characters; may not be null),
+2.  a name (Unicode text string with 1 or more characters; must not be null),
 
 where the qualifier can be omitted (null).
 
@@ -49,17 +49,17 @@ The OpenDMA class architecture knows these scalar data types:
 
 ##### §2.2 Reference values
 
-The simple object model can reference other objects in the same context (see §3) by holding their unique identifier (see §3).
+The simple object model can reference other objects in the same context (see §4) by holding their unique identifier (see §4).
 
 ##### §2.3 Content
 
-The OpenDMA class architecture knows the special data type “Content” that is not usual to other well known object models. This data type stores octet streams and is accessed in a stream typed manner.
+The OpenDMA class architecture knows the special data type “Content” that is not usual to other well known object models. This data type stores very large octet streams and is accessed in a stream typed manner.
 
 ##### §2.4 Cardinality
 
 Each data type (scalar or reference) can hold either exactly one (single value) or a list of zero or more (multi value) elements of the same data type.
 
-##### §2.5 Date type id
+##### §2.5 Data type id
 
 A numeric *data type id* is assigned to each data type corresponding to this table:
 
@@ -81,9 +81,17 @@ A numeric *data type id* is assigned to each data type corresponding to this tab
 
 The OpenDMA data model knows the special value null as representation for “not assigned”.
 
-#### §3 Objects
+#### §3 Properties
 
-An object is a list of zero or more properties (see §4). Each object can be uniquely identified in its *context* by some *unique object identifier* that must be presentable as String.
+A *property* is defined as a triple consisting of
+
+1.  a qualified name as defined in §1,
+2.  a data type as defined in §2, and
+3.  a value depending on the data type or null as representation for “empty”.
+
+#### §4 Objects
+
+An *object* is a list of zero or more properties (see §3). Each object can be uniquely identified in its *context* by some *unique object identifier* that must be presentable as String.
 
 Definition: *context*
 
@@ -99,26 +107,18 @@ In a computer, the context would be the computer memory and the unique object id
 
 In a database system, the context would be the table and the unique object identifier would be the record number.
 
-#### §4 Properties
-
-Each property consists of
-
-1.  a qualified name as defined in §1,
-2.  a data type as defined in §2, and
-3.  a value depending on the data type or null as representation for “empty”.
-
 #### §5 Operations on objects
 
-Each object (§3) supports only these two operations:
+Each object (§4) supports only these two operations:
 
 - Read properties  
-  input: name (§1)  
-  output: value (§4) or null  
-  Returns the value of a property identified by its name (§1)
+  input: qualified name (§1)  
+  output: value (§3) or null  
+  Returns the value of a property identified by its name.
 
 - Write properties  
-  input: name (§1), value (§4)  
-  Modifies the value of a property identified by its name (§1)
+  input: qualified name (§1), value (§3)  
+  Modifies the value of a property identified by its name.
 
 Both operations may succeed or fail. This result (success or failure) has to be returned to the caller.
 
@@ -136,73 +136,75 @@ The OpenDMA enforces some constraints on the simple object model for type safety
 
 #### §6 Reflection
 
-Every object must have at least a single valued property (§4) with the qualified name \[“opendma.org”, “Class”\]. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The value must not be null.
+Every object must have at least a single valued property (§3) with the qualified name \[“opendma.org”, “Class”\]. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The value must not be null.
 
-The properties of every object must exactly match in number, data type, cardinality and nullability the *effective property list* (§10) defined by the valid class object.
+The properties of every object must exactly match in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9)
 
 #### §7 Class info object
 
 A *class info object* is an object with at least theses properties:
 
-1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6
-2.  \[“opendma.org”, “Name”\], single value, String
+1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6, not null
+2.  \[“opendma.org”, “Name”\], single value, String, not null
 3.  \[“opendma.org”, “NameQualifier”\], single value, String
-4.  \[“opendma.org”, “Parent”\], single value, Reference to a valid class object as defined in §8.3
-5.  \[“opendma.org”, “Aspects”\], multi value, Reference to valid aspect objects as defined in §8.4
-6.  \[“opendma.org”, “DisplayName”\], single value, String
-7.  \[“opendma.org”, “Properties”\], multi value, Reference to property info objects as defined in §9
+4.  \[“opendma.org”, “Parent”\], single value, Reference to a valid class object (§8.3), not null
+5.  \[“opendma.org”, “Aspects”\], multi value, Reference to valid aspect objects (§8.4), not null
+6.  \[“opendma.org”, “DisplayName”\], single value, String, not null
+7.  \[“opendma.org”, “Properties”\], multi value, Reference to property info objects (§9)
+8.  \[“opendma.org”, ”SubClasses”\], multi value, Reference to a class info objects
 
 These constraints apply to the properties:
 
-- All properties except “Aspects” and “Parent” must not be null. “Properties” still may contain 0 elements.
-
-- The restrictions of “Parent” are defined in §8.
+- The restrictions of the “Parent” Property are defined in §8.
 
 - All property info objects (§9) referenced in the “Properties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a parent class or an aspect class may be reused. Properties can not be overwritten.
 
-- The tuple (”NameQualifier”,”Name”) must be unique in the class hierarchy (§8.3)
+- The tuple (”NameQualifier”,”Name”) of this object must be unique across all class info objects in the same context (§4)
+
+- The reference to a class info object *c* is contained in the “SubClasses” property of a class info object *p* if and only if the “Parent” reference property of *c* references *p*.
 
 #### §8 Class hierarchy
 
 ##### §8.1 Class hierarchy root
 
-Every context (§3) contains at least one class info object (§7) with these property values:
+Every context (§4) contains at least one class info object (§7) with these property values:
 
-| **Property name**                  | **Value**                                                                                                                                     |
-|:-----------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------|
-| \[“opendam.org”, “Class”\]         | Reference to the class class object (§8.2)                                                                                                    |
-| \[“opendam.org”, “Name”\]          | String “Object”                                                                                                                               |
-| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                                                          |
-| \[“opendma.org”, “Parent”\]        | NULL                                                                                                                                          |
-| \[“opendma.org”, “Aspects”\]       | NULL                                                                                                                                          |
-| \[“opendam.org”, “DisplayName”\]   | String “OdmaObject”                                                                                                                           |
-| \[“opendma.org”, “Properties”\]    | A 1 element multi value reference field containing a reference to an object as described in §9 describing the class property as defined in §7 |
+| **Property name**                  | **Value**                                                                                                               |
+|:-----------------------------------|:------------------------------------------------------------------------------------------------------------------------|
+| \[“opendam.org”, “Class”\]         | Reference to the class class object (§8.2)                                                                              |
+| \[“opendam.org”, “Name”\]          | String “Object”                                                                                                         |
+| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                                    |
+| \[“opendma.org”, “Parent”\]        | NULL                                                                                                                    |
+| \[“opendma.org”, “Aspects”\]       | empty                                                                                                                   |
+| \[“opendam.org”, “DisplayName”\]   | String “OdmaObject”                                                                                                     |
+| \[“opendma.org”, “Properties”\]    | Contains at least a reference to a property info object as described in §9 defining the class property as defined in §7 |
 
-This object is called the *class hierarchy root*.
+Every context has to provide a reference to exactly one object following these constraints. This object is called the *class hierarchy root*.
 
 ##### §8.2 Class class object
 
-Every context (§3) contains exactly one class info object (§7) with these property values:
+Every context (§4) contains a class info object (§7) that is referenced by the class hierarchy root (§8.1) with these property values:
 
-| **Property name**                  | **Value**                                                                                                                                |
-|:-----------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------|
-| \[“opendam.org”, “Class”\]         | Reference to itself                                                                                                                      |
-| \[“opendam.org”, “Name”\]          | String “Class”                                                                                                                           |
-| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                                                     |
-| \[“opendma.org”, “Parent”\]        | Reference to the class hierarchy root (§8.1)                                                                                             |
-| \[“opendma.org”, “Aspects”\]       | NULL                                                                                                                                     |
-| \[“opendam.org”, “DisplayName”\]   | String “OdmaClass”                                                                                                                       |
-| \[“opendma.org”, “Properties”\]    | A 7 element multi value reference field containing references to 7 objects as described in §9 describing all properties as defined in §7 |
+| **Property name**                  | **Value**                                                                                                       |
+|:-----------------------------------|:----------------------------------------------------------------------------------------------------------------|
+| \[“opendam.org”, “Class”\]         | Reference to itself                                                                                             |
+| \[“opendam.org”, “Name”\]          | String “Class”                                                                                                  |
+| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                            |
+| \[“opendma.org”, “Parent”\]        | Reference to the class hierarchy root (§8.1)                                                                    |
+| \[“opendma.org”, “Aspects”\]       | empty                                                                                                           |
+| \[“opendam.org”, “DisplayName”\]   | String “OdmaClass”                                                                                              |
+| \[“opendma.org”, “Properties”\]    | Contains at least references to 7 property info objects as described in §9 defining all properties listed in §7 |
 
 This object is called the *class class*.
+
+<u>Conslusion 1:</u> Every context (§4) contains exactly one class class object. This follows directly from the existence and uniqueness of the class hierarchy root and the single cardinality and not nullability of the Class property of the class hierarchy root.
 
 ##### §8.3 Valid class objects
 
 A *valid class object* is a class info object (§7) following these conditions:
 
 1)  The class hierarchy root (§8.1) is a valid class object.
-2)  All class objects containing a reference to the class hierarchy root (§8.1) in their parent property are valid class objects.
-3)  All class objects containing a reference to a valid class object in their parent property are again valid class objects.
+2)  All class objects containing a reference to a valid class object in their “Parent” property are again valid class objects.
 
 This forms a tree like structure called the *OpenDMA class hierarchy*.
 
@@ -210,24 +212,33 @@ This forms a tree like structure called the *OpenDMA class hierarchy*.
 
 A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3). This prevents multi inheritance.
 
+<u>Info:</u> Compared to the Java programming language, the valid class objects can be seen as the classes in Java and the valid aspect objects can be seen as the interfaces in Java.
+
+##### §8.4 Extension relationship
+
+A class info object *c* is said to extend a class info object *p* if and only if at least one of these conditions is met:
+
+1)  The “Parent” property of *c* references *p*, or
+2)  An entry of the Aspects property of *c* references *p*, or
+3)  The class info object referenced by *c*’s Parent property extends *p*, or
+4)  An entry of the Aspects property of *c* extends *p*.
+
 #### §9 Property info object
 
 A *property info object* is an object with at least theses properties:
 
-1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6
-2.  \[“opendma.org”, “Name”\], single value, String
-3.  \[“opendma.org”, “NameQualifier”\], single value, String
-4.  \[“opendma.org”, “DataType”\], single value, Integer
-5.  \[“opendma.org”, “ReferenceClass”\], single value, Reference
-6.  \[“opendma.org”, “MultiValue”\], single value, Boolean
-7.  \[“opendma.org”, “Required”\], single value, Boolean
-8.  \[“opendma.org”, “DisplayName”\], single value, String
+1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6, not null
+2.  \[“opendma.org”, “Name”\], single value, String, not null
+3.  \[“opendma.org”, “NameQualifier”\], single value, String, not null
+4.  \[“opendma.org”, “DataType”\], single value, Integer, not null
+5.  \[“opendma.org”, “ReferenceClass”\], single value, Reference, nullable
+6.  \[“opendma.org”, “MultiValue”\], single value, Boolean, not null
+7.  \[“opendma.org”, “Required”\], single value, Boolean, not null
+8.  \[“opendma.org”, “DisplayName”\], single value, String, not null
 
 These constraints apply to the properties:
 
-- “Class”, “Name”, “NameQualifier”, “DataType”, “MultiValue”, “Required” and “DisplayName” must not be null.
-
-- There exists exactly one class object (§7) in each context (§3) that describes property info objects. The “Class” property has to contain a reference to that class object.
+- There exists exactly one class object (§7) in each context (§4) that describes property info objects. The “Class” property has to contain a reference to that class object.
 
 - The value of “DataType” must be one of the list of numeric data type ids (§2.5).
 
@@ -261,6 +272,11 @@ The write operation (§5) for a property *p* on an object *o* has to return an *
 
 The value returned by the read operation (§5) has to be of the data type defined by the numeric data type id read from the \[“opendam.org”, “DataType”\] Property of the corresponding property info for p.
 
+<u>Note1:</u>
+
+This section defines only a required set of properties for the objects of the class hierarchy, but it does not limit the actual properties to this set.
+
+An implementor might introduce additional properties for the class hierarchy root \[“opendma.org”, ”Object”\] without violating the conditions posed by the OpenDMA architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.  
 ## Section II: OpenDMA document management model
 
 While the first section has defined a common object oriented model that could represent nearly everything, this second section defines a set of classes specific for document management.
