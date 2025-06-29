@@ -293,13 +293,13 @@ A *choice value object* is an object with at least theses properties:
 
 1.  `opendma:Class`, single value, Reference, as defined in §6, not null
 2.  `opendma:Id`, single value, String, as defined in §6.2, not null
-3. `opendma:DisplayName`, single value, String, not null
-4. `opendma:StringValue`, single value, String, nullable
-5. `opendma:IntegerValue`, single value, Integer, nullable
-6. `opendma:ShortValue`, single value, Short, nullable
-7. `opendma:LongValue`, single value, Long, nullable
-8. `opendma:FloatValue`, single value, Float, nullable
-9. `opendma:DoubleValue`, single value, Double, nullable
+3.  `opendma:DisplayName`, single value, String, not null
+4.  `opendma:StringValue`, single value, String, nullable
+5.  `opendma:IntegerValue`, single value, Integer, nullable
+6.  `opendma:ShortValue`, single value, Short, nullable
+7.  `opendma:LongValue`, single value, Long, nullable
+8.  `opendma:FloatValue`, single value, Float, nullable
+9.  `opendma:DoubleValue`, single value, Double, nullable
 10. `opendma:BooleanValue`, single value, Boolean, nullable
 11. `opendma:DateTimeValue`, single value, DateTime, nullable
 12. `opendma:BlobValue`, single value, BLOB, nullable
