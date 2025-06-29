@@ -22,16 +22,14 @@ This first subsection defines an object model without any constraints. Those obj
 
 The OpenDMA architecture uses only qualified names. Each consists of
 
-1.  a qualifier (Unicode text string with 1 or more characters; may be null), and
-2.  a name (noncolon Unicode text string with 1 or more characters; must not be null),
+1.  a namespace (Unicode text string with 1 or more characters; must not be null), and
+2.  a name (noncolon Unicode text string with 1 or more characters; must not be null).
 
-where the qualifier can be omitted (null).
-
-The qualifier is a sequence of noncolon names connected by the colon character. Each nc name identifies one namespace. The namespaces are nested from left to right.
+The namespace is a sequence of noncolon names connected by the colon character. Each noncolon name identifies one namespace. The namespaces are nested from left to right.
 
 The namespace “opendma” is reserved for this architecture specification.
 
-If a qualified name is represented as simple string, the qualifier and the name are concatenated by the colon character.
+If a qualified name is represented as simple string, the namespace and the name are concatenated by the colon character.
 
 #### §2 Data types
 
@@ -161,7 +159,7 @@ A *class info object* is an object with at least theses properties:
 1.  `opendma:Class`, single value, Reference, as defined in §6.1, not null
 2.  `opendma:Id`, single value, String, as defined in §6.2, not null
 3.  `opendma:Name`, single value, String, not null
-4.  `opendma:NameQualifier`, single value, String, nullable
+4.  `opendma:Namespace`, single value, String, not null
 5.  `opendma:DisplayName`, single value, String, not null
 6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), nullable
 7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), nullable
@@ -179,9 +177,9 @@ These constraints apply to the properties:
 
 - The restrictions of the “SuperClass” Property are defined in §8.
 
-- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a super class or an aspect class may be reused. Properties can not be overwritten.
+- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”Namespace”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a super class or an aspect class may be reused. Properties can not be overwritten.
 
-- The tuple (”NameQualifier”,”Name”) of this object must be unique across all class info objects in the same context (§4)
+- The tuple (”Namespace”,”Name”) of this object must be unique across all class info objects in the same context (§4)
 
 - The reference to a class info object *c* is contained in the “SubClasses” property of a class info object *p* if and only if the “SuperClass” reference property of *c* references *p*.
 
@@ -196,7 +194,7 @@ Every context (§4) contains at least one class info object (§7) with these pro
 | `opendma:Class`         | Reference to the class class object (§8.2)                                                                                                                         |
 | `opendma:Id`            | Unique object identifier                                                                                                                                           |
 | `opendma:Name`          | String “Object”                                                                                                                                                    |
-| `opendma:NameQualifier` | String “opendma”                                                                                                                                                   |
+| `opendma:Namespace`     | String “opendma”                                                                                                                                                   |
 | `opendma:SuperClass`    | NULL                                                                                                                                                               |
 | `opendma:Aspects`       | empty                                                                                                                                                              |
 | `opendma:DisplayName`   | String “OdmaObject”                                                                                                                                                |
@@ -213,7 +211,7 @@ Every context (§4) contains a class info object (§7) that is referenced by the
 | `opendma:Class`         | Reference to itself                                                                                           |
 | `opendma:Id`            | Unique object identifier                                                                                      |
 | `opendma:Name`          | String “Class”                                                                                                |
-| `opendma:NameQualifier` | String “opendma”                                                                                              |
+| `opendma:Namespace`     | String “opendma”                                                                                              |
 | `opendma:SuperClass`    | Reference to the class hierarchy root (§8.1)                                                                  |
 | `opendma:Aspects`       | empty                                                                                                         |
 | `opendma:DisplayName`   | String “OdmaClass”                                                                                            |
@@ -266,7 +264,7 @@ A *property info object* is an object with at least theses properties:
 <!-- -->
 
 2.  `opendma:Name`, single value, String, not null
-3.  `opendma:NameQualifier`, single value, String, nullable
+3.  `opendma:Namespace`, single value, String, not null
 4.  `opendma:DisplayName`, single value, String, not null
 5.  `opendma:DataType`, single value, Integer, not null
 6.  `opendma:ReferenceClass`, single value, Reference, nullable
@@ -326,7 +324,7 @@ The object model knows a set of distinguished failure messages for the read / wr
 
 ##### §12.1 Property existence
 
-The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an *ObjectNotFound* (§11) response code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and `opendma:NameQualifier` values to *pn*.
+The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an *ObjectNotFound* (§11) response code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and `opendma:Namespace` values to *pn*.
 
 ##### §12.2 Type safety
 
