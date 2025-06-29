@@ -1,8 +1,8 @@
 |                           |                          |
 |---------------------------|-------------------------:|
 | xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |            Version 0.6.1 |
-|                           | Release date: 11/08/2011 |
+| Editor: Stefan Kopf       |            Version 0.6.2 |
+|                           | Release date: 04/14/2025 |
 
 # OpenDMA – Class architecture
 
@@ -163,7 +163,7 @@ A *class info object* is an object with at least theses properties:
 3.  `opendma:Name`, single value, String, not null
 4.  `opendma:NameQualifier`, single value, String, nullable
 5.  `opendma:DisplayName`, single value, String, not null
-6.  `opendma:Parent`, single value, Reference to a class info object (§7), nullable
+6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), nullable
 7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), nullable
 8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), nullable
 9.  `opendma:Properties`, multi value, Reference to property info objects (§9), nullable
@@ -177,13 +177,13 @@ A *class info object* is an object with at least theses properties:
 
 These constraints apply to the properties:
 
-- The restrictions of the “Parent” Property are defined in §8.
+- The restrictions of the “SuperClass” Property are defined in §8.
 
-- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a parent class or an aspect class may be reused. Properties can not be overwritten.
+- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a super class or an aspect class may be reused. Properties can not be overwritten.
 
 - The tuple (”NameQualifier”,”Name”) of this object must be unique across all class info objects in the same context (§4)
 
-- The reference to a class info object *c* is contained in the “SubClasses” property of a class info object *p* if and only if the “Parent” reference property of *c* references *p*.
+- The reference to a class info object *c* is contained in the “SubClasses” property of a class info object *p* if and only if the “SuperClass” reference property of *c* references *p*.
 
 #### §8 Class hierarchy
 
@@ -197,7 +197,7 @@ Every context (§4) contains at least one class info object (§7) with these pro
 | `opendma:Id`            | Unique object identifier                                                                                                                                           |
 | `opendma:Name`          | String “Object”                                                                                                                                                    |
 | `opendma:NameQualifier` | String “opendma”                                                                                                                                                   |
-| `opendma:Parent`        | NULL                                                                                                                                                               |
+| `opendma:SuperClass`    | NULL                                                                                                                                                               |
 | `opendma:Aspects`       | empty                                                                                                                                                              |
 | `opendma:DisplayName`   | String “OdmaObject”                                                                                                                                                |
 | `opendma:Properties`    | Contains at least references to property info objects as described in §9 defining the “Class” property as defined in §6.1 and the “Id” property as defined in §6.2 |
@@ -214,7 +214,7 @@ Every context (§4) contains a class info object (§7) that is referenced by the
 | `opendma:Id`            | Unique object identifier                                                                                      |
 | `opendma:Name`          | String “Class”                                                                                                |
 | `opendma:NameQualifier` | String “opendma”                                                                                              |
-| `opendma:Parent`        | Reference to the class hierarchy root (§8.1)                                                                  |
+| `opendma:SuperClass`    | Reference to the class hierarchy root (§8.1)                                                                  |
 | `opendma:Aspects`       | empty                                                                                                         |
 | `opendma:DisplayName`   | String “OdmaClass”                                                                                            |
 | `opendma:Properties`    | Contains at least references to property info objects as described in §9 defining all properties listed in §7 |
@@ -228,7 +228,7 @@ This object is called the *class class*.
 A *valid class object* is a class info object (§7) following these conditions:
 
 1)  The class hierarchy root (§8.1) is a valid class object.
-2)  All class objects containing a reference to a valid class object in their “Parent” property are again valid class objects.
+2)  All class objects containing a reference to a valid class object in their “SuperClass” property are again valid class objects.
 
 This forms a tree like structure called the *OpenDMA class hierarchy*. The “Aspect” property of every valid clas object has to contain the value “false”.
 
@@ -242,9 +242,9 @@ A *valid aspect object* is a class info object (§7) that is not a valid class o
 
 A class info object *c* is said to *extend* a class info object *p* if and only if at least one of these conditions is met:
 
-1)  The “Parent” property of *c* references *p*, or
+1)  The “SuperClass” property of *c* references *p*, or
 2)  An entry of the Aspects property of *c* references *p*, or
-3)  The class info object referenced by *c*’s Parent property extends *p*, or
+3)  The class info object referenced by *c*’s SuperClass property extends *p*, or
 4)  An entry of the Aspects property of *c* extends *p*.
 
 <u>Info:</u> A class c does not extend itself.
@@ -290,7 +290,7 @@ These constraints apply to the properties:
 The *effective properties list* of a valid class object (§8.3) or valid aspect object (\$8.4) *c* is a list of property info objects (§9) defined as follows:
 
 1)  all property info objects (§9) of *c*’s `opendma:Properties` Property are part of the effective properties list, and
-2)  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:Parent` property are part of the effective properties list.
+2)  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass` property are part of the effective properties list.
 3)  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:Aspects` property are part of the effective properties list.
 
 #### §11 Choice value object
