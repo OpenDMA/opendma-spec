@@ -1,8 +1,8 @@
 |                           |                          |
 |---------------------------|-------------------------:|
 | xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |            Version 0.5.2 |
-|                           | Release date: 11/17/2010 |
+| Editor: Stefan Kopf       |              Version 0.6 |
+|                           | Release date: 09/18/2011 |
 
 # OpenDMA – Class architecture
 
@@ -23,13 +23,15 @@ This first subsection defines an object model without any constraints. Those obj
 The OpenDMA architecture uses only qualified names. Each consists of
 
 1.  a qualifier (Unicode text string with 1 or more characters; may be null), and
-2.  a name (Unicode text string with 1 or more characters; must not be null),
+2.  a name (noncolon Unicode text string with 1 or more characters; must not be null),
 
 where the qualifier can be omitted (null).
 
-The qualifier “opendma” is reserved for this architecture specification.
+The qualifier is a sequence of noncolon names connected by the colon character. Each nc name identifies one namespace. The namespaces are nested from left to right.
 
-If a qualified name is represented as simple string, the qualifier and the name a separated by the colon character.
+The namespace “opendma” is reserved for this architecture specification.
+
+If a qualified name is represented as simple string, the qualifier and the name are concatenated by the colon character.
 
 #### §2 Data types
 
@@ -165,10 +167,13 @@ A *class info object* is an object with at least theses properties:
 7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), nullable
 8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), nullable
 9.  `opendma:Properties`, multi value, Reference to property info objects (§9), nullable
-10. `opendma:Instantiable`, single value, Boolean, not null
-11. `opendma:Hidden`, single value, Boolean, not null
-12. `opendma:System`, single value, Boolean, not null
-13. `opendma:SubClasses`, multi value, Reference to a class info objects, nullable
+10. `opendma:Aspect`, single value, Boolean, not null
+11. `opendma:Instantiable`, single value, Boolean, not null
+12. `opendma:Hidden`, single value, Boolean, not null
+13. `opendma:System`, single value, Boolean, not null
+14. `opendma:Retrievable`, single value, Boolean, not null
+15. `opendma:Searchable`, single value, Boolean, not null
+16. `opendma:SubClasses`, multi value, Reference to a class info objects, nullable
 
 These constraints apply to the properties:
 
@@ -225,11 +230,11 @@ A *valid class object* is a class info object (§7) following these conditions:
 1)  The class hierarchy root (§8.1) is a valid class object.
 2)  All class objects containing a reference to a valid class object in their “Parent” property are again valid class objects.
 
-This forms a tree like structure called the *OpenDMA class hierarchy*.
+This forms a tree like structure called the *OpenDMA class hierarchy*. The “Aspect” property of every valid clas object has to contain the value “false”.
 
 ##### §8.4 Valid aspect objects
 
-A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3) and whose “IsInstantiable” property contains the value “false”. This prevents multi inheritance.
+A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose “Aspect” property contains the value “true” and whose “Instantiable” property contains the value “false”. This prevents multi inheritance.
 
 <u>Info:</u> Compared to the Java programming language, the valid class objects can be seen as the classes in Java and the valid aspect objects can be seen as the interfaces in Java.
 
@@ -256,7 +261,7 @@ A *property info object* is an object with at least theses properties:
 
 <!-- -->
 
-14. `opendma:Id`, single value, String, as defined in §6.2, not null
+17. `opendma:Id`, single value, String, as defined in §6.2, not null
 
 <!-- -->
 
@@ -267,9 +272,10 @@ A *property info object* is an object with at least theses properties:
 6.  `opendma:ReferenceClass`, single value, Reference, nullable
 7.  `opendma:MultiValue`, single value, Boolean, not null
 8.  `opendma:Required`, single value, Boolean, not null
-9.  `opendma:Readonly`, single value, Boolean, not null
+9.  `opendma:ReadOnly`, single value, Boolean, not null
 10. `opendma:Hidden`, single value, Boolean, not null
 11. `opendma:System`, single value, Boolean, not null
+12. `opendma:Choices`, multi value, Reference, nullable
 
 These constraints apply to the properties:
 
@@ -287,23 +293,51 @@ The *effective properties list* of a valid class object (§8.3) or valid aspect 
 2)  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:Parent` property are part of the effective properties list.
 3)  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:Aspects` property are part of the effective properties list.
 
-#### §11 Failure messages
+#### §11 Choice value object
+
+A *choice value object* is an object with at least theses properties:
+
+13. `opendma:Class`, single value, Reference, as defined in §6, not null
+
+<!-- -->
+
+18. `opendma:Id`, single value, String, as defined in §6.2, not null
+
+<!-- -->
+
+14. `opendma:DisplayName`, single value, String, not null
+15. `opendma:StringValue`, single value, String, nullable
+16. `opendma:IntegerValue`, single value, Integer, nullable
+17. `opendma:ShortValue`, single value, Short, nullable
+18. `opendma:LongValue`, single value, Long, nullable
+19. `opendma:FloatValue`, single value, Float, nullable
+20. `opendma:DoubleValue`, single value, Double, nullable
+21. `opendma:BooleanValue`, single value, Boolean, nullable
+22. `opendma:DateTimeValue`, single value, DateTime, nullable
+23. `opendma:BlobValue`, single value, BLOB, nullable
+24. `opendma:ReferenceValue`, single value, Reference, nullable
+
+#### §12 Failure messages
 
 The object model knows a set of distinguished failure messages for the read / write operations (§5):
 
 1.  ObjectNotFound
 2.  InvalidDataType
 
-##### §11.1 Property existence
+##### §12.1 Property existence
 
 The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an *ObjectNotFound* (§11) response code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and `opendma:NameQualifier` values to *pn*.
 
-##### §11.2 Type safety
+##### §12.2 Type safety
 
 The write operation (§5) for a qualified property name *pn* on an object *o* has to return an *InvalidDataType* (§11) response code if and only if
 
 1)  the effective property list (§10) of *o* does contain a property info object for *pn*, and
-2)  the value of `opendma:DataType` of that property info object does not match the data type of the value to be written.
+
+2)  one of these conditions applies:
+
+    1.  the value of `opendma:DataType` of that property info object does not match the data type of the value to be written, or
+    2.  the value of `opendma:Choices` of that property info object is not null and does not contain a reference to a choice value object (§11) whose value property corresponding to the data type contains the value to be written.
 
 The value returned by the read operation (§5) has to be of the data type defined by the numeric data type id read from the `opendma:DataType` property of the corresponding property info for *pn*.
 
@@ -332,7 +366,13 @@ The set of basic document management classes consists of:
   A Document is able to keep track of its changes (versioning) and manage the access to it (checkin and checkout).
 
 - ContentElement
-  A *ContentElement* represents one atomic octet stream the Documents are made of. The binary data is stored together with meta data like the mime type.
+  A *ContentElement* represents one atomic content element the Documents are made of. This abstract (non instantiable) base class defines the type of content and the position of this element in the sequence of all content elements.
+
+- DataContentElement
+  A *DataContentElement* represents one atomic octet stream. The binary data is stored together with meta data like size and filename.
+
+- ReferenceContentElement
+  A *ReferenceContentElement* represents a reference to external data. The reference is stored as URI to the content location.
 
 - VersionCollection
   A *VersionCollection* represents the set of all versions of a Document.
@@ -349,106 +389,118 @@ The set of basic document management classes consists of:
 - Association
   An Association represents the directed link between a Container and a Containable object.
 
-#### §12 Repository class
+#### §13 Repository class
 
 The `opendma:Repository` class extends the `opendma:Object` class and has these additional properties:
 
-| **Property** | **Type**       | **Contents**                                                                                 |
-|:-------------|:---------------|:---------------------------------------------------------------------------------------------|
-| Name         | String (s,nn)  | The internal technical name of this repository                                               |
-| DisplayName  | String (s, nn) | The name of this Repository displayed to users                                               |
-| RootClass    | Reference      | Reference to the class hierarchy root class as defined in §8.1. Must not be null.            |
-| RootAspects  | Reference (m)  | Reference to all valid aspect objects that do not inherit another valid aspect               |
-| RootFolder   | Reference      | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. |
+| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                                 |
+|:-------------|:----------|:------|:------|:-----------------------------------------------------------------------------------------------------------------------------|
+| Name         | String    | S     | N     | The internal technical name of this repository                                                                               |
+| DisplayName  | String    | S     | N     | The name of this Repository displayed to users                                                                               |
+| RootClass    | Reference | S     | N     | Reference to the class hierarchy root class as defined in §8.1. Must not be null. Reference class: `opendma:Class`             |
+| RootAspects  | Reference | M     | Y     | Reference to all valid aspect objects that do not inherit another valid aspect Reference class: `opendma:Class`                |
+| RootFolder   | Reference | S     | Y     | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. Reference class: `opendma:Folder` |
 
-##### §12.1 Repository reflection in the objects
+##### §13.1 Repository reflection in the objects
 
 The `opendma:Object` class is extended as follows to reflect the Repository they reside in:
 
-| **Property** | **Type**      | **Contents**                          |
-|:-------------|:--------------|:--------------------------------------|
-| Repository   | Reference (s) | The repository this object belongs to |
+| **Property** | **Type**  | **C** | **N** | **Contents**                                                              |
+|:-------------|:----------|:------|:------|:--------------------------------------------------------------------------|
+| Repository   | Reference | S     | N     | The repository this object belongs to Reference class: `opendma:Repository` |
 
-#### §13 Global unique identification
+#### §14 Global unique identification
 
 The `opendma:Object` class is extended as follows:
 
-| **Property** | **Type**       | **Contents**                                                                                                           |
-|:-------------|:---------------|:-----------------------------------------------------------------------------------------------------------------------|
-| Guid         | String (s, nn) | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
+| **Property** | **Type** | **C** | **N** | **Contents**                                                                                                           |
+|:-------------|:---------|:------|:------|:-----------------------------------------------------------------------------------------------------------------------|
+| Guid         | String   | S     | N     | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
 
-#### §14 Document aspect
+#### §15 Document aspect
 
 The `opendma:Document` aspect is defined as:
 
-| **Property**          | **Type**      | **Contents**                                                                                           |
-|:----------------------|:--------------|:-------------------------------------------------------------------------------------------------------|
-| VersionSpecificId     | String (s)    | Id identifying this version of the object                                                              |
-| VersionSpecificGuid   | Struing (s)   | Guid identifying this version of the object                                                            |
-| Title                 | String (s)    | The title of this document                                                                             |
-| Version               | String (s)    | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)            |
-| VersionCollection     | Reference (s) | Reference to the collection of all versions or null if versioning is not supported.                    |
-| ContentElements       | Reference (m) | References to multiple ContentElement objects.                                                         |
-| CombinedMimeType      | String (s)    | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement. |
-| PrimaryContentElement | Reference (s) | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty.       |
-| ~~PrimaryContent~~    | ~~Content~~   | ~~Shortcut to the content of PrimaryContentElement~~                                                   |
-| ~~PrimarySize~~       | ~~Long (s)~~  | ~~Shortcut to the size of PrimaryContentElement~~                                                      |
-| ~~PrimaryMimeType~~   | ~~String~~    | ~~Shortcut to the mimetype of PrimaryContentElement~~                                                  |
-| ~~PrimaryFileName~~   | ~~String~~    | ~~Shortcut to the FileName of PrimaryContentElement~~                                                  |
-| CheckedOut            | Boolean (s)   | Whether this document is checked out or not.                                                           |
-| CreatedAt             | DateTime (s)  | When this document has been created                                                                    |
-| VersionCreatedAt      | DateTime (s)  | When this version of this document has been created                                                    |
-| LastModifiedAt        | DateTime (s)  | When *this version* of the document has been created, i.e. when this document has been modified        |
-| CheckedOutAt          | DateTime (s)  | When this version of the document has been checked out; null if this document is not checked out       |
-| CreatedBy             | String (s)    | User who created this document                                                                         |
-| VersionCreatedBy      | String (s)    | User who created this version of this document                                                         |
-| LastModifiedBy        | String (s)    | User who created this version of the document                                                          |
-| CheckedOutBy          | String (s)    | User who checked out this version of the document; null if this document is not checked out            |
+| **Property**           | **Type**  | **C** | **N** | **Contents**                                                                                                                                    |
+|:-----------------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------|
+| Title                  | String    | S     | Y     | The title of this document                                                                                                                      |
+| Version                | String    | S     | Y     | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)                                                     |
+| VersionCollection      | Reference | S     | Y     | Reference to the collection of all versions or null if versioning is not supported. Reference class: `opendma:VersionCollection`                  |
+| VersionIndependentId   | String    | S     | N     | Id identifying this logical document independent from the specific version                                                                      |
+| VersionIndependentGuid | String    | S     | N     | Guid identifying this logical document independent from the specific version                                                                    |
+| ContentElements        | Reference | M     | Y     | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                                                          |
+| CombinedContentType    | String    | S     | Y     | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement.                                          |
+| PrimaryContentElement  | Reference | S     | Y     | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty (null). Reference class: `opendma:ContentElement` |
+| CreatedAt              | DateTime  | S     | N     | When this version of this document has been created                                                                                             |
+| CreatedBy              | String    | S     | N     | User who created this version of this document                                                                                                  |
+| LastModifiedAt         | DateTime  | S     | N     | When this version of this document has been modified the last time                                                                              |
+| LastModifiedBy         | String    | S     | N     | User who modified this version of this document the last time                                                                                   |
+| CheckedOut             | Boolean   | S     | N     | Whether this document is checked out or not.                                                                                                    |
+| CheckedOutAt           | DateTime  | S     | Y     | When this version of the document has been checked out; null if and only if this document is not checked out                                    |
+| CheckedOutBy           | String    | S     | Y     | User who checked out this version of this document; null if and only if this document is not checked out                                        |
 
-#### §15 ContentElement aspect
+#### §16 ContentElement aspect
 
 The `opendma:ContentElement` aspect is defined as:
 
-| **Property** | **Type**    | **Contents**                             |
-|:-------------|:------------|:-----------------------------------------|
-| Content      | Content (s) | The data of this content element         |
-| Size         | Longint (s) | The size of the data in number of octets |
-| MimeType     | String (s)  | The mime type of the data                |
-| FileName     | String (s)  | The file name of the data                |
+| **Property** | **Type** | **C** | **N** | **Contents**                                                                                |
+|:-------------|:---------|:------|:------|:--------------------------------------------------------------------------------------------|
+| ContentType  | String   | S     | Y     | The MIME type of the content represented by this element                                    |
+| Position     | Integer  | S     | Y     | The position of this element in the list of all content elements of the containing document |
+
+#### §17 DataContentElement aspect
+
+The `opendma:DataContentElement` aspect extends opendam:ContentElement and declares:
+
+| **Property** | **Type** | **C** | **N** | **Contents**                             |
+|:-------------|:---------|:------|:------|:-----------------------------------------|
+| Content      | Content  | S     | Y     | The data of this content element         |
+| Size         | Longint  | S     | Y     | The size of the data in number of octets |
+| FileName     | String   | S     | Y     | The file name of the data                |
+
+#### §18 ReferenceContentElement aspect
+
+The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and declares:
+
+| **Property** | **Type** | **C** | **N** | **Contents**                        |
+|:-------------|:---------|:------|:------|:------------------------------------|
+| Location     | String   | S     | Y     | The URI where the content is stored |
 
 #### §16 VersionCollection aspect
 
 The `opendma:VersionCollection` aspect is defined as:
 
-| **Property** | **Type**                    | **Contents**                                                                                                        |
-|:-------------|:----------------------------|:--------------------------------------------------------------------------------------------------------------------|
-| Versions     | Reference (m, nn, Document) | List of all versions of this Document                                                                               |
-| Latest       | Reference (s, nn, Document) | Reference to the latest version of the Document collection                                                          |
-| Released     | Reference (s, n, Document)  | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. |
-| InProgress   | Reference (s, n, Document)  | Reference to the InProgress Document while this document is checked out.                                            |
+| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                                                          |
+|:-------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Versions     | Reference | M     | N     | List of all versions of this Document Reference class: `opendma:Document`                                                                               |
+| Latest       | Reference | S     | Y     | Reference to the latest version of the Document collection Reference class: `opendma:Document`                                                          |
+| Released     | Reference | S     | Y     | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. Reference class: `opendma:Document` |
+| InProgress   | Reference | S     | Y     | Reference to the InProgress Document while this document is checked out. Reference class: `opendma:Document`                                            |
+| CreatedAt    | DateTime  | S     | N     | When this document has been created                                                                                                                   |
+| CreatedBy    | String    | S     | N     | User who created this document                                                                                                                        |
 
 #### §17 Container aspect
 
 The `opendma:Container` aspect is defined as:
 
-| **Property**   | **Type**      | **Contents**                                                      |
-|:---------------|:--------------|:------------------------------------------------------------------|
-| Title          | String (s)    | The title of this container                                       |
-| Containees     | Reference (m) | The containable objects contained in this container               |
-| Associations   | Reference (m) | The associations between this container and the contained objects |
-| CreatedAt      | DateTime (s)  | When this container has been created                              |
-| LastModifiedAt | DateTime (s)  | When this container has been modified the last time               |
-| CreatedBy      | String (s)    | User who created this container                                   |
-| LastModifiedBy | String (s)    | User who modified this container the last time                    |
+| **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                           |
+|:---------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------|
+| Title          | String    | S     | Y     | The title of this container                                                                            |
+| Containees     | Reference | M     | Y     | The containable objects contained in this container Reference class: `opendma:Containable`               |
+| Associations   | Reference | M     | Y     | The associations between this container and the contained objects Reference class: `opendma:Association` |
+| CreatedAt      | DateTime  | S     | N     | When this container has been created                                                                   |
+| CreatedBy      | String    | S     | N     | User who created this container                                                                        |
+| LastModifiedAt | DateTime  | S     | N     | When this container has been modified the last time                                                    |
+| LastModifiedBy | String    | S     | N     | User who modified this container the last time                                                         |
 
 #### §18 Folder aspect
 
 The `opendma:Folder` aspect extends the `opendma:Container` by these additional properties:
 
-| **Property** | **Type**               | **Contents**                                                                 |
-|:-------------|:-----------------------|:-----------------------------------------------------------------------------|
-| Parent       | Reference (s,n,Folder) | The parent folder this folder is contained in                                |
-| SubFolders   | Ref (m, Folder)        | All Folder objects that contain this folder in their `opendma:Parent` property |
+| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                 |
+|:-------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------------|
+| Parent       | Reference | S     | Y     | The parent folder this folder is contained in Reference class: `opendma:Folder`                                |
+| SubFolders   | Reference | M     | Y     | All Folder objects that contain this folder in their `opendma:Parent` property Reference class: `opendma:Folder` |
 
 The Parent property of all Folder objects in the repository, except for the Folder referenced in the RootFolder property of the Repository (§13), must not be null. The parent property of the Folder referenced in the RootFolder property of the Repository (§13) must be null.
 
@@ -463,24 +515,24 @@ A Folder must not contain a reference to one of its descendants in its Parent pr
 
 The `opendma:Containable` aspect is defined as:
 
-| **Property**            | **Type**      | **Contents**                                                         |
-|:------------------------|:--------------|:---------------------------------------------------------------------|
-| ContainedIn             | Reference (m) | The container objects this Containable is contained in               |
-| ContainedInAssociations | Reference (m) | The associations that bind this Containable in the Conatiner objects |
+| **Property**            | **Type**  | **C** | **N** | **Contents**                                                                                              |
+|:------------------------|:----------|:------|:------|:----------------------------------------------------------------------------------------------------------|
+| ContainedIn             | Reference | M     | Y     | The container objects this Containable is contained in Reference class: `opendma:Container`                 |
+| ContainedInAssociations | Reference | M     | Y     | The associations that bind this Containable in the Conatiner objects Reference class: `opendma:Association` |
 
 #### §20 Association aspect
 
 The `opendma:Association` aspect is defined as:
 
-| **Property**   | **Type**                      | **Contents**                                                                                    |
-|:---------------|:------------------------------|:------------------------------------------------------------------------------------------------|
-| Name           | String (s)                    | The name of this association                                                                    |
-| Container      | Reference (s,nn, Container)   | The source of this directed association                                                         |
-| Containment    | Reference (s,nn, Containable) | The destination of this directed association                                                    |
-| CreatedAt      | DateTime (s)                  | When this document has been created                                                             |
-| LastModifiedAt | DateTime (s)                  | When *this version* of the document has been created, i.e. when this document has been modified |
-| CreatedBy      | String (s)                    | User who created this document                                                                  |
-| LastModifiedBy | String (s)                    | User who created this version of the document                                                   |
+| **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                    |
+|:---------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------|
+| Name           | String    | S     | N     | The name of this association                                                                    |
+| Container      | Reference | S     | N     | The source of this directed association Reference class: `opendma:Container`                      |
+| Containment    | Reference | S     | N     | The destination of this directed association Reference class: `opendma:Containable`               |
+| CreatedAt      | DateTime  | S     | N     | When this document has been created                                                             |
+| CreatedBy      | String    | S     | N     | User who created this document                                                                  |
+| LastModifiedAt | DateTime  | S     | N     | When *this version* of the document has been created, i.e. when this document has been modified |
+| LastModifiedBy | String    | S     | N     | User who created this version of the document                                                   |
 
 ### Section II.2: Extended document management model
 
@@ -497,3 +549,28 @@ The set of extended document management classes consists of:
 
 - Retention
   Describe me.
+
+Template property table
+
+| **Property** | **Type** | **C** | **N** | **Contents** |
+|:-------------|:---------|:------|:------|:-------------|
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
+|              |          |       |       |              |
