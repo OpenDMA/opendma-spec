@@ -146,7 +146,7 @@ The following constraints apply to all objects in the OpenDMA object model.
 
 Every object must have at least a single valued property (§3) with the qualified name `opendma:Class`. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The property “IsInstantiable” of that valid class object must be true.
 
-The properties of every object must exactly match in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9).
+The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9). If a property info object has a non-empty “ReferenceClass” property, the value of the corresponding property must only contain values described  by one of the “ChoiceValue” objects.
 
 ##### §6.2 Identification
 
@@ -304,6 +304,12 @@ A *choice value object* is an object with at least theses properties:
 11. `opendma:DateTimeValue`, single value, DateTime, nullable
 12. `opendma:BlobValue`, single value, BLOB, nullable
 13. `opendma:ReferenceValue`, single value, Reference, nullable
+
+> Note:  
+> Due to the reflection limitations (§6.1), the “ReferenceValue” property must only contain valid references. It must
+> only contain references to objects whose “Class” property contains a reference to a class info object that is or
+> extends (§8.4) the class info object referenced by the “ReferenceClass” property of the property info object (§9) it
+> is contained in.
 
 #### §12 Failure messages
 
