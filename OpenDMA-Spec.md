@@ -77,7 +77,7 @@ A numeric *data type id* is assigned to each data type corresponding to this tab
 | Reference (§2.2)     | 10               |
 | Content (§2.3)       | 11               |
 
-##### §2.4 Nullability
+##### §2.6 Nullability
 
 The OpenDMA data model knows the special value *null* as representation for “not assigned”. Multi valued data can either be null or not null in its entirety. An individual value of a multi valued data type must not be null.
 
@@ -162,10 +162,11 @@ A *class info object* is an object with at least theses properties:
 6.  \[“opendma.org”, “Parent”\], single value, Reference to a class info object (§7), nullable
 7.  \[“opendma.org”, “Aspects”\], multi value, Reference to valid aspect objects (§8.4), nullable
 8.  \[“opendma.org”, “DeclaredProperties”\], multi value, Reference to property info objects (§9), nullable
-9.  \[“opendma.org”, “IsInstantiable”\], single value, Boolean, not null
-10. \[“opendma.org”, “IsHidden”\], single value, Boolean, not null
-11. \[“opendma.org”, “IsSystem”\], single value, Boolean, not null
-12. \[“opendma.org”, ”SubClasses”\], multi value, Reference to a class info objects, nullable
+9.  \[“opendma.org”, “Properties”\], multi value, Reference to property info objects (§9), nullable
+10. \[“opendma.org”, “Instantiable”\], single value, Boolean, not null
+11. \[“opendma.org”, “Hidden”\], single value, Boolean, not null
+12. \[“opendma.org”, “System”\], single value, Boolean, not null
+13. \[“opendma.org”, ”SubClasses”\], multi value, Reference to a class info objects, nullable
 
 These constraints apply to the properties:
 
@@ -230,7 +231,7 @@ A *valid aspect object* is a class info object (§7) that is not a valid class o
 
 <u>Info:</u> Compared to the Java programming language, the valid class objects can be seen as the classes in Java and the valid aspect objects can be seen as the interfaces in Java.
 
-##### §8.4 Extension relationship
+##### §8.5 Extension relationship
 
 A class info object *c* is said to *extend* a class info object *p* if and only if at least one of these conditions is met:
 
@@ -238,6 +239,12 @@ A class info object *c* is said to *extend* a class info object *p* if and only 
 2)  An entry of the Aspects property of *c* references *p*, or
 3)  The class info object referenced by *c*’s Parent property extends *p*, or
 4)  An entry of the Aspects property of *c* extends *p*.
+
+<u>Info:</u> A class c does not extend itself.
+
+##### §8.6 InstanceOf relationship
+
+A object *o* is said to be an *instance of* a class info object *c* if the “Class” property of *o* contains a reference to a valid class info object that is or extends *c*.
 
 #### §9 Property info object
 
@@ -247,7 +254,7 @@ A *property info object* is an object with at least theses properties:
 
 <!-- -->
 
-13. \[“opendma.org”, “Id”\], single value, String, as defined in §6.2, not null
+14. \[“opendma.org”, “Id”\], single value, String, as defined in §6.2, not null
 
 <!-- -->
 
@@ -256,11 +263,11 @@ A *property info object* is an object with at least theses properties:
 4.  \[“opendma.org”, “DisplayName”\], single value, String, not null
 5.  \[“opendma.org”, “DataType”\], single value, Integer, not null
 6.  \[“opendma.org”, “ReferenceClass”\], single value, Reference, nullable
-7.  \[“opendma.org”, “IsMultiValue”\], single value, Boolean, not null
-8.  \[“opendma.org”, “IsRequired”\], single value, Boolean, not null
-9.  \[“opendma.org”, “IsHidden”\], single value, Boolean, not null
-10. \[“opendma.org”, “IsReadonly”\], single value, Boolean, not null
-11. \[“opendma.org”, “IsSystem”\], single value, Boolean, not null
+7.  \[“opendma.org”, “MultiValue”\], single value, Boolean, not null
+8.  \[“opendma.org”, “Required”\], single value, Boolean, not null
+9.  \[“opendma.org”, “Readonly”\], single value, Boolean, not null
+10. \[“opendma.org”, “Hidden”\], single value, Boolean, not null
+11. \[“opendma.org”, “System”\], single value, Boolean, not null
 
 These constraints apply to the properties:
 
@@ -289,7 +296,7 @@ The object model knows a set of distinguished failure messages for the read / wr
 
 The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an *ObjectNotFound* (§11) response code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its \[“opendma.org”,”Name”\] and \[“opendma.org”, “NameQualifier”\] values to *pn*.
 
-##### §12.2 Type safety
+##### §11.2 Type safety
 
 The write operation (§5) for a qualified property name *pn* on an object *o* has to return an *InvalidDataType* (§11) response code if and only if
 
@@ -325,13 +332,22 @@ The set of basic document management classes consists of:
 - ContentElement
   A *ContentElement* represents one atomic octet stream the Documents are made of. The binary data is stored together with meta data like the mime type.
 
+- VersionCollection
+  A *VersionCollection* represents the set of all versions of a Document.
+
+- Container
+  A *Container* holds a list of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based on references. So an object may be contained in multiple Containers or in no Container at all. OpenDMA does not require a single rooted tree as a file system does.
+
+- Containable
+  This aspect is extended by all classes and aspects that can be contained in a Container.
+
 - Folder
-  A *Folder* holds a list of Document, Folder or other objects that are said to be contained in this Folder. This list of containees is build up with Association objects based on references. So an object may be contained in multiple Folders or in no Folder at all. OpenDMA does not require a single rooted tree as a file system does.
+  A *Folder* is an extension of the Container that forms one single rooted loop-free tree.
 
 - Association
-  An Association represents the directed or undirected link between two objects.
+  An Association represents the directed link between a Container and a Containable object.
 
-#### §13 Repository class
+#### §12 Repository class
 
 The \[“opendma.org”,”Repository”\] class extends the \[“opendma.org”,”Object”\] class and has these additional properties:
 
@@ -340,9 +356,10 @@ The \[“opendma.org”,”Repository”\] class extends the \[“opendma.org”
 | Name         | String (s,nn)  | The internal technical name of this repository                                               |
 | DisplayName  | String (s, nn) | The name of this Repository displayed to users                                               |
 | RootClass    | Reference      | Reference to the class hierarchy root class as defined in §8.1. Must not be null.            |
+| RootAspects  | Reference (m)  | Reference to all valid aspect objects that do not inherit another valid aspect               |
 | RootFolder   | Reference      | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. |
 
-##### §13.1 Repository reflection in the objects
+##### §12.1 Repository reflection in the objects
 
 The \[“opendma.org”,”Object”\] class is extended as follows to reflect the Repository they reside in:
 
@@ -350,7 +367,7 @@ The \[“opendma.org”,”Object”\] class is extended as follows to reflect t
 |:-------------|:--------------|:--------------------------------------|
 | Repository   | Reference (s) | The repository this object belongs to |
 
-#### §14 Global unique identification
+#### §13 Global unique identification
 
 The \[“opendma.org”,”Object”\] class is extended as follows:
 
@@ -358,12 +375,14 @@ The \[“opendma.org”,”Object”\] class is extended as follows:
 |:-------------|:---------------|:-----------------------------------------------------------------------------------------------------------------------|
 | Guid         | String (s, nn) | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
 
-#### §15 Document aspect
+#### §14 Document aspect
 
 The \[“opendma.org”,”Document”\] aspect is defined as:
 
 | **Property**          | **Type**      | **Contents**                                                                                           |
 |:----------------------|:--------------|:-------------------------------------------------------------------------------------------------------|
+| VersionSpecificId     | String (s)    | Id identifying this version of the object                                                              |
+| VersionSpecificGuid   | Struing (s)   | Guid identifying this version of the object                                                            |
 | Title                 | String (s)    | The title of this document                                                                             |
 | Version               | String (s)    | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)            |
 | VersionCollection     | Reference (s) | Reference to the collection of all versions or null if versioning is not supported.                    |
@@ -371,18 +390,20 @@ The \[“opendma.org”,”Document”\] aspect is defined as:
 | CombinedMimeType      | String (s)    | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement. |
 | PrimaryContentElement | Reference (s) | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty.       |
 | PrimaryContent        | Content       | Shortcut to the content of PrimaryContentElement                                                       |
-| PrimaryMimeType       | String        | Shortcut to the mimetype of PrimaryContentElement                                                      |
 | PrimarySize           | Long (s)      | Shortcut to the size of PrimaryContentElement                                                          |
+| PrimaryMimeType       | String        | Shortcut to the mimetype of PrimaryContentElement                                                      |
 | PrimaryFileName       | String        | Shortcut to the FileName of PrimaryContentElement                                                      |
-| IsCheckedOut          | Boolean (s)   | Whether this document is checked out or not.                                                           |
+| CheckedOut            | Boolean (s)   | Whether this document is checked out or not.                                                           |
 | CreatedAt             | DateTime (s)  | When this document has been created                                                                    |
+| VersionCreatedAt      | DateTime (s)  | When this version of this document has been created                                                    |
 | LastModifiedAt        | DateTime (s)  | When *this version* of the document has been created, i.e. when this document has been modified        |
 | CheckedOutAt          | DateTime (s)  | When this version of the document has been checked out; null if this document is not checked out       |
 | CreatedBy             | String (s)    | User who created this document                                                                         |
+| VersionCreatedBy      | String (s)    | User who created this version of this document                                                         |
 | LastModifiedBy        | String (s)    | User who created this version of the document                                                          |
 | CheckedOutBy          | String (s)    | User who checked out this version of the document; null if this document is not checked out            |
 
-#### §16 ContentElement aspect
+#### §15 ContentElement aspect
 
 The \[“opendma.org”,”ContentElement”\] aspect is defined as:
 
@@ -393,6 +414,17 @@ The \[“opendma.org”,”ContentElement”\] aspect is defined as:
 | MimeType     | String (s)  | The mime type of the data                |
 | FileName     | String (s)  | The file name of the data                |
 
+#### §16 VersionCollection aspect
+
+The \[“opendma.org”,”VersionCollection”\] aspect is defined as:
+
+| **Property** | **Type**                    | **Contents**                                                                                                        |
+|:-------------|:----------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| Versions     | Reference (m, nn, Document) | List of all versions of this Document                                                                               |
+| Latest       | Reference (s, nn, Document) | Reference to the latest version of the Document collection                                                          |
+| Released     | Reference (s, n, Document)  | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. |
+| InProgress   | Reference (s, n, Document)  | Reference to the InProgress Document while this document is checked out.                                            |
+
 #### §17 Container aspect
 
 The \[“opendma.org”,”Container”\] aspect is defined as:
@@ -400,7 +432,7 @@ The \[“opendma.org”,”Container”\] aspect is defined as:
 | **Property**   | **Type**      | **Contents**                                                      |
 |:---------------|:--------------|:------------------------------------------------------------------|
 | Title          | String (s)    | The title of this container                                       |
-| Containees     | Reference (m) | The objects contained in this container                           |
+| Containees     | Reference (m) | The containable objects contained in this container               |
 | Associations   | Reference (m) | The associations between this container and the contained objects |
 | CreatedAt      | DateTime (s)  | When this container has been created                              |
 | LastModifiedAt | DateTime (s)  | When this container has been modified the last time               |
@@ -426,7 +458,12 @@ A Folder must not contain a reference to one of its descendants in its Parent pr
 
 #### §19 Containable aspect
 
-The \[“opendma.org”,”Containable”\] aspect does not have any properties. It is used by all classes and aspects that can be contained in a container.
+The \[“opendma.org”,”Containable”\] aspect is defined as:
+
+| **Property**            | **Type**      | **Contents**                                                         |
+|:------------------------|:--------------|:---------------------------------------------------------------------|
+| ContainedIn             | Reference (m) | The container objects this Containable is contained in               |
+| ContainedInAssociations | Reference (m) | The associations that bind this Containable in the Conatiner objects |
 
 #### §20 Association aspect
 
@@ -445,3 +482,15 @@ The \[“opendma.org”,”Association”\] aspect is defined as:
 ### Section II.2: Extended document management model
 
 The set of extended document management classes consists of:
+
+- AccessControl
+  Describe me.
+
+- Rendition
+  Describe me.
+
+- Policy
+  Describe me.
+
+- Retention
+  Describe me.
