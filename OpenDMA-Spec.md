@@ -1,8 +1,8 @@
 |                           |                          |
 |---------------------------|-------------------------:|
 | xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |              Version 0.4 |
-|                           | Release date: 01/15/2009 |
+| Editor: Stefan Kopf       |              Version 0.5 |
+|                           | Release date: 01/20/2009 |
 
 # OpenDMA – Class architecture
 
@@ -44,7 +44,7 @@ The OpenDMA class architecture knows these scalar data types:
 5.  Float
 6.  Double
 7.  Boolean
-8.  DateTime
+8.  DateTime **we might need to change to Calendar to cover timezones!**
 9.  BLOB (Binary large object)
 
 ##### §2.2 Reference values
@@ -111,13 +111,13 @@ In a database system, the context would be the table and the unique object ident
 
 Each object (§4) supports only these two operations:
 
-- Read properties  
-  input: qualified name (§1)  
-  output: value (§3) or null  
+- Read properties
+  input: qualified name (§1)
+  output: value (§3) or null
   Returns the value of a property identified by its name.
 
-- Write properties  
-  input: qualified name (§1), value (§3)  
+- Write properties
+  input: qualified name (§1), value (§3)
   Modifies the value of a property identified by its name.
 
 Both operations may succeed or fail. This result (success or failure) has to be returned to the caller.
@@ -134,30 +134,43 @@ Please note:
 
 The OpenDMA enforces some constraints on the simple object model for type safety and reflection.
 
-#### §6 Reflection
+#### §6 Basic object constraints
 
-Every object must have at least a single valued property (§3) with the qualified name \[“opendma.org”, “Class”\]. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The value must not be null.
+The following constraints apply to all objects in the OpenDMA object model.
 
-The properties of every object must exactly match in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9)
+##### §6.1 Reflection
+
+Every object must have at least a single valued property (§3) with the qualified name \[“opendma.org”, “Class”\]. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The property “IsInstantiable” of that valid class object must be true.
+
+The properties of every object must exactly match in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9).
+
+##### §6.2 Identification
+
+Every object must have at least a single valued String property (§3) with the qualified name \[“opendma.org”, “Id”\]. This property contains the String representation of the unique object identifier as defined in §4.
 
 #### §7 Class info object
 
 A *class info object* is an object with at least theses properties:
 
-1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6, not null
-2.  \[“opendma.org”, “Name”\], single value, String, not null
-3.  \[“opendma.org”, “NameQualifier”\], single value, String
-4.  \[“opendma.org”, “Parent”\], single value, Reference to a valid class object (§8.3), not null
-5.  \[“opendma.org”, “Aspects”\], multi value, Reference to valid aspect objects (§8.4), not null
-6.  \[“opendma.org”, “DisplayName”\], single value, String, not null
-7.  \[“opendma.org”, “Properties”\], multi value, Reference to property info objects (§9)
-8.  \[“opendma.org”, ”SubClasses”\], multi value, Reference to a class info objects
+1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6.1, not null
+2.  \[“opendma.org”, “Id”\], single value, String, as defined in §6.2, not null
+3.  \[“opendma.org”, “Name”\], single value, String, not null
+4.  \[“opendma.org”, “NameQualifier”\], single value, String
+5.  \[“opendma.org”, “DisplayName”\], single value, String, not null
+6.  \[“opendma.org”, “Parent”\], single value, Reference to a valid class object (§8.3), not null
+7.  \[“opendma.org”, “Aspects”\], multi value, Reference to valid aspect objects (§8.4), not null
+8.  \[“opendma.org”, “DeclaredProperties”\], multi value, Reference to property info objects (§9)
+9.  \[“opendma.org”, “IsInstantiable”\], single value, Boolean, not null
+10. \[“opendma.org”, “IsHidden”\], single value, Boolean, not null
+11. \[“opendma.org”, “IsSystem”\], single value, Boolean, not null
+12. \[“opendma.org”, ”SubClasses”\], multi value, Reference to a class info objects
 
 These constraints apply to the properties:
 
 - The restrictions of the “Parent” Property are defined in §8.
 
-- All property info objects (§9) referenced in the “Properties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a parent class or an aspect class may be reused. Properties can not be overwritten.
+- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”NameQualifier”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a parent class or an aspect class may be reused. Properties can not be overwritten.
+  **TODO: Reference properties should be allowed to narrow the reference class**
 
 - The tuple (”NameQualifier”,”Name”) of this object must be unique across all class info objects in the same context (§4)
 
@@ -169,15 +182,16 @@ These constraints apply to the properties:
 
 Every context (§4) contains at least one class info object (§7) with these property values:
 
-| **Property name**                  | **Value**                                                                                                               |
-|:-----------------------------------|:------------------------------------------------------------------------------------------------------------------------|
-| \[“opendam.org”, “Class”\]         | Reference to the class class object (§8.2)                                                                              |
-| \[“opendam.org”, “Name”\]          | String “Object”                                                                                                         |
-| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                                    |
-| \[“opendma.org”, “Parent”\]        | NULL                                                                                                                    |
-| \[“opendma.org”, “Aspects”\]       | empty                                                                                                                   |
-| \[“opendam.org”, “DisplayName”\]   | String “OdmaObject”                                                                                                     |
-| \[“opendma.org”, “Properties”\]    | Contains at least a reference to a property info object as described in §9 defining the class property as defined in §7 |
+| **Property name**                  | **Value**                                                                                                                                                          |
+|:-----------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| \[“opendam.org”, “Class”\]         | Reference to the class class object (§8.2)                                                                                                                         |
+| \[“opendam.org”, “Id”\]            | Unique object identifier                                                                                                                                           |
+| \[“opendam.org”, “Name”\]          | String “Object”                                                                                                                                                    |
+| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                                                                               |
+| \[“opendma.org”, “Parent”\]        | NULL                                                                                                                                                               |
+| \[“opendma.org”, “Aspects”\]       | empty                                                                                                                                                              |
+| \[“opendam.org”, “DisplayName”\]   | String “OdmaObject”                                                                                                                                                |
+| \[“opendma.org”, “Properties”\]    | Contains at least references to property info objects as described in §9 defining the “Class” property as defined in §6.1 and the “Id” property as defined in §6.2 |
 
 Every context has to provide a reference to exactly one object following these constraints. This object is called the *class hierarchy root*.
 
@@ -185,15 +199,16 @@ Every context has to provide a reference to exactly one object following these c
 
 Every context (§4) contains a class info object (§7) that is referenced by the class hierarchy root (§8.1) with these property values:
 
-| **Property name**                  | **Value**                                                                                                       |
-|:-----------------------------------|:----------------------------------------------------------------------------------------------------------------|
-| \[“opendam.org”, “Class”\]         | Reference to itself                                                                                             |
-| \[“opendam.org”, “Name”\]          | String “Class”                                                                                                  |
-| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                            |
-| \[“opendma.org”, “Parent”\]        | Reference to the class hierarchy root (§8.1)                                                                    |
-| \[“opendma.org”, “Aspects”\]       | empty                                                                                                           |
-| \[“opendam.org”, “DisplayName”\]   | String “OdmaClass”                                                                                              |
-| \[“opendma.org”, “Properties”\]    | Contains at least references to 7 property info objects as described in §9 defining all properties listed in §7 |
+| **Property name**                  | **Value**                                                                                                     |
+|:-----------------------------------|:--------------------------------------------------------------------------------------------------------------|
+| \[“opendam.org”, “Class”\]         | Reference to itself                                                                                           |
+| \[“opendam.org”, “Id”\]            | Unique object identifier                                                                                      |
+| \[“opendam.org”, “Name”\]          | String “Class”                                                                                                |
+| \[“opendam.org”, “NameQualifier”\] | String “opendma.org”                                                                                          |
+| \[“opendma.org”, “Parent”\]        | Reference to the class hierarchy root (§8.1)                                                                  |
+| \[“opendma.org”, “Aspects”\]       | empty                                                                                                         |
+| \[“opendam.org”, “DisplayName”\]   | String “OdmaClass”                                                                                            |
+| \[“opendma.org”, “Properties”\]    | Contains at least references to property info objects as described in §9 defining all properties listed in §7 |
 
 This object is called the *class class*.
 
@@ -210,7 +225,7 @@ This forms a tree like structure called the *OpenDMA class hierarchy*.
 
 ##### §8.4 Valid aspect objects
 
-A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3). This prevents multi inheritance.
+A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3) and whose “IsInstantiable” property contains the value “false”. This prevents multi inheritance.
 
 <u>Info:</u> Compared to the Java programming language, the valid class objects can be seen as the classes in Java and the valid aspect objects can be seen as the interfaces in Java.
 
@@ -228,17 +243,27 @@ A class info object *c* is said to extend a class info object *p* if and only if
 A *property info object* is an object with at least theses properties:
 
 1.  \[“opendma.org”, “Class”\], single value, Reference, as defined in §6, not null
+
+<!-- -->
+
+13. \[“opendma.org”, “Id”\], single value, String, as defined in §6.2, not null
+
+<!-- -->
+
 2.  \[“opendma.org”, “Name”\], single value, String, not null
 3.  \[“opendma.org”, “NameQualifier”\], single value, String, not null
-4.  \[“opendma.org”, “DataType”\], single value, Integer, not null
-5.  \[“opendma.org”, “ReferenceClass”\], single value, Reference, nullable
-6.  \[“opendma.org”, “MultiValue”\], single value, Boolean, not null
-7.  \[“opendma.org”, “Required”\], single value, Boolean, not null
-8.  \[“opendma.org”, “DisplayName”\], single value, String, not null
+4.  \[“opendma.org”, “DisplayName”\], single value, String, not null
+5.  \[“opendma.org”, “DataType”\], single value, Integer, not null
+6.  \[“opendma.org”, “ReferenceClass”\], single value, Reference, nullable
+7.  \[“opendma.org”, “IsMultiValue”\], single value, Boolean, not null
+8.  \[“opendma.org”, “IsRequired”\], single value, Boolean, not null
+9.  \[“opendma.org”, “IsHidden”\], single value, Boolean, not null
+10. \[“opendma.org”, “IsReadonly”\], single value, Boolean, not null
+11. \[“opendma.org”, “IsSystem”\], single value, Boolean, not null
 
 These constraints apply to the properties:
 
-- There exists exactly one class object (§7) in each context (§4) that describes property info objects. The “Class” property has to contain a reference to that class object.
+- There exists exactly one valid class object (§8.3) in each context (§4) that describes property info objects. The qualified name of this object is \[“opendma.org”, “PropertyInfo”\]. The “Class” property has to contain a reference to that class object.
 
 - The value of “DataType” must be one of the list of numeric data type ids (§2.5).
 
@@ -276,81 +301,122 @@ The value returned by the read operation (§5) has to be of the data type define
 
 This section defines only a required set of properties for the objects of the class hierarchy, but it does not limit the actual properties to this set.
 
-An implementor might introduce additional properties for the class hierarchy root \[“opendma.org”, ”Object”\] without violating the conditions posed by the OpenDMA architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.  
+An implementor might introduce additional properties for the class hierarchy root \[“opendma.org”, ”Object”\] without violating the conditions posed by the OpenDMA architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
 ## Section II: OpenDMA document management model
 
 While the first section has defined a common object oriented model that could represent nearly everything, this second section defines a set of classes specific for document management.
 
-This set of classes is divided into two parts, a set of basic document management classes and a set of extended document management classes. The first basic set is sufficient for all fundamental document management operations. On top of these adds the second set extended functionality that is not required in every environment.
+This set of classes is divided into two parts, a set of basic document management classes and a set of extended document management classes. The first basic set is sufficient for all fundamental document management operations. On top of these, the second set adds extended functionality that is not required in every environment.
 
 ### Section II.1: Basic document management model
 
 The set of basic document management classes consists of:
 
-- Repository  
-  A Repository represents a place where Documents, Folders and Associations are stored.
+- Repository
+  A *Repository* represents a place where Objects, Classes, Documents, Folders and Associations are stored. It represents the *context* defined in §4. Classes inside one Repository must not be valid in another Repository.
 
-- Document  
-  A Document represents an atomic content element that can be able to keep track of its changes (versions) and manage the access to it (checkin and checkout).
+- Document
+  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. But unlike files, it may consist of multiple octet streams. So a webpage can be stored as one Document that consists of the HTML data and all additional image data. Also a TIFF image of a page can be stored as one Document that contains the TIFF image itself as well as a JPEG thumbnail and some XML annotations.
+  A Document is able to keep track of its changes (versions) and manage the access to it (checkin and checkout).
 
-- Folder  
-  A Folder holds a list of Document, Folder or other objects that are said to be contained in this Folder. This list is build up with Associations.
+- ContentElement
+  A *ContentElement* represents one atomic octet stream the Documents are made of. The binary data is stored together with meta data like the mime type.
 
-- Association  
+- Folder
+  A *Folder* holds a list of Document, Folder or other objects that are said to be contained in this Folder. This list of containees is build up with Association objects based on references. So an object may be contained in multiple Folders or in no Folder at all. OpenDMA does not require a single rooted tree as a file system does.
+
+- Association
   An Association represents the directed or undirected link between two objects.
 
 #### §13 Repository class
 
 The \[“opendma.org”,”Repository”\] class extends the \[“opendma.org”,”Object”\] class and has these additional properties:
 
-| **Property** | **Type**      | **Contents**                 |
-|:-------------|:--------------|:-----------------------------|
-| Title        | String (s,nn) | The title of this repository |
-|              |               |                              |
+| **Property** | **Type**       | **Contents**                                                                                 |
+|:-------------|:---------------|:---------------------------------------------------------------------------------------------|
+| Name         | String (s,nn)  | The internal technical name of this repository                                               |
+| DisplayName  | String (s, nn) | The name of this Repository displayed to users                                               |
+| RootClass    | Reference      | Reference to the class hierarchy root class as defined in §8.1. Must not be null.            |
+| RootFolder   | Reference      | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. |
 
-#### §14 Document class
+##### §13.1 Repository reflection in the objects
 
-The (“opendma.org”,”Document”) class extends the (“opendma.org”,”Object”) class and has these additional properties:
+The \[“opendma.org”,”Object”\] class is extended as follows to reflect the Repository they reside in:
 
-| **Property**   | **Type**     | **Contents**                                                                                     |
-|:---------------|:-------------|:-------------------------------------------------------------------------------------------------|
-| Title          | String (s)   | The title of this document                                                                       |
-| Version        | String (s)   | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)      |
-| Content        | Content (s)  | The content of this document                                                                     |
-| CheckedOut     | Boolean (s)  | Whether this document is checked out or not.                                                     |
-| Size           | Long (s)     | The size of the content in octets                                                                |
-| MimeType       | String (s)   | The mime type of the content                                                                     |
-| CreatedAt      | DateTime (s) | When this document has been created                                                              |
-| LastModifiedAt | DateTime (s) | When *this version* of the document has been created, i.e. when this document has been modified  |
-| CheckedOutAt   | DateTime (s) | When this version of the document has been checked out; null if this document is not checked out |
-| CreatedBy      | String (s)   | User who created this document                                                                   |
-| LastModifiedBy | String (s)   | User who created this version of the document                                                    |
-| CheckedOutBy   | Strng (s)    | User who checked out this version of the document; null if this document is not checked out      |
-|                |              |                                                                                                  |
+| **Property** | **Type**      | **Contents**                          |
+|:-------------|:--------------|:--------------------------------------|
+| Repository   | Reference (s) | The repository this object belongs to |
 
-This definition of the Document class does not yet support multiple content elements. We need to extend this definition!
+#### §14 Global unique identification
 
-#### §15 Folder class
+The \[“opendma.org”,”Object”\] class is extended as follows:
 
-The \[“opendma.org”,”Folder”\] class extends the \[“opendma.org”,”Object”\] class and has these additional properties:
+| **Property** | **Type**       | **Contents**                                                                                                           |
+|:-------------|:---------------|:-----------------------------------------------------------------------------------------------------------------------|
+| Guid         | String (s, nn) | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
 
-| **Property** | **Type**      | **Contents**                              |
-|:-------------|:--------------|:------------------------------------------|
-| Title        | String (s)    | The title of this repository              |
-| Containees   | Reference (m) | The objects contained in this folder      |
-| Associations | Reference (m) | The associations of the contained objects |
-|              |               |                                           |
+#### §15 Document aspect
 
-#### §16 Association class
+The \[“opendma.org”,”Document”\] aspect is defined as:
 
-The \[“opendma.org”,”Association”\] class extends the \[“opendma.org”,”Object”\] class and has these additional properties:
+| **Property**          | **Type**      | **Contents**                                                                                           |
+|:----------------------|:--------------|:-------------------------------------------------------------------------------------------------------|
+| Title                 | String (s)    | The title of this document                                                                             |
+| Version               | String (s)    | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)            |
+| VersionCollection     | Reference (s) | Reference to the collection of all versions or null if versioning is not supported.                    |
+| ContentElements       | Reference (m) | References to multiple ContentElement objects.                                                         |
+| CombinedMimeType      | String (s)    | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement. |
+| PrimaryContentElement | Reference (s) | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty.       |
+| PrimaryContent        | Content       | Shortcut to the content of PrimaryContentElement                                                       |
+| PrimaryMimeType       | String        | Shortcut to the mimetype of PrimaryContentElement                                                      |
+| PrimarySize           | Long (s)      | Shortcut to the size of PrimaryContentElement                                                          |
+| PrimaryFileName       | String        | Shortcut to the FileName of PrimaryContentElement                                                      |
+| IsCheckedOut          | Boolean (s)   | Whether this document is checked out or not.                                                           |
+| CreatedAt             | DateTime (s)  | When this document has been created                                                                    |
+| LastModifiedAt        | DateTime (s)  | When *this version* of the document has been created, i.e. when this document has been modified        |
+| CheckedOutAt          | DateTime (s)  | When this version of the document has been checked out; null if this document is not checked out       |
+| CreatedBy             | String (s)    | User who created this document                                                                         |
+| LastModifiedBy        | String (s)    | User who created this version of the document                                                          |
+| CheckedOutBy          | String (s)    | User who checked out this version of the document; null if this document is not checked out            |
 
-| **Property** | **Type**      | **Contents**                                 |
-|:-------------|:--------------|:---------------------------------------------|
-| Head         | Reference (s) | The source of this directed association      |
-| Tail         | Reference (s) | The destination of this directed association |
-| Name         | String (s)    | The name of this association                 |
-|              |               |                                              |
+#### §16 ContentElement aspect
+
+The \[“opendma.org”,”ContentElement”\] aspect is defined as:
+
+| **Property** | **Type**    | **Contents**                             |
+|:-------------|:------------|:-----------------------------------------|
+| Content      | Content (s) | The data of this content element         |
+| Size         | Longint (s) | The size of the data in number of octets |
+| MimeType     | String (s)  | The mime type of the data                |
+| FileName     | String (s)  | The file name of the data                |
+
+#### §17 Folder aspect
+
+The \[“opendma.org”,”Folder”\] aspect is defined as:
+
+| **Property**   | **Type**      | **Contents**                                                                                    |
+|:---------------|:--------------|:------------------------------------------------------------------------------------------------|
+| Title          | String (s)    | The title of this repository                                                                    |
+| Containees     | Reference (m) | The objects contained in this folder                                                            |
+| Associations   | Reference (m) | The associations of the contained objects                                                       |
+| CreatedAt      | DateTime (s)  | When this document has been created                                                             |
+| LastModifiedAt | DateTime (s)  | When *this version* of the document has been created, i.e. when this document has been modified |
+| CreatedBy      | String (s)    | User who created this document                                                                  |
+| LastModifiedBy | String (s)    | User who created this version of the document                                                   |
+
+#### §18 Association aspect
+
+The \[“opendma.org”,”Association”\] aspect is defined as:
+
+| **Property**   | **Type**      | **Contents**                                                                                    |
+|:---------------|:--------------|:------------------------------------------------------------------------------------------------|
+| Name           | String (s)    | The name of this association                                                                    |
+| Container      | Reference (s) | The source of this directed association                                                         |
+| Containment    | Reference (s) | The destination of this directed association                                                    |
+| CreatedAt      | DateTime (s)  | When this document has been created                                                             |
+| LastModifiedAt | DateTime (s)  | When *this version* of the document has been created, i.e. when this document has been modified |
+| CreatedBy      | String (s)    | User who created this document                                                                  |
+| LastModifiedBy | String (s)    | User who created this version of the document                                                   |
 
 ### Section II.2: Extended document management model
 
