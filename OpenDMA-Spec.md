@@ -96,7 +96,7 @@ The OpenDMA data model knows the special value *null* as representation for “n
 A *property* is defined as a triple consisting of
 
 1.  a qualified name as defined in §1,
-2.  a data type as defined in §2, and
+2.  a data type and cardinality as defined in §2, and
 3.  a value depending on the data type or null as representation for “empty”.
 
 #### §4 Objects
