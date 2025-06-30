@@ -103,19 +103,7 @@ A *property* is defined as a triple consisting of
 
 An *object* is a list of zero or more properties (see §3). Each object can be uniquely identified in its *context* by some *unique object identifier* that must be presentable as String.
 
-Definition: *context*
-
-A context is the place where the objects reside.
-
-Definition: *unique object identifier*
-
-A unique object identifier is some method to distinguish between objects in the same context.
-
-Examples:
-
-In a computer, the context would be the computer memory and the unique object identifier would be the address of the location where the object is stored in memory. If the machine supports different address spaces (like all modern computers do), each application has its own context, the application heap. The unique object identifier would by the relative address inside that heap.
-
-In a database system, the context would be the table and the unique object identifier would be the record number.
+A *context* is an artificial boundary set up by the actual document management system around objects in the same management domain.
 
 #### §5 Operations on objects
 
