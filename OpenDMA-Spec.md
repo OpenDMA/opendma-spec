@@ -240,12 +240,15 @@ A *valid class object* is a class info object (§7) following these conditions:
 This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid clas object has to contain the value `false`.
 
 Constraints:  
-The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects in a context.
+The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 
 ##### §8.4 Valid aspect objects
 
 A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose `opendma:Aspect` property contains the value `true`
 and whose `opendma:Aspects` property is empty.
+
+Constraints:  
+The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 
 ##### §8.5 Extension relationship
 
