@@ -46,7 +46,7 @@ The OpenDMA class architecture knows these scalar data types:
 5.  Float
 6.  Double
 7.  Boolean
-8.  DateTime (including time zone. Time zone may be undetermined)
+8.  DateTime
 9.  BLOB (Binary large object)
 
 ##### §2.2 Reference values
