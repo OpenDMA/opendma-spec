@@ -87,7 +87,9 @@ A numeric *data type id* is assigned to each data type corresponding to this tab
 
 ##### §2.6 Nullability
 
-The OpenDMA data model knows the special value *null* as representation for “not assigned”. This is only available for single valued data. Multi valued data cannot contain *null* values as individual elements and it cannot be *null* in it's entirety. It would be represented as an empty list or set instead.
+The OpenDMA data model knows the special value *null* as representation for “not assigned”.
+
+*Null* values are only available for single valued data. Multi valued data can neither contain *null* values as individual elements nor can it be *null* in it's entirety. It always contains a potentially empty list or set.
 
 #### §3 Properties
 
