@@ -51,7 +51,7 @@ The OpenDMA class architecture knows these scalar data types:
 
 ##### §2.2 Reference values
 
-The simple object model can reference other objects in the same context (see §4) by holding their unique identifier (see §4).
+The simple object model can reference other objects in the same context (see §4).
 
 ##### §2.3 Content
 
