@@ -177,7 +177,7 @@ These constraints apply to the properties:
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
 3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
 
-> Conclusion:
+> Conclusion:  
 > The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
 > referenced by `opendma:SuperClass`
 
