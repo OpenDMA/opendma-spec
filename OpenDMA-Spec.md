@@ -25,7 +25,7 @@ The OpenDMA architecture uses only qualified names. Each consists of
 1.  a namespace (Unicode text string with 1 or more characters; must not be null or empty), and
 2.  a name (noncolon Unicode text string with 1 or more characters; must not be null or empty).
 
-The namespace is a sequence of 1 or more noncolon names separated by the colon character. Namespaces are nested from left to right by appending another noncolon name.
+The namespace is a sequence of 1 or more non-empty non-colon names separated by the colon character. Namespaces are nested from left to right by appending another non-colon name.
 
 The namespace “opendma” is reserved for this architecture specification.
 
