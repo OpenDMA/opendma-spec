@@ -140,7 +140,7 @@ The properties of every object must match exactly in number, data type, cardinal
 
 ##### §6.2 Identification
 
-Every object must have at least a single valued String property (§3) with the qualified name `opendma:Id`. This property contains the String representation of the unique object identifier as defined in §4.
+Every object must have at least a single valued property (§3) with the qualified name `opendma:Id` and the “String” data type. This property must contain the String representation of the unique object identifier as defined in §4.
 
 #### §7 Class info object
 
