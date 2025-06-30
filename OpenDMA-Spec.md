@@ -97,7 +97,7 @@ A *property* is defined as a triple consisting of
 
 1.  a qualified name as defined in §1,
 2.  a data type and cardinality as defined in §2, and
-3.  a value depending on the data type or null as representation for “empty”.
+3.  a value depending on the data type or null as representation for “not assigned”.
 
 #### §4 Objects
 
