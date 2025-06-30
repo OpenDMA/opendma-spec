@@ -180,15 +180,15 @@ These constraints apply to the properties:
 Every context (§4) contains at least one class info object (§7) with these property values:
 
 | **Property name**     | **Value**                                                                                                                                                          |
-|:----------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|:-----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------|
 | `opendma:Class`       | Reference to the class class object (§8.2)                                                                                                                         |
 | `opendma:Id`          | Unique object identifier                                                                                                                                           |
 | `opendma:Name`        | String “Object”                                                                                                                                                    |
 | `opendma:Namespace`   | String “opendma”                                                                                                                                                   |
-| `opendma:SuperClass`  | NULL                                                                                                                                                               |
-| `opendma:Aspects`     | empty                                                                                                                                                              |
 | `opendma:DisplayName` | String “OdmaObject”                                                                                                                                                |
-| `opendma:Properties`  | Contains at least references to property info objects as described in §9 defining the “Class” property as defined in §6.1 and the “Id” property as defined in §6.2 |
+| `opendma:SuperClass`         | NULL                                                                                                                                 |
+| `opendma:DeclaredProperties` | Contains at least references to property info objects as described in §9 defining the “Class” (§6.1) and the “Id” (§6.2) properties. |
+| `opendma:Aspect`             | false                                                                                                                                |
 
 Every context has to provide a reference to exactly one object following these constraints. This object is called the *class hierarchy root*.
 
