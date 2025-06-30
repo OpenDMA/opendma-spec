@@ -172,10 +172,11 @@ A *class info object* is an object with at least theses properties:
 15. `opendma:Searchable`, single value, Boolean, not null
 16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
-These constraints apply to the properties:
+These constraints apply to the properties of valid class objects (§8.3) and valid aspect objects (§8.4):
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
 3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
+5.  The values of `opendma:Aspects` are all valid aspect objects
 
 > Conclusion:  
 > The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
@@ -206,7 +207,7 @@ Every context has to provide a reference to exactly one object following these c
 
 ##### §8.2 Class class object
 
-Every context (§4) contains a class info object (§7) that is referenced by the class hierarchy root (§8.1) with these property values:
+Every context (§4) contains a class info object (§7) that is referenced by the `opendma:Class` property of the class hierarchy root (§8.1) with these property values:
 
 | **Property name**            | **Value**                                                                                                     |
 |:-----------------------------|:--------------------------------------------------------------------------------------------------------------|
@@ -242,6 +243,9 @@ This forms a tree like structure called the *OpenDMA class hierarchy*. The `open
 Constraints:  
 The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 
+> Note:  
+> Paragraph §7 lists constraints that are only required for valid class objects.
+
 ##### §8.4 Valid aspect objects
 
 A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose `opendma:Aspect` property contains the value `true`
@@ -249,6 +253,9 @@ and whose `opendma:Aspects` property is empty.
 
 Constraints:  
 The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
+
+> Note:  
+> Paragraph §7 lists constraints that are only required for valid aspect objects.
 
 ##### §8.5 Extension relationship
 
@@ -259,12 +266,15 @@ A class info object *c* is said to *extend* a class info object *s* if and only 
 3.  The class info object referenced by *c*’s `opendma:SuperClass` property extends *s*, or
 4.  An entry of the `opendma:Aspects` property of *c* extends *s*.
 
+Naming convention:  
+Properties that are declared by valid class objects that are extended by a valid class *c* are said to be “inherited by *c*”.
+
 > Note:  
 > A class does not extend itself.
 
 ##### §8.6 InstanceOf relationship
 
-A object *o* is said to be an *instance of* a class info object *c* if the `opendma:Class` property of *o* contains a reference
+An object *o* is said to be an *instance of* a class info object *c* if the `opendma:Class` property of *o* contains a reference
 to a valid class info object that is or extends *c*.
 
 #### §9 Property info object
