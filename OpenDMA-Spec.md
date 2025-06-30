@@ -63,7 +63,9 @@ The special data type “Content” represents binary data as octet streams. The
 
 ##### §2.4 Cardinality
 
-Data of each data type can either be single valued or multi valued. Single valued data has at most one value of the data type whereas multi valued data is unbound and can have multiple elements of the same data type. Multi valued data of the “Reference” data type is represented as an unordered set while multi valued data of all other data types is represented as an ordered list.
+Data of each data type can either be single valued or multi valued. Single valued data has at most one value of the data type whereas multi valued data is unbound and can have multiple elements of the same data type.
+
+Multi valued data of the “Reference” data type is represented as an unordered set while multi valued data of all other data types is represented as an ordered list.
 
 ##### §2.5 Data type id
 
