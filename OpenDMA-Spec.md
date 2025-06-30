@@ -111,22 +111,18 @@ Each object (§4) supports only these two operations:
 
 - Read property  
   input: qualified name (§1)  
-  output: property (§3) containing the value or null  
-  Returns the value of a property identified by its name.
+  output: property (§3)  
+  Returns the entire description of this property  with it's name, data type, cardinality and value(s).
 
 - Write property  
-  input: qualified name (§1), value or null  
-  Modifies the value of a property identified by its name.
+  input: qualified name (§1) and value(s)  
+  Modifies only the value(s) of a property identified by its name.
 
-Both operations may succeed or fail. This result (success or failure) has to be returned to the caller.
+Both operations may succeed or fail. This result (success or failure) must be returned to the caller.
 
-**Some notes on section I.1**
-
-Please note:
-
-- It is not defined, when the read or write operation has to succeed and when it has to fail.
-
-- The outcome of the read and write operations is not defined. After writing a value for some property, it is not defined that a following read operation has to return this value or that it has to succeed at all.
+> Notes:
+> - It is not defined, when the read or write operation has to succeed and when it has to fail.
+> - The outcome of the read and write operations is not defined. After writing a value for some property, it is not defined that a following read operation has to return this value or that it has to succeed at all.
 
 ### Section I.2: OpenDMA object model
 
