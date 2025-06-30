@@ -248,11 +248,13 @@ The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique acro
 
 ##### §8.4 Valid aspect objects
 
-A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose `opendma:Aspect` property contains the value `true`
-and whose `opendma:Aspects` property is empty.
+A *valid aspect object* is a class info object (§7) that meets these constraints:
 
-Constraints:  
-The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
+1.  The `opendma:Aspect` property must contain the value `true`
+2.  The `opendma:Aspects` property must contain an empty set
+3.  The `opendma:SuperClass` property must either contain `null` or a reference to a valid aspect object
+4.  The graph created by following the `opendma:SuperClass` references must be loop free
+5.  The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 
 > Note:  
 > Paragraph §7 lists constraints that are only required for valid aspect objects.
