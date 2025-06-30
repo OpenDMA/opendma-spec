@@ -134,9 +134,18 @@ The following constraints apply to all objects in the OpenDMA object model.
 
 ##### §6.1 Reflection
 
-Every object must have at least a single valued property (§3) with the qualified name `opendma:Class`. This property is a reference property (§2.2) that has to contain a reference to a *valid class object* (§8.3). The property “IsInstantiable” of that valid class object must be true.
+Every object must have at least a single valued property (§3) with the qualified name `opendma:Class` and the “Reference” data type.
+It must contain a reference to a *valid class object* (§8.3).
 
-The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10) defined by this valid class object. A reference property *x* (§2.2) must only contain references to objects whose “Class” Property contains a reference to a class info object that is or extends (§8.4) the class info object referenced by the “ReferenceClass” property of *x*’s property info object (§9). If a property info object has a non-empty “ReferenceClass” property, the value of the corresponding property must only contain values described  by one of the “ChoiceValue” objects.
+The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10)
+defined by this valid class object.
+
+A reference property *x* (§2.2) must only contain references to objects whose `opendma:Class` property contains a reference to a class
+info object that is or extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of *x*’s property info
+object (§9).
+
+If a property info object has a non-empty `opendma:Choices` property, the value of the corresponding property must only contain values
+described by one of the `opendma:ChoiceValue` objects.
 
 ##### §6.2 Identification
 
@@ -164,14 +173,13 @@ A *class info object* is an object with at least theses properties:
 16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
 These constraints apply to the properties:
+1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
+2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
+3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
 
-- The restrictions of the “SuperClass” Property are defined in §8.
-
-- All property info objects (§9) referenced in the “DeclaredProperties” property must be unique in the list of effective properties (§10) of this class regarding the tuple (”Namespace”,”Name”). This implies that (a) no qualified property name may be used twice in this list and (b) no qualified property name already used by a super class or an aspect class may be reused. Properties can not be overwritten.
-
-- The tuple (”Namespace”,”Name”) of this object must be unique across all class info objects in the same context (§4)
-
-- The reference to a class info object *c* is contained in the “SubClasses” property of a class info object *p* if and only if the “SuperClass” reference property of *c* references *p*.
+> Conclusion:
+> The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
+> referenced by `opendma:SuperClass`
 
 #### §8 Class hierarchy
 
@@ -179,35 +187,43 @@ These constraints apply to the properties:
 
 Every context (§4) contains at least one class info object (§7) with these property values:
 
-| **Property name**     | **Value**                                                                                                                                                          |
+| **Property name**            | **Value**                                                                                                                            |
 |:-----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------|
-| `opendma:Class`       | Reference to the class class object (§8.2)                                                                                                                         |
-| `opendma:Id`          | Unique object identifier                                                                                                                                           |
-| `opendma:Name`        | String “Object”                                                                                                                                                    |
-| `opendma:Namespace`   | String “opendma”                                                                                                                                                   |
-| `opendma:DisplayName` | String “OdmaObject”                                                                                                                                                |
+| `opendma:Class`              | Reference to the class class object (§8.2)                                                                                           |
+| `opendma:Id`                 | Unique object identifier                                                                                                             |
+| `opendma:Name`               | String “Object”                                                                                                                      |
+| `opendma:Namespace`          | String “opendma”                                                                                                                     |
+| `opendma:DisplayName`        | String “OdmaObject”                                                                                                                  |
 | `opendma:SuperClass`         | NULL                                                                                                                                 |
 | `opendma:DeclaredProperties` | Contains at least references to property info objects as described in §9 defining the “Class” (§6.1) and the “Id” (§6.2) properties. |
 | `opendma:Aspect`             | false                                                                                                                                |
 
 Every context has to provide a reference to exactly one object following these constraints. This object is called the *class hierarchy root*.
 
+> Note:  
+> Properties defined in §7 and not listed in the table above have implementation specific values. The constraints set
+> forth in this document apply, e.g. for `opendma:Properties`
+
 ##### §8.2 Class class object
 
 Every context (§4) contains a class info object (§7) that is referenced by the class hierarchy root (§8.1) with these property values:
 
-| **Property name**     | **Value**                                                                                                     |
+| **Property name**            | **Value**                                                                                                     |
 |:-----------------------------|:--------------------------------------------------------------------------------------------------------------|
-| `opendma:Class`       | Reference to itself                                                                                           |
-| `opendma:Id`          | Unique object identifier                                                                                      |
-| `opendma:Name`        | String “Class”                                                                                                |
-| `opendma:Namespace`   | String “opendma”                                                                                              |
-| `opendma:DisplayName` | String “OdmaClass”                                                                                            |
+| `opendma:Class`              | Reference to itself                                                                                           |
+| `opendma:Id`                 | Unique object identifier                                                                                      |
+| `opendma:Name`               | String “Class”                                                                                                |
+| `opendma:Namespace`          | String “opendma”                                                                                              |
+| `opendma:DisplayName`        | String “OdmaClass”                                                                                            |
 | `opendma:SuperClass`         | Reference to the class hierarchy root (§8.1)                                                                  |
 | `opendma:DeclaredProperties` | Contains at least references to property info objects as described in §9 defining all properties listed in §7 |
 | `opendma:Aspect`             | false                                                                                                                                                              |
 
 This object is called the *class class*.
+
+> Note:  
+> Properties defined in §7 and not listed in the table above have implementation specific values. The constraints set
+> forth in this document apply, e.g. for `opendma:Properties`
 
 > Conslusion:  
 > Every context (§4) contains exactly one class class object. This follows directly from the existence and uniqueness
@@ -223,28 +239,30 @@ A *valid class object* is a class info object (§7) following these conditions:
 
 This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid clas object has to contain the value `false`.
 
+Constraints:  
+The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects in a context.
+
 ##### §8.4 Valid aspect objects
 
-A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose “Aspect” property contains the value “true” and whose “Instantiable” property contains the value “false”. This prevents multi inheritance.
-
-> Info:  
-> Compared to the Java programming language, the valid class objects can be seen as the classes in Java and the valid aspect objects can be seen as the interfaces in Java.
+A *valid aspect object* is a class info object (§7) that is not a valid class object (§8.3), whose `opendma:Aspect` property contains the value `true`
+and whose `opendma:Aspects` property is empty.
 
 ##### §8.5 Extension relationship
 
-A class info object *c* is said to *extend* a class info object *p* if and only if at least one of these conditions is met:
+A class info object *c* is said to *extend* a class info object *s* if and only if at least one of these conditions is met:
 
-1.  The “SuperClass” property of *c* references *p*, or
-2.  An entry of the Aspects property of *c* references *p*, or
-3.  The class info object referenced by *c*’s SuperClass property extends *p*, or
-4.  An entry of the Aspects property of *c* extends *p*.
+1.  The `opendma:SuperClass` property of *c* references *s*, or
+2.  An entry of the `opendma:Aspects` property of *c* references *s*, or
+3.  The class info object referenced by *c*’s `opendma:SuperClass` property extends *s*, or
+4.  An entry of the `opendma:Aspects` property of *c* extends *s*.
 
-> Info:  
-> A class c does not extend itself.
+> Note:  
+> A class does not extend itself.
 
 ##### §8.6 InstanceOf relationship
 
-A object *o* is said to be an *instance of* a class info object *c* if the “Class” property of *o* contains a reference to a valid class info object that is or extends *c*.
+A object *o* is said to be an *instance of* a class info object *c* if the `opendma:Class` property of *o* contains a reference
+to a valid class info object that is or extends *c*.
 
 #### §9 Property info object
 
@@ -264,21 +282,31 @@ A *property info object* is an object with at least theses properties:
 12. `opendma:System`, single value, Boolean, not null
 13. `opendma:Choices`, multi value, Reference, can be empty
 
-These constraints apply to the properties:
+> Conclusion:  
+> There exists exactly one valid class object (§8.3) in each context (§4) that describes property info objects.
 
-- There exists exactly one valid class object (§8.3) in each context (§4) that describes property info objects. The qualified name of this object is `opendma:PropertyInfo`. The “Class” property has to contain a reference to a valid class object (§8.3) that is or extends this object.
+The qualified name of the valid class info object that descibes property info objects is `opendma:PropertyInfo`.
 
-- The value of “DataType” must be one of the list of numeric data type ids (§2.5).
-
-- The value of “ReferenceClass” must contain a refence to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of “DataType” is 8. It must be null otherwise.
+These constraints apply to the property values of property info objects:
+- The `opendma:Class` property has to contain a reference to a valid class object (§8.3) that is or extends the valid class object with the qualified name `opendma:PropertyInfo`.
+- The value of `opendma:DataType` must be one of the list of numeric data type ids (§2.5).
+- The value of `opendma:ReferenceClass` must contain a refence to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of `opendma:DataType` is `8`. It must be `null` otherwise.
 
 #### §10 Effective properties list
 
-The *effective properties list* of a valid class object (§8.3) or valid aspect object (\$8.4) *c* is a list of property info objects (§9) defined as follows:
+The *effective properties list* of a valid class object (§8.3) or valid aspect object ($8.4) *c* is a list of property info objects (§9) defined as follows:
 
-1.  all property info objects (§9) of *c*’s `opendma:Properties` Property are part of the effective properties list, and
-2.  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass` property are part of the effective properties list.
+1.  all property info objects (§9) of *c*’s `opendma:DeclaredProperties` property are part of the effective properties list, and
+2.  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass`
+    property are part of the effective properties list, unless there is a property info object with the same `opendma:Name` and
+	`opendma:Namespace` in `opendma:DeclaredProperties` and the data type of both objects is `8` (“Reference”) and the valid class
+	object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
+	valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
+	valid class object referenced by *c*’s `opendma:SuperClass` property.
 3.  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:Aspects` property are part of the effective properties list.
+
+Constraints:  
+The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all property info objects of a valid class object or valid aspect object.
 
 #### §11 Choice value object
 
@@ -299,40 +327,46 @@ A *choice value object* is an object with at least theses properties:
 13. `opendma:ReferenceValue`, single value, Reference, nullable
 
 > Note:  
-> Due to the reflection limitations (§6.1), the “ReferenceValue” property must only contain valid references. It must
-> only contain references to objects whose “Class” property contains a reference to a class info object that is or
-> extends (§8.4) the class info object referenced by the “ReferenceClass” property of the property info object (§9) it
+> Due to the reflection limitations (§6.1), the `opendma:ReferenceValue` property must only contain valid references. It must
+> only contain references to objects whose `opendma:Class` property contains a reference to a class info object that is or
+> extends (§8.4) the class info object referenced by the `opendma:ReferenceClass` property of the property info object (§9) it
 > is contained in.
 
 #### §12 Failure messages
 
 The object model knows a set of distinguished failure messages for the read / write operations (§5):
 
-1.  ObjectNotFound
+1.  PropertyNotFound
 2.  InvalidDataType
 
 ##### §12.1 Property existence
 
-The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an *ObjectNotFound* (§11) response code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and `opendma:Namespace` values to *pn*.
+The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an `PropertyNotFound` (§11) response
+code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and
+`opendma:Namespace` values to *pn*.
 
 ##### §12.2 Type safety
 
-The write operation (§5) for a qualified property name *pn* on an object *o* has to return an *InvalidDataType* (§11) response code if and only if
+The write operation (§5) for a qualified property name *pn* on an object *o* has to return an `InvalidDataType` (§11) response code if and only if
 
 1.  the effective property list (§10) of *o* does contain a property info object for *pn*, and
-
 2.  one of these conditions applies:
 
     1.  the value of `opendma:DataType` of that property info object does not match the data type of the value to be written, or
-    2.  the value of `opendma:Choices` of that property info object is not null and does not contain a reference to a choice value object (§11) whose value property corresponding to the data type contains the value to be written.
+    2.  the value of `opendma:MultiValue` of that property info object does not match the cardinality of the value to be written, or
+    3.  the value of `opendma:Required` of that property info object is `true` and the value to be written is either `null` or an empty collection, or
+    4.  the value of `opendma:Choices` of that property info object is not empty and does not contain a reference to a choice value object (§11) whose
+	    value property corresponding to the data type contains the value to be written.
 
-The value returned by the read operation (§5) has to be of the data type defined by the numeric data type id read from the `opendma:DataType` property of the corresponding property info for *pn*.
+The value returned by the read operation (§5) has to be of the data type defined by the numeric data type id read from the `opendma:DataType` property
+of the corresponding property info for *pn*.
 
 > Note:
 >
 > This section defines only a required set of properties for the objects of the class hierarchy, but it does not limit the actual properties to this set.
 >
-> An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by the OpenDMA architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
+> An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by the OpenDMA
+> architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
 >
 > Later sections of this specification might narrow these constraints and limit the set of properties to exactly the properties defined here.
 
