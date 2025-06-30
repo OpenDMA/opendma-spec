@@ -8,7 +8,7 @@
 
 ## Preface
 
-The Open document management architecture (OpenDMA) is based on an *abstract* architecture that is able to cover all existing document management systems. This abstract architecture is defined in multiple layers (*sections* in this document), where each layer is able to use the features offered by a lower layer.
+The Open document management architecture (OpenDMA) is based on an *abstract* architecture that is able to cover all existing document management systems. This abstract architecture is defined in multiple layers (*sections* in this document), where each layer is built on top of features offered by lower layers.
 
 ## Section I: Object oriented OpenDMA model
 
