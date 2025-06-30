@@ -33,7 +33,7 @@ If a qualified name is represented as a simple string, the namespace and the nam
 
 #### §2 Data types
 
-The simple object model is able to hold data as scalar values or un-typed references to other objects. Both may be either single valued or multi valued (arrays).
+The simple object model is able to hold data as scalar values or un-typed references to other objects. Both may be either single valued or multi valued.
 
 ##### §2.1 Scalar values
 
@@ -59,7 +59,7 @@ The OpenDMA class architecture knows the special data type “Content” that is
 
 ##### §2.4 Cardinality
 
-Data of each data type can be either single valued or multi valued. Single valued data has exactly one value of the data type whereas multi valued data has a list of one or more elements of the same data type. An empty list of values is not allowed (see Nullability §2.4).
+Data of each data type can be either single valued or multi valued. Single valued data has exactly one value of the data type whereas multi valued data consists of one or more elements of the same data type. An empty list of values is not allowed (see Nullability §2.4).
 
 ##### §2.5 Data type id
 
