@@ -197,15 +197,15 @@ Every context has to provide a reference to exactly one object following these c
 Every context (§4) contains a class info object (§7) that is referenced by the class hierarchy root (§8.1) with these property values:
 
 | **Property name**     | **Value**                                                                                                     |
-|:----------------------|:--------------------------------------------------------------------------------------------------------------|
+|:-----------------------------|:--------------------------------------------------------------------------------------------------------------|
 | `opendma:Class`       | Reference to itself                                                                                           |
 | `opendma:Id`          | Unique object identifier                                                                                      |
 | `opendma:Name`        | String “Class”                                                                                                |
 | `opendma:Namespace`   | String “opendma”                                                                                              |
-| `opendma:SuperClass`  | Reference to the class hierarchy root (§8.1)                                                                  |
-| `opendma:Aspects`     | empty                                                                                                         |
 | `opendma:DisplayName` | String “OdmaClass”                                                                                            |
-| `opendma:Properties`  | Contains at least references to property info objects as described in §9 defining all properties listed in §7 |
+| `opendma:SuperClass`         | Reference to the class hierarchy root (§8.1)                                                                  |
+| `opendma:DeclaredProperties` | Contains at least references to property info objects as described in §9 defining all properties listed in §7 |
+| `opendma:Aspect`             | false                                                                                                                                                              |
 
 This object is called the *class class*.
 
