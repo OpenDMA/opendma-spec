@@ -209,7 +209,10 @@ Every context (§4) contains a class info object (§7) that is referenced by the
 
 This object is called the *class class*.
 
-<u>Conslusion 1:</u> Every context (§4) contains exactly one class class object. This follows directly from the existence and uniqueness of the class hierarchy root and the single cardinality and not nullability of the Class property of the class hierarchy root.
+> Conslusion:  
+> Every context (§4) contains exactly one class class object. This follows directly from the existence and uniqueness
+> of the class hierarchy root and the single cardinality and not nullability of the Class property of the class
+> hierarchy root.
 
 ##### §8.3 Valid class objects
 
