@@ -50,7 +50,7 @@ The OpenDMA class architecture knows these scalar data types:
 9.  BLOB (Binary large object)
 
 > Note:  
-> Venders can choose the timezone for DataTime values and need to document this properly. We strongly encourage vendors
+> Vendors can choose the timezone for DataTime values and need to document this properly. We strongly encourage vendors
 > to add an option to their OpenDMA adaptors to always treat DateTime values in UTC.
 
 ##### §2.2 Reference values
