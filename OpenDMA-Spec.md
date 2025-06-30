@@ -22,8 +22,8 @@ This first subsection defines an object model without any constraints. Those obj
 
 The OpenDMA architecture uses only qualified names. Each consists of
 
-1.  a namespace (Unicode text string with 1 or more characters; must not be null or empty), and
-2.  a name (noncolon Unicode text string with 1 or more characters; must not be null or empty).
+1.  a namespace (Unicode text string with 1 or more characters), and
+2.  a name (noncolon Unicode text string with 1 or more characters).
 
 The namespace is a sequence of 1 or more non-empty non-colon names separated by the colon character. Namespaces are nested from left to right by appending another non-colon name.
 
