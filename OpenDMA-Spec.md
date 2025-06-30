@@ -219,9 +219,9 @@ This object is called the *class class*.
 A *valid class object* is a class info object (§7) following these conditions:
 
 1.  The class hierarchy root (§8.1) is a valid class object.
-2.  All class objects containing a reference to a valid class object in their “SuperClass” property are again valid class objects.
+2.  All class objects containing a reference to a valid class object in their `opendma:SuperClass` property are again valid class objects.
 
-This forms a tree like structure called the *OpenDMA class hierarchy*. The “Aspect” property of every valid clas object has to contain the value “false”.
+This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid clas object has to contain the value `false`.
 
 ##### §8.4 Valid aspect objects
 
