@@ -33,7 +33,7 @@ If a qualified name is represented as a simple string, the namespace and the nam
 
 #### §2 Data types
 
-The simple object model is able to hold data as scalar values or un-typed references to other objects. Both may be either single valued or multi valued.
+The simple object model is able to hold data as scalar values or un-typed references to other objects. Both may either be single valued or multi valued.
 
 ##### §2.1 Scalar values
 
@@ -140,9 +140,9 @@ It must contain a reference to a *valid class object* (§8.3).
 The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10)
 defined by this valid class object.
 
-A reference property *x* (§2.2) must only contain references to objects whose `opendma:Class` property contains a reference to a class
-info object that is or extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of *x*’s property info
-object (§9).
+A reference property *x* (§2.2) must only contain references to objects whose `opendma:Class` property contains a reference to a valid
+class info object that is or extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of the property
+info object (§9) describing *x*.
 
 If a property info object has a non-empty `opendma:Choices` property, the value of the corresponding property must only contain values
 described by one of the `opendma:ChoiceValue` objects.
