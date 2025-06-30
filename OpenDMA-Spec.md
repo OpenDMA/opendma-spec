@@ -55,7 +55,7 @@ The simple object model can reference other objects in the same context (see §4
 
 ##### §2.3 Content
 
-The OpenDMA class architecture knows the special data type “Content” that is not common in other well known object models. This data type stores very large octet streams and is accessed in a stream typed manner.
+The special data type “Content” represents binary data as octet streams. These are typically very large in size and are accessed as a whole in a stream typed manner.
 
 ##### §2.4 Cardinality
 
