@@ -151,17 +151,17 @@ A *class info object* is an object with at least theses properties:
 3.  `opendma:Name`, single value, String, not null
 4.  `opendma:Namespace`, single value, String, not null
 5.  `opendma:DisplayName`, single value, String, not null
-6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), nullable
-7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), nullable
-8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), nullable
-9.  `opendma:Properties`, multi value, Reference to property info objects (§9), nullable
+6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), can be null
+7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), can be empty
+8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), can be empty
+9.  `opendma:Properties`, multi value, Reference to property info objects (§9), can be empty
 10. `opendma:Aspect`, single value, Boolean, not null
 11. `opendma:Instantiable`, single value, Boolean, not null
 12. `opendma:Hidden`, single value, Boolean, not null
 13. `opendma:System`, single value, Boolean, not null
 14. `opendma:Retrievable`, single value, Boolean, not null
 15. `opendma:Searchable`, single value, Boolean, not null
-16. `opendma:SubClasses`, multi value, Reference to a class info objects, nullable
+16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
 These constraints apply to the properties:
 
@@ -253,13 +253,13 @@ A *property info object* is an object with at least theses properties:
 4.  `opendma:Namespace`, single value, String, not null
 5.  `opendma:DisplayName`, single value, String, not null
 6.  `opendma:DataType`, single value, Integer, not null
-7.  `opendma:ReferenceClass`, single value, Reference, nullable
+7.  `opendma:ReferenceClass`, single value, Reference, can be null
 8.  `opendma:MultiValue`, single value, Boolean, not null
 9.  `opendma:Required`, single value, Boolean, not null
 10. `opendma:ReadOnly`, single value, Boolean, not null
 11. `opendma:Hidden`, single value, Boolean, not null
 12. `opendma:System`, single value, Boolean, not null
-13. `opendma:Choices`, multi value, Reference, nullable
+13. `opendma:Choices`, multi value, Reference, can be empty
 
 These constraints apply to the properties:
 
