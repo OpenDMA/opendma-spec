@@ -401,7 +401,7 @@ The set of basic document management classes consists of:
   A *Repository* represents a place where all Objects are stored. It represents the *context* defined in §4. Classes inside one Repository need not be valid in another Repository.
 
 - Document  
-  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. But unlike files, it may consist of multiple octet streams. So a webpage can be stored as one Document that consists of the HTML data and all additional image data. Also a TIFF image of a page can be stored as one Document that contains the TIFF image itself as well as a JPEG thumbnail and some XML annotations.
+  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These contnt streams can for example old images of the individual pages that make up the document.  
   A Document is able to keep track of its changes (versioning) and manage the access to it (checkin and checkout).
 
 - ContentElement  
