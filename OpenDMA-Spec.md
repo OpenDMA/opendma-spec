@@ -378,14 +378,87 @@ The write operation (§5) for a qualified property name *pn* on an object *o* ha
 The value returned by the read operation (§5) has to be of the data type defined by the numeric data type id read from the `opendma:DataType` property
 of the corresponding property info for *pn*.
 
-> Note:
->
-> This section defines only a required set of properties for the objects of the class hierarchy, but it does not limit the actual properties to this set.
->
-> An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by the OpenDMA
-> architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
->
-> Later sections of this specification might narrow these constraints and limit the set of properties to exactly the properties defined here.
+#### §13 Core class reference
+
+Section I.2 defines a set of properties that are required for the objects of the class hierarchy, but it does not limit the actual properties to this set.
+
+An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by the OpenDMA
+architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
+
+The meaning and expected content of the properties defined in section I.2 is documented in this paragraph.
+
+##### §13.1 opendma:Object
+
+Root of the class hierarchy. Every class in OpenDMA extends this class. All objects in OpenDMA have the properties defined for this class.
+
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Class`              | Reference | Single | Required | Reference to a valid class object describing this object                                                          |
+| `opendma:Id`                 | String    | Single | Required | String representation of the unique object identifier as defined in §4                                            |
+
+##### §13.2 opendma:Class
+
+Objects of this class describe Classes and Aspects in OpenmDMA. Every object in OpenDMA has a reference to an instance of this class describing it.
+
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| *`opendma:Class`*            | Reference | Single | Required | Reference to a valid class object describing this object                                                          |
+| *`opendma:Id`*               | String    | Single | Required | String representation of the unique object identifier as defined in §4                                            |
+| `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this class                                                            |
+| `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this class                                                       |
+| `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this class                                                                    |
+| `opendma:SuperClass`         | Reference | Single | Optional | Super class of this class or aspect. Value is instance of `opendma:Class`.                                        |
+| `opendma:Aspects`            | Reference | Multi  | Optional | List of aspects that are implemented by this class. Values are instances of `opendma:Class`.                      |
+| `opendma:DeclaredProperties` | Reference | Multi  | Optional | List of properties declared by this class. Values are instances of `opendma:PropertyInfo`.                        |
+| `opendma:Properties`         | Reference | Multi  | Optional | List of effective properties. Values are instances of `opendma:PropertyInfo`.                                     |
+| `opendma:Aspect`             | Boolean   | Single | Required | Flag indicating if this object represents an Aspect or a Class                                                    |
+| `opendma:Instantiable`       | Boolean   | Single | Required | Flag indicating if there can ob objects of this class (true) or if this class is abstract (false)                 |
+| `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
+| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are managed by the system                                                    |
+| `opendma:Retrievable`        | Boolean   | Single | Required | If instances of this class can by retrieved by their ID                                                           |
+| `opendma:Searchable`         | Boolean   | Single | Required | If instances of this class can be retrieved in a search                                                           |
+| `opendma:SubClasses`         | Reference | Multi  | Optional | List of classes or aspects that extend this class                                                                 |
+
+##### §13.2 opendma:PropertyInfo
+
+Objects of this class describe properties in OpenmDMA. Every Class object in OpenDMA has a reference to a set of PropertyInfo objects. Each describes one of the properties on this object.
+
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| *`opendma:Class`*            | Reference | Single | Required | Reference to a valid class object describing this object                                                          |
+| *`opendma:Id`*               | String    | Single | Required | String representation of the unique object identifier as defined in §4                                            |
+| `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this property                                                         |
+| `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this property                                                    |
+| `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this property                                                                 |
+| `opendma:DataType`           | Integer   | Single | Required | Numeric data type ID                                                                                              |
+| `opendma:ReferenceClass`     | Reference | Single | Optional | If the data type is "Reference" (8), instance of `opendma:Class` values must be an instance of, null otherwise    |
+| `opendma:MultiValue`         | Boolean   | Single | Required | Indicates if this property has single or multi cardinality                                                        |
+| `opendma:Required`           | Boolean   | Single | Required | Indicates if at least one value is required                                                                       |
+| `opendma:ReadOnly`           | Boolean   | Single | Required | Flag indicating if this property can be changed                                                                   |
+| `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
+| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are managed by the system                                                    |
+| `opendma:Choices`            | Reference | Multi  | Optional | List of `opendma:ChoiceValue` instances each describing one possible value for this property                      |
+
+##### §13.3 opendma:ChoiceValue
+
+Objects of this class describe a possible value of a property.
+
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| *`opendma:Class`*            | Reference | Single | Required | Reference to a valid class object describing this object                                                          |
+| *`opendma:Id`*               | String    | Single | Required | String representation of the unique object identifier as defined in §4                                            |
+| `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this possible value option                                                    |
+| `opendma:StringValue`        | String    | Single | Optional | Value of the property if the data type of the property is "String"                                                |
+| `opendma:IntegerValue`       | Integer   | Single | Optional | Value of the property if the data type of the property is "Integer"                                               |
+| `opendma:ShortValue`         | Short     | Single | Optional | Value of the property if the data type of the property is "Short"                                                 |
+| `opendma:LongValue`          | Long      | Single | Optional | Value of the property if the data type of the property is "Long"                                                  |
+| `opendma:FloatValue`         | Float     | Single | Optional | Value of the property if the data type of the property is "Float"                                                 |
+| `opendma:DoubleValue`        | Double    | Single | Optional | Value of the property if the data type of the property is "Double"                                                |
+| `opendma:BooleanValue`       | Boolean   | Single | Optional | Value of the property if the data type of the property is "Boolean"                                               |
+| `opendma:DateTimeValue`      | DateTime  | Single | Optional | Value of the property if the data type of the property is "DateTime"                                              |
+| `opendma:BlobValue`          | Blob      | Single | Optional | Value of the property if the data type of the property is "Blob"                                                  |
+| `opendma:ReferenceValue`     | Reference | Single | Optional | Value of the property if the data type of the property is "Reference"                                             |
+
 
 ## Section II: OpenDMA document management model
 
@@ -398,7 +471,7 @@ This set is divided into two parts, a set of basic and a set of extended documen
 The set of basic document management classes consists of:
 
 - Repository  
-  A *Repository* represents a place where all Objects are stored. It represents the *context* defined in §4. Classes inside one Repository need not be valid in another Repository.
+  A *Repository* represents a place where all Objects are stored. It represents the *context* defined in §4. Classes inside one Repository need not be valid in another Repository.  
 
 - Document  
   A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These contnt streams can for example old images of the individual pages that make up the document.  
@@ -428,7 +501,7 @@ The set of basic document management classes consists of:
 - Association  
   An Association represents the directed link between a Container and a Containable object.
 
-#### §13 Repository class
+#### §14 Repository class
 
 The `opendma:Repository` class extends the `opendma:Object` class and has these additional properties:
 
@@ -440,7 +513,7 @@ The `opendma:Repository` class extends the `opendma:Object` class and has these 
 | RootAspects  | Reference | M     | Y     | Reference to all valid aspect objects that do not inherit another valid aspect. Reference class: `opendma:Class`               |
 | RootFolder   | Reference | S     | Y     | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. Reference class: `opendma:Folder` |
 
-##### §13.1 Repository reflection in the objects
+##### §14.1 Repository reflection in the objects
 
 The `opendma:Object` class is extended as follows to reflect the Repository they reside in:
 
@@ -448,7 +521,7 @@ The `opendma:Object` class is extended as follows to reflect the Repository they
 |:-------------|:----------|:------|:------|:-----------------------------------------------------------------------------|
 | Repository   | Reference | S     | N     | The repository this object belongs to. Reference class: `opendma:Repository` |
 
-#### §14 Global unique identification
+#### §15 Global unique identification
 
 The `opendma:Object` class is extended as follows:
 
@@ -456,7 +529,7 @@ The `opendma:Object` class is extended as follows:
 |:-------------|:---------|:------|:------|:-----------------------------------------------------------------------------------------------------------------------|
 | Guid         | String   | S     | N     | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
 
-#### §15 Document aspect
+#### §16 Document aspect
 
 The `opendma:Document` aspect is defined as:
 
@@ -478,7 +551,7 @@ The `opendma:Document` aspect is defined as:
 | CheckedOutAt           | DateTime  | S     | Y     | When this version of the document has been checked out; null if and only if this document is not checked out                                      |
 | CheckedOutBy           | String    | S     | Y     | User who checked out this version of this document; null if and only if this document is not checked out                                          |
 
-#### §16 ContentElement aspect
+#### §17 ContentElement aspect
 
 The `opendma:ContentElement` aspect is defined as:
 
@@ -487,7 +560,7 @@ The `opendma:ContentElement` aspect is defined as:
 | ContentType  | String   | S     | Y     | The MIME type of the content represented by this element                                    |
 | Position     | Integer  | S     | Y     | The position of this element in the list of all content elements of the containing document |
 
-#### §17 DataContentElement aspect
+#### §18 DataContentElement aspect
 
 The `opendma:DataContentElement` aspect extends opendam:ContentElement and declares:
 
@@ -497,7 +570,7 @@ The `opendma:DataContentElement` aspect extends opendam:ContentElement and decla
 | Size         | Longint  | S     | Y     | The size of the data in number of octets |
 | FileName     | String   | S     | Y     | The file name of the data                |
 
-#### §18 ReferenceContentElement aspect
+#### §19 ReferenceContentElement aspect
 
 The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and declares:
 
@@ -505,7 +578,7 @@ The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and 
 |:-------------|:---------|:------|:------|:------------------------------------|
 | Location     | String   | S     | Y     | The URI where the content is stored |
 
-#### §16 VersionCollection aspect
+#### §20 VersionCollection aspect
 
 The `opendma:VersionCollection` aspect is defined as:
 
@@ -518,7 +591,7 @@ The `opendma:VersionCollection` aspect is defined as:
 | CreatedAt    | DateTime  | S     | N     | When this document has been created                                                                                                                     |
 | CreatedBy    | String    | S     | N     | User who created this document                                                                                                                          |
 
-#### §17 Container aspect
+#### §21 Container aspect
 
 The `opendma:Container` aspect is defined as:
 
@@ -532,7 +605,7 @@ The `opendma:Container` aspect is defined as:
 | LastModifiedAt | DateTime  | S     | N     | When this container has been modified the last time                                                       |
 | LastModifiedBy | String    | S     | N     | User who modified this container the last time                                                            |
 
-#### §18 Folder aspect
+#### §22 Folder aspect
 
 The `opendma:Folder` aspect extends the `opendma:Container` by these additional properties:
 
@@ -550,7 +623,7 @@ A folder *d* is called a *descendant* of folder *f* if one of these conditions i
 
 A Folder must not contain a reference to one of its descendants in its Parent property.
 
-#### §19 Containable aspect
+#### §23 Containable aspect
 
 The `opendma:Containable` aspect is defined as:
 
@@ -559,7 +632,7 @@ The `opendma:Containable` aspect is defined as:
 | ContainedIn             | Reference | M     | Y     | The container objects this Containable is contained in. Reference class: `opendma:Container`                 |
 | ContainedInAssociations | Reference | M     | Y     | The associations that bind this Containable in the Conatiner objects. Reference class: `opendma:Association` |
 
-#### §20 Association aspect
+#### §24 Association aspect
 
 The `opendma:Association` aspect is defined as:
 
