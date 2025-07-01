@@ -398,7 +398,7 @@ Root of the class hierarchy. Every class in OpenDMA extends this class. All obje
 
 ##### §13.2 opendma:Class
 
-Objects of this class describe Classes and Aspects in OpenmDMA. Every object in OpenDMA has a reference to an instance of this class describing it.
+Objects of this class describe Classes and Aspects in OpenDMA. Every object in OpenDMA has a reference to an instance of this class describing it.
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
