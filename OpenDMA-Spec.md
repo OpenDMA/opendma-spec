@@ -402,8 +402,8 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                          |
-| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                            |
+| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this class                                                            |
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this class                                                       |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this class                                                                    |
@@ -411,33 +411,33 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:Aspects`            | Reference | Multi  | Optional | List of aspects that are implemented by this class. Values are instances of `opendma:Class`.                      |
 | `opendma:DeclaredProperties` | Reference | Multi  | Optional | List of properties declared by this class. Values are instances of `opendma:PropertyInfo`.                        |
 | `opendma:Properties`         | Reference | Multi  | Optional | List of effective properties. Values are instances of `opendma:PropertyInfo`.                                     |
-| `opendma:Aspect`             | Boolean   | Single | Required | Flag indicating if this object represents an Aspect or a Class                                                    |
-| `opendma:Instantiable`       | Boolean   | Single | Required | Flag indicating if there can ob objects of this class (true) or if this class is abstract (false)                 |
+| `opendma:Aspect`             | Boolean   | Single | Required | Indicates if this object represents an Aspect or a Class                                                          |
+| `opendma:Instantiable`       | Boolean   | Single | Required | Indicates if there can ob objects of this class (true) or if this class is abstract (false)                       |
 | `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
-| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are managed by the system                                                    |
-| `opendma:Retrievable`        | Boolean   | Single | Required | If instances of this class can by retrieved by their ID                                                           |
-| `opendma:Searchable`         | Boolean   | Single | Required | If instances of this class can be retrieved in a search                                                           |
+| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are owned and managed by the system                                          |
+| `opendma:Retrievable`        | Boolean   | Single | Required | Indicates if instances of this class can by retrieved by their Id                                                 |
+| `opendma:Searchable`         | Boolean   | Single | Required | Indicates if instances of this class can be retrieved in a search                                                 |
 | `opendma:SubClasses`         | Reference | Multi  | Optional | List of classes or aspects that extend this class                                                                 |
 
 ##### §13.2 opendma:PropertyInfo
 
-Objects of this class describe properties in OpenmDMA. Every Class object in OpenDMA has a reference to a set of PropertyInfo objects. Each describes one of the properties on this object.
+Objects of this class describe properties in OpenmDMA. Every object in OpenDMA has a reference to an opendma:Class which has the opendma:Properties set of PropertyInfo objects. Each describes one of the properties on the object.
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                          |
-| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                            |
+| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this property                                                         |
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this property                                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this property                                                                 |
 | `opendma:DataType`           | Integer   | Single | Required | Numeric data type ID                                                                                              |
-| `opendma:ReferenceClass`     | Reference | Single | Optional | If the data type is "Reference" (8), instance of `opendma:Class` values must be an instance of, null otherwise    |
+| `opendma:ReferenceClass`     | Reference | Single | Optional | The `opendma:Class` values of the property must be an instance of if and only if the data type is "Reference" (8), null otherwise |
 | `opendma:MultiValue`         | Boolean   | Single | Required | Indicates if this property has single or multi cardinality                                                        |
 | `opendma:Required`           | Boolean   | Single | Required | Indicates if at least one value is required                                                                       |
-| `opendma:ReadOnly`           | Boolean   | Single | Required | Flag indicating if this property can be changed                                                                   |
+| `opendma:ReadOnly`           | Boolean   | Single | Required | Indicates if this property can be updated                                                                         |
 | `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
-| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are managed by the system                                                    |
-| `opendma:Choices`            | Reference | Multi  | Optional | List of `opendma:ChoiceValue` instances each describing one possible value for this property                      |
+| `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this property are owned and managed by the system                                       |
+| `opendma:Choices`            | Reference | Multi  | Optional | List of `opendma:ChoiceValue` instances each describing one valid value for this property                         |
 
 ##### §13.3 opendma:ChoiceValue
 
@@ -445,19 +445,19 @@ Objects of this class describe a possible value of a property.
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                          |
-| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                            |
+| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this possible value option                                                    |
-| `opendma:StringValue`        | String    | Single | Optional | Value of the property if the data type of the property is "String"                                                |
-| `opendma:IntegerValue`       | Integer   | Single | Optional | Value of the property if the data type of the property is "Integer"                                               |
-| `opendma:ShortValue`         | Short     | Single | Optional | Value of the property if the data type of the property is "Short"                                                 |
-| `opendma:LongValue`          | Long      | Single | Optional | Value of the property if the data type of the property is "Long"                                                  |
-| `opendma:FloatValue`         | Float     | Single | Optional | Value of the property if the data type of the property is "Float"                                                 |
-| `opendma:DoubleValue`        | Double    | Single | Optional | Value of the property if the data type of the property is "Double"                                                |
-| `opendma:BooleanValue`       | Boolean   | Single | Optional | Value of the property if the data type of the property is "Boolean"                                               |
-| `opendma:DateTimeValue`      | DateTime  | Single | Optional | Value of the property if the data type of the property is "DateTime"                                              |
-| `opendma:BlobValue`          | Blob      | Single | Optional | Value of the property if the data type of the property is "Blob"                                                  |
-| `opendma:ReferenceValue`     | Reference | Single | Optional | Value of the property if the data type of the property is "Reference"                                             |
+| `opendma:StringValue`        | String    | Single | Optional | Value of the property if the data type of the property is "String", null otherwise                                |
+| `opendma:IntegerValue`       | Integer   | Single | Optional | Value of the property if the data type of the property is "Integer", null otherwise                               |
+| `opendma:ShortValue`         | Short     | Single | Optional | Value of the property if the data type of the property is "Short", null otherwise                                 |
+| `opendma:LongValue`          | Long      | Single | Optional | Value of the property if the data type of the property is "Long", null otherwise                                  |
+| `opendma:FloatValue`         | Float     | Single | Optional | Value of the property if the data type of the property is "Float", null otherwise                                 |
+| `opendma:DoubleValue`        | Double    | Single | Optional | Value of the property if the data type of the property is "Double", null otherwise                                |
+| `opendma:BooleanValue`       | Boolean   | Single | Optional | Value of the property if the data type of the property is "Boolean", null otherwise                               |
+| `opendma:DateTimeValue`      | DateTime  | Single | Optional | Value of the property if the data type of the property is "DateTime", null otherwise                              |
+| `opendma:BlobValue`          | Blob      | Single | Optional | Value of the property if the data type of the property is "Blob", null otherwise                                  |
+| `opendma:ReferenceValue`     | Reference | Single | Optional | Value of the property if the data type of the property is "Reference", null otherwise                             |
 
 
 ## Section II: OpenDMA document management model
