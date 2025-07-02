@@ -479,11 +479,13 @@ The set of basic document management classes consists of:
   Object references are limited in scope within a single repository.
 
 - Document  
-  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These content streams can for example contain images of the individual pages that make up the document.  
-  A Document is able to keep track of its changes (versioning) and manage the access to it (checkin and checkout).
+  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple
+  octet streams. These content streams can for example contain images of the individual pages that make up the document. A Document is able to keep track of its changes
+  (versioning) and manage the access to it (checkin and checkout).
 
 - ContentElement  
-  A *ContentElement* represents one atomic content element the Documents are made of. This abstract (non instantiable) base class defines the type of content and the position of this element in the sequence of all content elements.
+  A *ContentElement* represents one atomic content element the Documents are made of. This abstract (non instantiable) base class defines the type of content and the
+  position of this element in the sequence of all content elements.
 
 - DataContentElement  
   A *DataContentElement* represents one atomic octet stream. The binary data is stored together with meta data like size and filename.
@@ -492,19 +494,22 @@ The set of basic document management classes consists of:
   A *ReferenceContentElement* represents a reference to external data. The reference is stored as URI to the content location.
 
 - VersionCollection  
-  A *VersionCollection* represents the set of all versions of a Document.
+  A *VersionCollection* represents the set of all versions of a Document. Based on the actual document management system, it can represent a single series of versions,
+  a tree of version, or any other versioning concept.
 
 - Container  
-  A *Container* holds a list of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based on references. An object may be contained in multiple Containers or in no Container at all. OpenDMA does not require a single rooted tree as a file system does.
+  A *Container* holds a set of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based
+  on references to the containmer and the containee. This allows an object to be contained in multiple Containers or in no Container at all. A Container does not enforce
+  a loop-free single rooted tree. Use a folder instead for this requirement.
 
 - Containable  
-  This aspect is extended by all classes and aspects that can be contained in a Container.
+  The *Containable* aspect is used by all classes and aspects that can be contained in a Container.
 
 - Folder  
-  A *Folder* is an extension of the Container that forms one single rooted loop-free tree.
+  A *Folder* is an extension of the Container forming one single rooted loop-free tree.
 
 - Association  
-  An Association represents the directed link between a Container and a Containable object.
+  An *Association* represents the directed link between a Container and a Containable object.
 
 #### §14 Repository class
 
