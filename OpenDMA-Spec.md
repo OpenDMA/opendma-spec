@@ -20,7 +20,7 @@ This first subsection defines an object model without any constraints. Those obj
 
 #### §1 Qualified names
 
-The OpenDMA architecture uses only qualified names. Each consists of
+OpenDMA uses only qualified names. Each consists of
 
 1.  a namespace (Unicode text string with 1 or more characters), and
 2.  a name (noncolon Unicode text string with 1 or more characters).
@@ -126,7 +126,7 @@ Both operations may succeed or fail. This result (success or failure) must be re
 
 ### Section I.2: OpenDMA object model
 
-The OpenDMA enforces some constraints on the simple object model for type safety and reflection.
+OpenDMA enforces some constraints on the simple object model for type safety and reflection.
 
 #### §6 Basic object constraints
 
@@ -384,8 +384,8 @@ of the corresponding property info for *pn*.
 
 Section I.2 defines a set of properties that are required for the objects of the class hierarchy, but it does not limit the actual properties to this set.
 
-An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by the OpenDMA
-architecture. This allows the mapping of any existing class hierarchy into the OpenDMA object model.
+An implementer might introduce additional properties for the class hierarchy root `opendma:Object` without violating the conditions posed by OpenDMA.
+This allows the mapping of any existing class hierarchy into the OpenDMA object model.
 
 The meaning and expected content of the properties defined in section I.2 is documented in this paragraph.
 
