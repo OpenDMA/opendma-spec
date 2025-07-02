@@ -505,7 +505,7 @@ The set of basic document management classes consists of:
 
 #### §14 Repository class
 
-The `opendma:Repository` class extends the `opendma:Object` class and has these additional properties:
+The `opendma:Repository` class extends the `opendma:Object` class and declares these additional properties:
 
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
@@ -534,7 +534,7 @@ The `opendma:Object` class is extended as follows:
 
 #### §16 Document aspect
 
-The `opendma:Document` aspect is defined as:
+The `opendma:Document` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -556,7 +556,7 @@ The `opendma:Document` aspect is defined as:
 
 #### §17 ContentElement aspect
 
-The `opendma:ContentElement` aspect is defined as:
+The `opendma:ContentElement` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -565,7 +565,7 @@ The `opendma:ContentElement` aspect is defined as:
 
 #### §18 DataContentElement aspect
 
-The `opendma:DataContentElement` aspect extends opendam:ContentElement and declares:
+The `opendma:DataContentElement` aspect extends `opendam:ContentElement` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -575,7 +575,7 @@ The `opendma:DataContentElement` aspect extends opendam:ContentElement and decla
 
 #### §19 ReferenceContentElement aspect
 
-The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and declares:
+The `opendma:ReefernceContentElement` aspect extends `opendam:ContentElement` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -583,7 +583,7 @@ The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and 
 
 #### §20 VersionCollection aspect
 
-The `opendma:VersionCollection` aspect is defined as:
+The `opendma:VersionCollection` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -596,7 +596,7 @@ The `opendma:VersionCollection` aspect is defined as:
 
 #### §21 Container aspect
 
-The `opendma:Container` aspect is defined as:
+The `opendma:Container` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -610,7 +610,7 @@ The `opendma:Container` aspect is defined as:
 
 #### §22 Folder aspect
 
-The `opendma:Folder` aspect extends the `opendma:Container` by these additional properties:
+The `opendma:Folder` aspect extends `opendma:Container` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -628,7 +628,7 @@ A Folder must not contain a reference to one of its descendants in its Parent pr
 
 #### §23 Containable aspect
 
-The `opendma:Containable` aspect is defined as:
+The `opendma:Containable` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -637,7 +637,7 @@ The `opendma:Containable` aspect is defined as:
 
 #### §24 Association aspect
 
-The `opendma:Association` aspect is defined as:
+The `opendma:Association` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
