@@ -510,8 +510,6 @@ The `opendma:Repository` class extends the `opendma:Object` class and has these 
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
-| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:Name`               | String    | Single | Required | The internal technical name of this repository                                                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this repository                                                               |
 | `opendma:RootClass`          | Reference | Single | Required | Valid class object describing the class hierarchy root                                                            |
