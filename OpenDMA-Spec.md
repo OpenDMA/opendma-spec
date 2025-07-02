@@ -507,29 +507,32 @@ The set of basic document management classes consists of:
 
 The `opendma:Repository` class extends the `opendma:Object` class and has these additional properties:
 
-| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                                   |
-|:-------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------------------------------|
-| Name         | String    | S     | N     | The internal technical name of this repository                                                                                 |
-| DisplayName  | String    | S     | N     | The name of this Repository displayed to users                                                                                 |
-| RootClass    | Reference | S     | N     | Reference to the class hierarchy root class as defined in §8.1. Must not be null. Reference class: `opendma:Class`             |
-| RootAspects  | Reference | M     | Y     | Reference to all valid aspect objects that do not inherit another valid aspect. Reference class: `opendma:Class`               |
-| RootFolder   | Reference | S     | Y     | Reference to a Folder aspect if this Repository has a dedicated root folder or null, if not. Reference class: `opendma:Folder` |
+
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
+| `opendma:Name`               | String    | Single | Required | The internal technical name of this repository                                                                    |
+| `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this repository                                                               |
+| `opendma:RootClass`          | Reference | Single | Required | Valid class object describing the class hierarchy root                                                            |
+| `opendma:RootAspects`        | Reference | Multi  | Optional | Set of valid aspect objects without a super class                                                                 |
+| `opendma:RootFolder`         | Reference | Single | Optional | Object that has the `opendma:Folder` aspect if this repository has a dedicated folder tree, null otherwise        |
 
 ##### §14.1 Repository reflection in the objects
 
-The `opendma:Object` class is extended as follows to reflect the Repository they reside in:
+The `opendma:Object` class is extended as follows to reflect the Repository an object belongs to:
 
-| **Property** | **Type**  | **C** | **N** | **Contents**                                                                 |
-|:-------------|:----------|:------|:------|:-----------------------------------------------------------------------------|
-| Repository   | Reference | S     | N     | The repository this object belongs to. Reference class: `opendma:Repository` |
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Repository`         | Reference | Single | Required | Object that is an instance of `opendma:Repository` describing the repository this object belongs to               |
 
 #### §15 Global unique identification
 
 The `opendma:Object` class is extended as follows:
 
-| **Property** | **Type** | **C** | **N** | **Contents**                                                                                                           |
-|:-------------|:---------|:------|:------|:-----------------------------------------------------------------------------------------------------------------------|
-| Guid         | String   | S     | N     | Global unique identifier for this object. Might be a combination of the Id of the Repository and the Id of the object. |
+| Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Guid`               | String    | Single | Required | Global unique identifier for this object as a combination of the Id of the Repository and the Id of the object.   |
 
 #### §16 Document aspect
 
