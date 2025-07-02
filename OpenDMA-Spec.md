@@ -236,7 +236,8 @@ This object is called the *class class*.
 A *valid class object* is a class info object (§7) following these conditions:
 
 1.  The class hierarchy root (§8.1) is a valid class object.
-2.  All class objects containing a reference to a valid class object in their `opendma:SuperClass` property are again valid class objects.
+2.  All class info objects containing a reference to a valid class object in their `opendma:SuperClass` property and whose
+   `opendma:Class` object is an instance of the class class object (§8.2) are again valid class objects.
 
 This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid clas object has to contain the value `false`.
 
@@ -254,6 +255,7 @@ A *valid aspect object* is a class info object (§7) that meets these constraint
 2.  The `opendma:Aspects` property must contain an empty set
 3.  The `opendma:SuperClass` property must either contain `null` or a reference to a valid aspect object
 4.  The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
+5.  The `opendma:Class` property must contain a reference to an object that is an instance of the class class object (§8.2)
 
 > Conclusion:  
 > Constraint 3 in this list guarantees that the graph created by following the `opendma:SuperClass` references is loop free.
