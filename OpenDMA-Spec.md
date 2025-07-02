@@ -135,7 +135,7 @@ The following constraints apply to all objects in the OpenDMA object model.
 ##### §6.1 Reflection
 
 Every object must have at least a single valued property (§3) with the qualified name `opendma:Class` and the “Reference” data type.
-It must contain a reference to a *valid class object* (§8.3).
+It must contain a reference to a *valid class object* (§8.3) where `opendma:Instantiable` is `true`.
 
 The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10)
 defined by this valid class object.
@@ -176,7 +176,7 @@ These constraints apply to the properties of valid class objects (§8.3) and val
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
 3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
-5.  The values of `opendma:Aspects` are all valid aspect objects
+5.  The values of `opendma:Aspects` are all valid aspect objects and the `opendma:Instantiable` property must be ` true`
 
 > Conclusion:  
 > The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
