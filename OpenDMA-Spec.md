@@ -476,7 +476,7 @@ The set of basic document management classes consists of:
   A *Repository* represents a place where all Objects are stored. It represents the *context* defined in §4. Classes inside one Repository need not be valid in another Repository.  
 
 - Document  
-  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These contnt streams can for example old images of the individual pages that make up the document.  
+  A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These content streams can for example contain images of the individual pages that make up the document.  
   A Document is able to keep track of its changes (versioning) and manage the access to it (checkin and checkout).
 
 - ContentElement  
@@ -492,7 +492,7 @@ The set of basic document management classes consists of:
   A *VersionCollection* represents the set of all versions of a Document.
 
 - Container  
-  A *Container* holds a list of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based on references. So an object may be contained in multiple Containers or in no Container at all. OpenDMA does not require a single rooted tree as a file system does.
+  A *Container* holds a list of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based on references. An object may be contained in multiple Containers or in no Container at all. OpenDMA does not require a single rooted tree as a file system does.
 
 - Containable  
   This aspect is extended by all classes and aspects that can be contained in a Container.
