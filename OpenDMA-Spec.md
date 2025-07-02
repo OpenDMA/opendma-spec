@@ -473,7 +473,10 @@ This set is divided into two parts, a set of basic and a set of extended documen
 The set of basic document management classes consists of:
 
 - Repository  
-  A *Repository* represents a place where all Objects are stored. It represents the *context* defined in §4. Classes inside one Repository need not be valid in another Repository.  
+  A *Repository* represents a place where all Objects are stored, reprsenting the *context* defined in §4.
+  It often constitues a data isolation boundary where objects with different management requirements or access restrictions are separated into different repositories.
+  Qualified names of classes and properties as well as unique object identifiers are only unique within a repository. They can be reused across different repositories.
+  Object references are limited in scope within a single repository.
 
 - Document  
   A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple octet streams. These content streams can for example contain images of the individual pages that make up the document.  
@@ -514,7 +517,7 @@ The `opendma:Repository` class extends the `opendma:Object` class and declares t
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this repository                                                               |
 | `opendma:RootClass`          | Reference | Single | Required | Valid class object describing the class hierarchy root                                                            |
 | `opendma:RootAspects`        | Reference | Multi  | Optional | Set of valid aspect objects without a super class                                                                 |
-| `opendma:RootFolder`         | Reference | Single | Optional | Object that has the `opendma:Folder` aspect if this repository has a dedicated folder tree, null otherwise        |
+| `opendma:RootFolder`         | Reference | Single | Optional | Object that has the `opendma:Folder` aspect representing the single root if this repository has a dedicated folder tree, null otherwise |
 
 ##### §14.1 Repository reflection in the objects
 
