@@ -538,86 +538,86 @@ The `opendma:Object` class is extended as follows:
 
 The `opendma:Document` aspect is defined as:
 
-| **Property**           | **Type**  | **C** | **N** | **Contents**                                                                                                                                      |
-|:-----------------------|:----------|:------|:------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
-| Title                  | String    | S     | Y     | The title of this document                                                                                                                        |
-| Version                | String    | S     | Y     | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)                                                       |
-| VersionCollection      | Reference | S     | Y     | Reference to the collection of all versions or null if versioning is not supported. Reference class: `opendma:VersionCollection`                  |
-| VersionIndependentId   | String    | S     | N     | Id identifying this logical document independent from the specific version                                                                        |
-| VersionIndependentGuid | String    | S     | N     | Guid identifying this logical document independent from the specific version                                                                      |
-| ContentElements        | Reference | M     | Y     | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                                                          |
-| CombinedContentType    | String    | S     | Y     | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement.                                            |
-| PrimaryContentElement  | Reference | S     | Y     | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty (null). Reference class: `opendma:ContentElement` |
-| CreatedAt              | DateTime  | S     | N     | When this version of this document has been created                                                                                               |
-| CreatedBy              | String    | S     | N     | User who created this version of this document                                                                                                    |
-| LastModifiedAt         | DateTime  | S     | N     | When this version of this document has been modified the last time                                                                                |
-| LastModifiedBy         | String    | S     | N     | User who modified this version of this document the last time                                                                                     |
-| CheckedOut             | Boolean   | S     | N     | Whether this document is checked out or not.                                                                                                      |
-| CheckedOutAt           | DateTime  | S     | Y     | When this version of the document has been checked out; null if and only if this document is not checked out                                      |
-| CheckedOutBy           | String    | S     | Y     | User who checked out this version of this document; null if and only if this document is not checked out                                          |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Title`                  | String    | Single | Optional | The title of this document                                                                                        |
+| `opendma:Version`                | String    | Single | Optional | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)                       |
+| `opendma:VersionCollection`      | Reference | Single | Optional | Reference to the collection of all versions or null if versioning is not supported. Reference class: `opendma:VersionCollection` |
+| `opendma:VersionIndependentId`   | String    | Single | Required | Id identifying this logical document independent from the specific version                                        |
+| `opendma:VersionIndependentGuid` | String    | Single | Required | Guid identifying this logical document independent from the specific version                                      |
+| `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                          |
+| `opendma:CombinedContentType`    | String    | Single | Optional | The mime type of the whole Document. It must be calculated from the mime types of each ContentElement.            |
+| `opendma:PrimaryContentElement`  | Reference | Single | Optional | Reference to the dedicated primary ContentElement, May only be null if ContentElements is empty (null). Reference class: `opendma:ContentElement` |
+| `opendma:CreatedAt`              | DateTime  | Single | Required | When this version of this document has been created                                                               |
+| `opendma:CreatedBy`              | String    | Single | Required | User who created this version of this document                                                                    |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Required | When this version of this document has been modified the last time                                                |
+| `opendma:LastModifiedBy`         | String    | Single | Required | User who modified this version of this document the last time                                                     |
+| `opendma:CheckedOut`             | Boolean   | Single | Required | Whether this document is checked out or not.                                                                      |
+| `opendma:CheckedOutAt`           | DateTime  | Single | Optional | When this version of the document has been checked out; null if and only if this document is not checked out      |
+| `opendma:CheckedOutBy`           | String    | Single | Optional | User who checked out this version of this document; null if and only if this document is not checked out          |
 
 #### §17 ContentElement aspect
 
 The `opendma:ContentElement` aspect is defined as:
 
-| **Property** | **Type** | **C** | **N** | **Contents**                                                                                |
-|:-------------|:---------|:------|:------|:--------------------------------------------------------------------------------------------|
-| ContentType  | String   | S     | Y     | The MIME type of the content represented by this element                                    |
-| Position     | Integer  | S     | Y     | The position of this element in the list of all content elements of the containing document |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:ContentType`            | String    | Single | Optional | The MIME type of the content represented by this element                                                          |
+| `opendma:Position`               | Integer   | Single | Optional | The position of this element in the list of all content elements of the containing document                       |
 
 #### §18 DataContentElement aspect
 
 The `opendma:DataContentElement` aspect extends opendam:ContentElement and declares:
 
-| **Property** | **Type** | **C** | **N** | **Contents**                             |
-|:-------------|:---------|:------|:------|:-----------------------------------------|
-| Content      | Content  | S     | Y     | The data of this content element         |
-| Size         | Longint  | S     | Y     | The size of the data in number of octets |
-| FileName     | String   | S     | Y     | The file name of the data                |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Content`                | Content   | Single | Optional | The data of this content element                                                                                  |
+| `opendma:Size`                   | Long      | Single | Optional | The size of the data in number of octets                                                                          |
+| `opendma:FileName`               | String    | Single | Optional | The file name of the data                                                                                         |
 
 #### §19 ReferenceContentElement aspect
 
 The `opendma:ReefernceContentElement` aspect extends opendam:ContentElement and declares:
 
-| **Property** | **Type** | **C** | **N** | **Contents**                        |
-|:-------------|:---------|:------|:------|:------------------------------------|
-| Location     | String   | S     | Y     | The URI where the content is stored |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Location`               | String    | Single | Optional | The URI where the content is stored                                                                               |
 
 #### §20 VersionCollection aspect
 
 The `opendma:VersionCollection` aspect is defined as:
 
-| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                                                            |
-|:-------------|:----------|:------|:------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Versions     | Reference | M     | N     | List of all versions of this Document. Reference class: `opendma:Document`                                                                              |
-| Latest       | Reference | S     | Y     | Reference to the latest version of the Document collection. Reference class: `opendma:Document`                                                         |
-| Released     | Reference | S     | Y     | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. Reference class: `opendma:Document` |
-| InProgress   | Reference | S     | Y     | Reference to the InProgress Document while this document is checked out. Reference class: `opendma:Document`                                            |
-| CreatedAt    | DateTime  | S     | N     | When this document has been created                                                                                                                     |
-| CreatedBy    | String    | S     | N     | User who created this document                                                                                                                          |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Versions`               | Reference | Multi  | Required | List of all versions of this Document. Reference class: `opendma:Document`                                        |
+| `opendma:Latest`                 | Reference | Single | Optional | Reference to the latest version of the Document collection. Reference class: `opendma:Document`                   |
+| `opendma:Released`               | Reference | Single | Optional | Reference to the latest released version of this Document Collection. Can be null if no Document has been released. Reference class: `opendma:Document` |
+| `opendma:InProgress`             | Reference | Single | Optional | Reference to the InProgress Document while this document is checked out. Reference class: `opendma:Document`      |
+| `opendma:CreatedAt`              | DateTime  | Single | Required | When this document has been created                                                                                                                     |
+| `opendma:CreatedBy`              | String    | Single | Required | User who created this document                                                                                                                          |
 
 #### §21 Container aspect
 
 The `opendma:Container` aspect is defined as:
 
-| **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                              |
-|:---------------|:----------|:------|:------|:----------------------------------------------------------------------------------------------------------|
-| Title          | String    | S     | Y     | The title of this container                                                                               |
-| Containees     | Reference | M     | Y     | The containable objects contained in this container. Reference class: `opendma:Containable`               |
-| Associations   | Reference | M     | Y     | The associations between this container and the contained objects. Reference class: `opendma:Association` |
-| CreatedAt      | DateTime  | S     | N     | When this container has been created                                                                      |
-| CreatedBy      | String    | S     | N     | User who created this container                                                                           |
-| LastModifiedAt | DateTime  | S     | N     | When this container has been modified the last time                                                       |
-| LastModifiedBy | String    | S     | N     | User who modified this container the last time                                                            |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Title`                  | String    | Single | Optional | The title of this container                                                                                       |
+| `opendma:Containees`             | Reference | Multi  | Optional | The containable objects contained in this container. Reference class: `opendma:Containable`                       |
+| `opendma:Associations`           | Reference | Multi  | Optional | The associations between this container and the contained objects. Reference class: `opendma:Association`         |
+| `opendma:CreatedAt`              | DateTime  | Single | Required | When this container has been created                                                                              |
+| `opendma:CreatedBy`              | String    | Single | Required | User who created this container                                                                                   |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Required | When this container has been modified the last time                                                               |
+| `opendma:LastModifiedBy`         | String    | Single | Required | User who modified this container the last time                                                                    |
 
 #### §22 Folder aspect
 
 The `opendma:Folder` aspect extends the `opendma:Container` by these additional properties:
 
-| **Property** | **Type**  | **C** | **N** | **Contents**                                                                                                      |
-|:-------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------------------------|
-| Parent       | Reference | S     | Y     | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                  |
-| SubFolders   | Reference | M     | Y     | All Folder objects that contain this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Parent`                 | Reference | Single | Optional | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                  |
+| `opendma:SubFolders`             | Reference | Multi  | Optional | All Folder objects that contain this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
 
 The Parent property of all Folder objects in the repository, except for the Folder referenced in the RootFolder property of the Repository (§13), must not be null. The parent property of the Folder referenced in the RootFolder property of the Repository (§13) must be null.
 
@@ -632,24 +632,24 @@ A Folder must not contain a reference to one of its descendants in its Parent pr
 
 The `opendma:Containable` aspect is defined as:
 
-| **Property**            | **Type**  | **C** | **N** | **Contents**                                                                                                 |
-|:------------------------|:----------|:------|:------|:-------------------------------------------------------------------------------------------------------------|
-| ContainedIn             | Reference | M     | Y     | The container objects this Containable is contained in. Reference class: `opendma:Container`                 |
-| ContainedInAssociations | Reference | M     | Y     | The associations that bind this Containable in the Conatiner objects. Reference class: `opendma:Association` |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:ContainedIn`            | Reference | Multi  | Optional | The container objects this Containable is contained in. Reference class: `opendma:Container`                      |
+| `opendma:ContainedInAssociations`| Reference | Multi  | Optional | The associations that bind this Containable in the Conatiner objects. Reference class: `opendma:Association`      |
 
 #### §24 Association aspect
 
 The `opendma:Association` aspect is defined as:
 
-| **Property**   | **Type**  | **C** | **N** | **Contents**                                                                                    |
-|:---------------|:----------|:------|:------|:------------------------------------------------------------------------------------------------|
-| Name           | String    | S     | N     | The name of this association                                                                    |
-| Container      | Reference | S     | N     | The source of this directed association. Reference class: `opendma:Container`                   |
-| Containable    | Reference | S     | N     | The destination of this directed association. Reference class: `opendma:Containable`            |
-| CreatedAt      | DateTime  | S     | N     | When this document has been created                                                             |
-| CreatedBy      | String    | S     | N     | User who created this document                                                                  |
-| LastModifiedAt | DateTime  | S     | N     | When *this version* of the document has been created, i.e. when this document has been modified |
-| LastModifiedBy | String    | S     | N     | User who created this version of the document                                                   |
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Name`                   | String    | Single | Required | The name of this association                                                                                      |
+| `opendma:Container`              | Reference | Single | Required | The source of this directed association. Reference class: `opendma:Container`                                     |
+| `opendma:Containable`            | Reference | Single | Required | The destination of this directed association. Reference class: `opendma:Containable`                              |
+| `opendma:CreatedAt`              | DateTime  | Single | Required | When this document has been created                                                                               |
+| `opendma:CreatedBy`              | String    | Single | Required | User who created this document                                                                                    |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Required | When *this version* of the document has been created, i.e. when this document has been modified                   |
+| `opendma:LastModifiedBy`         | String    | Single | Required | User who created this version of the document                                                                     |
 
 ### Section II.2: Extended document management model
 
