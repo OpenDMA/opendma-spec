@@ -599,8 +599,6 @@ The `opendma:VersionCollection` aspect declares these properties:
 | `opendma:Latest`                 | Reference | Single | Optional | Latest version of a document. Reference class: `opendma:Document`                                                 |
 | `opendma:Released`               | Reference | Single | Optional | Latest released version of a document if a version has been released. Reference class: `opendma:Document`         |
 | `opendma:InProgress`             | Reference | Single | Optional | Latest checked out working copy of a document. Reference class: `opendma:Document`                                |
-| `opendma:CreatedAt`              | DateTime  | Single | Required | Timestamp when this version collection has been created                                                           |
-| `opendma:CreatedBy`              | String    | Single | Required | User who created this version collection                                                                          |
 
 #### §21 Container aspect
 
