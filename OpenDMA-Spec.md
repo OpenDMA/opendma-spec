@@ -554,10 +554,10 @@ The `opendma:Document` aspect declares these properties:
 | `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                          |
 | `opendma:CombinedContentType`    | String    | Single | Optional | The combined conent type of the whole Document, calculated from the content types of each ContentElement.         |
 | `opendma:PrimaryContentElement`  | Reference | Single | Optional | The dedicated primary ContentElement. May only be null if ContentElements is empty. Reference class: `opendma:ContentElement` |
-| `opendma:CreatedAt`              | DateTime  | Single | Required | Timestamp when this version of this document has been created                                                     |
-| `opendma:CreatedBy`              | String    | Single | Required | User who created this version of this document                                                                    |
-| `opendma:LastModifiedAt`         | DateTime  | Single | Required | Timestamp when this version of this document has been modified the last time                                      |
-| `opendma:LastModifiedBy`         | String    | Single | Required | User who modified this version of this document the last time                                                     |
+| `opendma:CreatedAt`              | DateTime  | Single | Optional | Timestamp when this version of this document has been created                                                     |
+| `opendma:CreatedBy`              | String    | Single | Optional | User who created this version of this document                                                                    |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Optional | Timestamp when this version of this document has been modified the last time                                      |
+| `opendma:LastModifiedBy`         | String    | Single | Optional | User who modified this version of this document the last time                                                     |
 | `opendma:CheckedOut`             | Boolean   | Single | Required | Indicates if this document is checked out                                                                         |
 | `opendma:CheckedOutAt`           | DateTime  | Single | Optional | Timestamp when this version of the document has been checked out, null if this document is not checked out        |
 | `opendma:CheckedOutBy`           | String    | Single | Optional | User who checked out this version of this document, null if this document is not checked out                      |
@@ -611,10 +611,10 @@ The `opendma:Container` aspect declares these properties:
 | `opendma:Title`                  | String    | Single | Optional | The title of this container                                                                                       |
 | `opendma:Containees`             | Reference | Multi  | Optional | Set of containable objects contained in this container. Reference class: `opendma:Containable`                    |
 | `opendma:Associations`           | Reference | Multi  | Optional | Set of associations between this container and the contained objects. Reference class: `opendma:Association`      |
-| `opendma:CreatedAt`              | DateTime  | Single | Required | Timestamp when this container has been created                                                                    |
-| `opendma:CreatedBy`              | String    | Single | Required | User who created this container                                                                                   |
-| `opendma:LastModifiedAt`         | DateTime  | Single | Required | Timestamp when this container has been modified the last time                                                     |
-| `opendma:LastModifiedBy`         | String    | Single | Required | User who modified this container the last time                                                                    |
+| `opendma:CreatedAt`              | DateTime  | Single | Optional | Timestamp when this container has been created                                                                    |
+| `opendma:CreatedBy`              | String    | Single | Optional | User who created this container                                                                                   |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Optional | Timestamp when this container has been modified the last time                                                     |
+| `opendma:LastModifiedBy`         | String    | Single | Optional | User who modified this container the last time                                                                    |
 
 #### §22 Folder aspect
 
@@ -658,10 +658,10 @@ The `opendma:Association` aspect declares these properties:
 | `opendma:Name`                   | String    | Single | Required | The name of this association                                                                                      |
 | `opendma:Container`              | Reference | Single | Required | Source of this directed link. Reference class: `opendma:Container`                                                |
 | `opendma:Containable`            | Reference | Single | Required | Destination of this directed link. Reference class: `opendma:Containable`                                         |
-| `opendma:CreatedAt`              | DateTime  | Single | Required | Timestamp when this association has been created                                                                  |
-| `opendma:CreatedBy`              | String    | Single | Required | User who created this association                                                                                 |
-| `opendma:LastModifiedAt`         | DateTime  | Single | Required | Timestamp when this association has been modified the last time                                                   |
-| `opendma:LastModifiedBy`         | String    | Single | Required | User who modified this association the last time                                                                  |
+| `opendma:CreatedAt`              | DateTime  | Single | Optional | Timestamp when this association has been created                                                                  |
+| `opendma:CreatedBy`              | String    | Single | Optional | User who created this association                                                                                 |
+| `opendma:LastModifiedAt`         | DateTime  | Single | Optional | Timestamp when this association has been modified the last time                                                   |
+| `opendma:LastModifiedBy`         | String    | Single | Optional | User who modified this association the last time                                                                  |
 
 ### Section II.2: Extended document management model
 
