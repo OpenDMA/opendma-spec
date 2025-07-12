@@ -623,16 +623,22 @@ The `opendma:Folder` aspect extends `opendma:Container` and declares these addit
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Parent`                 | Reference | Single | Optional | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                  |
-| `opendma:SubFolders`             | Reference | Multi  | Optional | Set of Folder objects that contain this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
+| `opendma:SubFolders`             | Reference | Multi  | Optional | Set of objects with the `opendma:Folder` aspect that reference this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
 
-The Parent property of all Folder objects in the repository, except for the Folder referenced in the RootFolder property of the Repository (§13), must not be null. The parent property of the Folder referenced in the RootFolder property of the Repository (§13) must be null.
+The `opendma:Parent` property must not be `null`, except for the Folder referenced in the `opendma:RootFolder` property of the Repository (§13).
+The `opendma:Parent` property of the Folder referenced in the `opendma:RootFolder` property of the Repository (§13) must be `null`.
 
 A folder *d* is called a *descendant* of folder *f* if one of these conditions is met:
 
-1.  The “Parent” property of *d* references *f*, or
-2.  The “Parent” property of *d* references a descendant of *f*.
+1.  The `opendma:Parent` property of *d* references *f*, or
+2.  The `opendma:Parent` property of *d* references a descendant of *f*.
 
-A Folder must not contain a reference to one of its descendants in its Parent property.
+A Folder must not contain a reference to one of its descendants in its `opendma:Parent` property.
+
+All objects in the repository with the `opendma:Folder` aspect form a loop-free single-rooted tree.
+
+It is undefined if the objects referenced in the `opendma:SubFolders` set are also contained in the `opendma:Containees` property.
+It is also undefined if there are corresponding association objects in `opendma:Associations` for each object in the `opendma:SubFolders` set.
 
 #### §23 Containable aspect
 
