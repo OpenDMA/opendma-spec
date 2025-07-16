@@ -473,10 +473,12 @@ This set is divided into two parts, a set of basic and a set of extended documen
 The set of basic document management classes consists of:
 
 - Repository  
-  A *Repository* represents a place where all Objects are stored, reprsenting the *context* defined in §4.
+  A *Repository* represents a place where all Objects are stored, representing the *context* defined in §4.  
   It often constitues a data isolation boundary where objects with different management requirements or access restrictions are separated into different repositories.
   Qualified names of classes and properties as well as unique object identifiers are only unique within a repository. They can be reused across different repositories.
-  Object references are limited in scope within a single repository.
+  Object references are limited in scope within a single repository.  
+  Each Repository is identified by it's own unique repository identifier, representable as a text string. It allows client applications to tell different repositories
+  apart when working with multiple repsoitories at once.
 
 - Document  
   A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple
@@ -523,6 +525,10 @@ The `opendma:Repository` class extends the `opendma:Object` class and declares t
 | `opendma:RootClass`          | Reference | Single | Required | Valid class object describing the class hierarchy root                                                            |
 | `opendma:RootAspects`        | Reference | Multi  | Optional | Set of valid aspect objects without a super class                                                                 |
 | `opendma:RootFolder`         | Reference | Single | Optional | Object that has the `opendma:Folder` aspect representing the single root if this repository has a dedicated folder tree, null otherwise |
+
+Objects of this class describe a Repository. As `opendma:Repository` inherits from `opendma:Object`, it has an `opendma:Id` property.
+It contains the unique object identifier of this repository descriptor object within its repository. This ID is different from
+the ID of the reposiotry.
 
 ##### §14.1 Repository reflection in the objects
 
