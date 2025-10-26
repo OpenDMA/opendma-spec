@@ -133,8 +133,8 @@ The following constraints apply to all objects in the OpenDMA object model.
 
 ##### §6.1 Reflection
 
-Every object must have at least a single valued property (§3) with the qualified name `opendma:Class` and the “Reference” data type.
-It must contain a reference to a *valid class object* (§8.3) where `opendma:Instantiable` is `true`.
+Every object must have at least a single valued property (§3) with the qualified name `opendma:Class` of the “Reference” data type,
+which must contain a reference to a *valid class object* (§8.3).
 
 The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10)
 defined by this valid class object.
@@ -164,18 +164,17 @@ A *class info object* is an object with at least theses properties:
 8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), can be empty
 9.  `opendma:Properties`, multi value, Reference to property info objects (§9), can be empty
 10. `opendma:Aspect`, single value, Boolean, not null
-11. `opendma:Instantiable`, single value, Boolean, not null
-12. `opendma:Hidden`, single value, Boolean, not null
-13. `opendma:System`, single value, Boolean, not null
-14. `opendma:Retrievable`, single value, Boolean, not null
-15. `opendma:Searchable`, single value, Boolean, not null
-16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
+11. `opendma:Hidden`, single value, Boolean, not null
+12. `opendma:System`, single value, Boolean, not null
+13. `opendma:Retrievable`, single value, Boolean, not null
+14. `opendma:Searchable`, single value, Boolean, not null
+15. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
 These constraints apply to the properties of valid class objects (§8.3) and valid aspect objects (§8.4):
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
 3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
-5.  The values of `opendma:Aspects` are all valid aspect objects and the `opendma:Instantiable` property must be ` true`
+5.  The values of `opendma:Aspects` are all valid aspect objects
 
 > Conclusion:  
 > The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
@@ -413,7 +412,6 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:DeclaredProperties` | Reference | Multi  | Optional | List of properties declared by this class. Values are instances of `opendma:PropertyInfo`.                        |
 | `opendma:Properties`         | Reference | Multi  | Optional | List of effective properties. Values are instances of `opendma:PropertyInfo`.                                     |
 | `opendma:Aspect`             | Boolean   | Single | Required | Indicates if this object represents an Aspect or a Class                                                          |
-| `opendma:Instantiable`       | Boolean   | Single | Required | Indicates if there can ob objects of this class (true) or if this class is abstract (false)                       |
 | `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
 | `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are owned and managed by the system                                          |
 | `opendma:Retrievable`        | Boolean   | Single | Required | Indicates if instances of this class can by retrieved by their Id                                                 |
@@ -485,7 +483,7 @@ The set of basic document management classes consists of:
   (versioning) and manage the access to it (checkin and checkout).
 
 - ContentElement  
-  A *ContentElement* represents one atomic content element the Documents are made of. This abstract (non instantiable) base class defines the type of content and the
+  A *ContentElement* represents one atomic content element the Documents are made of. This base class defines the type of content and the
   position of this element in the sequence of all content elements.
 
 - DataContentElement  
