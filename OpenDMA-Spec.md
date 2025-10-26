@@ -46,7 +46,7 @@ The OpenDMA class architecture knows these scalar data types:
 6.  Double
 7.  Boolean
 8.  DateTime
-9.  BLOB (Binary large object)
+9.  Binary
 
 > Note:  
 > Vendors can choose the timezone for DataTime values and need to document this properly. We strongly encourage vendors
@@ -80,7 +80,7 @@ A numeric *data type id* is assigned to each data type corresponding to this tab
 | Double (§2.1)        | 6                |
 | Boolean (§2.1)       | 7                |
 | DateTime (§2.1)      | 8                |
-| BLOB (§2.1)          | 9                |
+| Binary (§2.1)        | 9                |
 | Reference (§2.2)     | 10               |
 | Content (§2.3)       | 11               |
 
@@ -341,7 +341,7 @@ A *choice value object* is an object with at least theses properties:
 9.  `opendma:DoubleValue`, single value, Double, nullable
 10. `opendma:BooleanValue`, single value, Boolean, nullable
 11. `opendma:DateTimeValue`, single value, DateTime, nullable
-12. `opendma:BlobValue`, single value, BLOB, nullable
+12. `opendma:BinaryValue`, single value, Binary, nullable
 13. `opendma:ReferenceValue`, single value, Reference, nullable
 
 > Note:  
@@ -457,7 +457,7 @@ Objects of this class describe a possible value of a property.
 | `opendma:DoubleValue`        | Double    | Single | Optional | Value of the property if the data type of the property is "Double", null otherwise                                |
 | `opendma:BooleanValue`       | Boolean   | Single | Optional | Value of the property if the data type of the property is "Boolean", null otherwise                               |
 | `opendma:DateTimeValue`      | DateTime  | Single | Optional | Value of the property if the data type of the property is "DateTime", null otherwise                              |
-| `opendma:BlobValue`          | Blob      | Single | Optional | Value of the property if the data type of the property is "Blob", null otherwise                                  |
+| `opendma:BinaryValue`        | Binary      | Single | Optional | Value of the property if the data type of the property is "Binary", null otherwise                                  |
 | `opendma:ReferenceValue`     | Reference | Single | Optional | Value of the property if the data type of the property is "Reference", null otherwise                             |
 
 
