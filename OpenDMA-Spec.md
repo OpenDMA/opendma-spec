@@ -1,10 +1,9 @@
-|                           |                          |
-|---------------------------|-------------------------:|
-| xaldon Technologies GmbH. |   TECH-DOC: **ODMA-002** |
-| Editor: Stefan Kopf       |              Version 0.7 |
-|                           |                          |
 
-# OpenDMA – Class architecture
+# OpenDMA – Open Document Management Architecture
+
+**DRAFT**  
+Version: 0.8  
+Editor: Stefan Kopf  
 
 ## Preface
 
