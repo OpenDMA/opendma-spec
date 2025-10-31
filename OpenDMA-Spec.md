@@ -632,12 +632,8 @@ The `opendma:Folder` aspect extends `opendma:Container` and declares these addit
 The `opendma:Parent` property must not be `null`, except for the Folder referenced in the `opendma:RootFolder` property of the Repository (§13).
 The `opendma:Parent` property of the Folder referenced in the `opendma:RootFolder` property of the Repository (§13) must be `null`.
 
-A folder *d* is called a *descendant* of folder *f* if one of these conditions is met:
-
-1.  The `opendma:Parent` property of *d* references *f*, or
-2.  The `opendma:Parent` property of *d* references a descendant of *f*.
-
-A Folder must not contain a reference to one of its descendants in its `opendma:Parent` property.
+A folder can have multiple parents, one of which is the designated *primary* parent. Only this primary parent is referenced as `opendma:Parent`.
+Consequently, folders refenced in `opendma:SubFolders` of folder *f* does not need to reference *f* in their `opendma:Parent` property.
 
 All objects in the repository with the `opendma:Folder` aspect form a loop-free single-rooted tree.
 
