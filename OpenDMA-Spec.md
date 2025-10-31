@@ -160,7 +160,7 @@ A *class info object* is an object with at least theses properties:
 4.  `opendma:Namespace`, single value, String, not null
 5.  `opendma:DisplayName`, single value, String, not null
 6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), can be null
-7.  `opendma:Aspects`, multi value, Reference to valid aspect objects (§8.4), can be empty
+7.  `opendma:IncludedAspects`, multi value, Reference to valid aspect objects (§8.4), can be empty
 8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), can be empty
 9.  `opendma:Properties`, multi value, Reference to property info objects (§9), can be empty
 10. `opendma:Aspect`, single value, Boolean, not null
@@ -174,10 +174,10 @@ These constraints apply to the properties of valid class objects (§8.3) and val
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class
 3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
-5.  The values of `opendma:Aspects` are all valid aspect objects
+5.  The values of `opendma:IncludedAspects` are all valid aspect objects
 
 > Conclusion:  
-> The set of valid aspect objects of the `opendma:Aspects` property contain the set of the `opendma:Aspects` property of the class info object
+> The set of valid aspect objects of the `opendma:IncludedAspects` property contain the set of the `opendma:IncludedAspects` property of the class info object
 > referenced by `opendma:SuperClass`
 
 #### §8 Class hierarchy
@@ -250,7 +250,7 @@ The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique acro
 A *valid aspect object* is a class info object (§7) that meets these constraints:
 
 1.  The `opendma:Aspect` property must contain the value `true`
-2.  The `opendma:Aspects` property must contain an empty set
+2.  The `opendma:IncludedAspects` property must contain an empty set
 3.  The `opendma:SuperClass` property must either contain `null` or a reference to a valid aspect object
 4.  The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 5.  The `opendma:Class` property must contain a reference to an object that is an instance of the class class object (§8.2)
@@ -266,9 +266,9 @@ A *valid aspect object* is a class info object (§7) that meets these constraint
 A class info object *c* is said to *extend* a class info object *s* if and only if at least one of these conditions is met:
 
 1.  The `opendma:SuperClass` property of *c* references *s*, or
-2.  An entry of the `opendma:Aspects` property of *c* references *s*, or
+2.  An entry of the `opendma:IncludedAspects` property of *c* references *s*, or
 3.  The class info object referenced by *c*’s `opendma:SuperClass` property extends *s*, or
-4.  An entry of the `opendma:Aspects` property of *c* extends *s*.
+4.  An entry of the `opendma:IncludedAspects` property of *c* extends *s*.
 
 Naming convention:  
 Properties that are declared by valid class objects that are extended by a valid class *c* are said to be “inherited by *c*”.
@@ -320,7 +320,7 @@ The *effective properties list* of a valid class object (§8.3) or valid aspect 
 	object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
 	valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
 	valid class object referenced by *c*’s `opendma:SuperClass` property.
-3.  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:Aspects` property are part of the effective properties list.
+3.  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:IncludedAspects` property are part of the effective properties list.
 
 Constraints:  
 The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all property info objects of a valid class object or valid aspect object.
@@ -408,7 +408,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this class                                                       |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this class                                                                    |
 | `opendma:SuperClass`         | Reference | Single | Optional | Super class of this class or aspect. Value is instance of `opendma:Class`.                                        |
-| `opendma:Aspects`            | Reference | Multi  | Optional | List of aspects that are implemented by this class. Values are instances of `opendma:Class`.                      |
+| `opendma:IncludedAspects`    | Reference | Multi  | Optional | List of aspects that are included in this class. Values are instances of `opendma:Class`.                         |
 | `opendma:DeclaredProperties` | Reference | Multi  | Optional | List of properties declared by this class. Values are instances of `opendma:PropertyInfo`.                        |
 | `opendma:Properties`         | Reference | Multi  | Optional | List of effective properties. Values are instances of `opendma:PropertyInfo`.                                     |
 | `opendma:Aspect`             | Boolean   | Single | Required | Indicates if this object represents an Aspect or a Class                                                          |
