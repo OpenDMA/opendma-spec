@@ -133,13 +133,16 @@ The following constraints apply to all objects in the OpenDMA object model.
 
 ##### §6.1 Reflection
 
-Every object must have at least a single valued property (§3) with the qualified name `opendma:Class` of the “Reference” data type,
-which must contain a reference to a *valid class object* (§8.3).
+Every object must have at least the following two properties:
+1. A single valued property (§3) with the qualified name `opendma:Class` of the “Reference” data type,
+   which must contain a reference to a *valid class object* (§8.3).
+2. A multi valued property (§3) with the qualified name `opendma:Aspects` of the “Reference” data type,
+   which can contain a list of zero or more references to *valid aspect objects* (§8.4).
 
-The properties of every object must match exactly in number, data type, cardinality and nullability the *effective property list* (§10)
-defined by this valid class object.
+The properties of every object must match exactly in number, data type, cardinality and nullability the combined *effective property lists* (§10)
+defined by these valid class and aspect objects. The qualified names of each property must be unique across all effective property lists.
 
-A reference property *x* (§2.2) must only contain references to objects whose `opendma:Class` property contains a reference to a valid
+A reference property *x* (§2.2) must only contain references to objects whose `opendma:Class` or `opendma:Aspects` properties contain a reference to a valid
 class info object that is or extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of the property
 info object (§9) describing *x*.
 
@@ -155,20 +158,21 @@ Every object must have at least a single valued property (§3) with the qualifie
 A *class info object* is an object with at least theses properties:
 
 1.  `opendma:Class`, single value, Reference, as defined in §6.1, not null
-2.  `opendma:Id`, single value, String, as defined in §6.2, not null
-3.  `opendma:Name`, single value, String, not null
-4.  `opendma:Namespace`, single value, String, not null
-5.  `opendma:DisplayName`, single value, String, not null
-6.  `opendma:SuperClass`, single value, Reference to a class info object (§7), can be null
-7.  `opendma:IncludedAspects`, multi value, Reference to valid aspect objects (§8.4), can be empty
-8.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), can be empty
-9.  `opendma:Properties`, multi value, Reference to property info objects (§9), can be empty
-10. `opendma:Aspect`, single value, Boolean, not null
-11. `opendma:Hidden`, single value, Boolean, not null
-12. `opendma:System`, single value, Boolean, not null
-13. `opendma:Retrievable`, single value, Boolean, not null
-14. `opendma:Searchable`, single value, Boolean, not null
-15. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
+2.  `opendma:Aspects`, multi value, Reference, as defined in §6.1, can be empty
+3.  `opendma:Id`, single value, String, as defined in §6.2, not null
+4.  `opendma:Name`, single value, String, not null
+5.  `opendma:Namespace`, single value, String, not null
+6.  `opendma:DisplayName`, single value, String, not null
+7.  `opendma:SuperClass`, single value, Reference to a class info object (§7), can be null
+8.  `opendma:IncludedAspects`, multi value, Reference to valid aspect objects (§8.4), can be empty
+9.  `opendma:DeclaredProperties`, multi value, Reference to property info objects (§9), can be empty
+10.  `opendma:Properties`, multi value, Reference to property info objects (§9), can be empty
+11. `opendma:Aspect`, single value, Boolean, not null
+12. `opendma:Hidden`, single value, Boolean, not null
+13. `opendma:System`, single value, Boolean, not null
+14. `opendma:Retrievable`, single value, Boolean, not null
+15. `opendma:Searchable`, single value, Boolean, not null
+16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
 These constraints apply to the properties of valid class objects (§8.3) and valid aspect objects (§8.4):
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
