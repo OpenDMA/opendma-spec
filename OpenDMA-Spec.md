@@ -49,7 +49,7 @@ The OpenDMA class architecture knows these scalar data types:
 9.  Binary
 
 > Note:  
-> Vendors can choose the timezone for DataTime values and need to document this properly. We strongly encourage vendors
+> Vendors can choose the timezone for DateTime values and need to document this properly. We strongly encourage vendors
 > to add an option to their OpenDMA adaptors to always treat DateTime values in UTC.
 
 ##### §2.2 Reference values
@@ -88,7 +88,7 @@ A numeric *data type id* is assigned to each data type corresponding to this tab
 
 The OpenDMA data model knows the special value *null* as representation for “not assigned”.
 
-*Null* values are only available for single valued data. Multi valued data can neither contain *null* values as individual elements nor can it be *null* in it's entirety. It always contains a potentially empty list or set.
+*Null* values are only available for single valued data. Multi valued data can neither contain *null* values as individual elements nor can it be *null* in its entirety. It always contains a potentially empty list or set.
 
 #### §3 Properties
 
@@ -111,7 +111,7 @@ Each object (§4) supports only these two operations:
 - Read property  
   input: qualified name (§1)  
   output: property (§3)  
-  Returns the entire description of this property  with it's name, data type, cardinality and value(s).
+  Returns the entire description of this property  with its name, data type, cardinality and value(s).
 
 - Write property  
   input: qualified name (§1) and value(s)  
@@ -228,7 +228,7 @@ This object is called the *class class*.
 > Properties defined in §7 and not listed in the table above have implementation specific values. The constraints set
 > forth in this document apply, e.g. for `opendma:Properties`
 
-> Conslusion:  
+> Conclusion:  
 > Every context (§4) contains exactly one class class object. This follows directly from the existence and uniqueness
 > of the class hierarchy root and the single cardinality and not nullability of the Class property of the class
 > hierarchy root.
@@ -241,7 +241,7 @@ A *valid class object* is a class info object (§7) following these conditions:
 2.  All class info objects containing a reference to a valid class object in their `opendma:SuperClass` property and whose
    `opendma:Class` object is an instance of the class class object (§8.2) are again valid class objects.
 
-This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid clas object has to contain the value `false`.
+This forms a tree like structure called the *OpenDMA class hierarchy*. The `opendma:Aspect` property of every valid class object has to contain the value `false`.
 
 Constraints:  
 The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
@@ -478,8 +478,8 @@ The set of basic document management classes consists of:
   It often constitues a data isolation boundary where objects with different management requirements or access restrictions are separated into different repositories.
   Qualified names of classes and properties as well as unique object identifiers are only unique within a repository. They can be reused across different repositories.
   Object references are limited in scope within a single repository.  
-  Each Repository is identified by it's own unique repository identifier, representable as a text string. It allows client applications to tell different repositories
-  apart when working with multiple repsoitories at once.
+  Each Repository is identified by its own unique repository identifier, representable as a text string. It allows client applications to tell different repositories
+  apart when working with multiple repositories at once.
 
 - Document  
   A *Document* is the atomic element users work on in a content based environment. It can be compared to a file in a file system. Unlike files, it may consist of multiple
@@ -502,7 +502,7 @@ The set of basic document management classes consists of:
 
 - Container  
   A *Container* holds a set of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based
-  on references to the containmer and the containee. This allows an object to be contained in multiple Containers or in no Container at all. A Container does not enforce
+  on references to the container and the containee. This allows an object to be contained in multiple Containers or in no Container at all. A Container does not enforce
   a loop-free single rooted tree. Use a folder instead for this requirement.
 
 - Containable  
@@ -570,7 +570,7 @@ The `opendma:Document` aspect declares these properties:
 | `opendma:VersionIndependentId`   | String    | Single | Required | Id identifying this logical document independent from the specific version                                        |
 | `opendma:VersionIndependentGuid` | String    | Single | Required | Guid identifying this logical document independent from the specific version                                      |
 | `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                          |
-| `opendma:CombinedContentType`    | String    | Single | Optional | The combined conent type of the whole Document, calculated from the content types of each ContentElement.         |
+| `opendma:CombinedContentType`    | String    | Single | Optional | The combined content type of the whole Document, calculated from the content types of each ContentElement.         |
 | `opendma:PrimaryContentElement`  | Reference | Single | Optional | The dedicated primary ContentElement. May only be null if ContentElements is empty. Reference class: `opendma:ContentElement` |
 | `opendma:CheckedOut`             | Boolean   | Single | Required | Indicates if this document is checked out                                                                         |
 | `opendma:CheckedOutAt`           | DateTime  | Single | Optional | Timestamp when this version of the document has been checked out, null if this document is not checked out        |
@@ -587,7 +587,7 @@ The `opendma:ContentElement` aspect declares these properties:
 
 #### §19 DataContentElement aspect
 
-The `opendma:DataContentElement` aspect extends `opendam:ContentElement` and declares these additional properties:
+The `opendma:DataContentElement` aspect extends `opendma:ContentElement` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -597,7 +597,7 @@ The `opendma:DataContentElement` aspect extends `opendam:ContentElement` and dec
 
 #### §20 ReferenceContentElement aspect
 
-The `opendma:ReefernceContentElement` aspect extends `opendam:ContentElement` and declares these additional properties:
+The `opendma:RefernceContentElement` aspect extends `opendma:ContentElement` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
