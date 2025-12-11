@@ -422,7 +422,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:Searchable`         | Boolean   | Single | Required | Indicates if instances of this class can be retrieved in a search                                                 |
 | `opendma:SubClasses`         | Reference | Multi  | Optional | List of classes or aspects that extend this class                                                                 |
 
-##### §13.2 opendma:PropertyInfo
+##### §13.3 opendma:PropertyInfo
 
 Objects of this class describe properties in OpenmDMA. Every object in OpenDMA has a reference to an opendma:Class which has the opendma:Properties set of PropertyInfo objects. Each describes one of the properties on the object.
 
@@ -442,7 +442,7 @@ Objects of this class describe properties in OpenmDMA. Every object in OpenDMA h
 | `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this property are owned and managed by the system                                       |
 | `opendma:Choices`            | Reference | Multi  | Optional | List of `opendma:ChoiceValue` instances each describing one valid value for this property                         |
 
-##### §13.3 opendma:ChoiceValue
+##### §13.4 opendma:ChoiceValue
 
 Objects of this class describe a possible value of a property.
 
