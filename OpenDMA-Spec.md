@@ -350,7 +350,7 @@ A *choice value object* is an object with at least theses properties:
 > Note:  
 > Due to the reflection limitations (§6.1), the `opendma:ReferenceValue` property must only contain valid references. It must
 > only contain references to objects whose `opendma:Class` property contains a reference to a class info object that is or
-> extends (§8.4) the class info object referenced by the `opendma:ReferenceClass` property of the property info object (§9) it
+> extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of the property info object (§9) it
 > is contained in.
 
 #### §12 Failure messages
@@ -362,13 +362,13 @@ The object model knows a set of distinguished failure messages for the read / wr
 
 ##### §12.1 Property existence
 
-The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an `PropertyNotFound` (§11) response
+The read and the write operation (§5) for a qualified property name *pn* on an object *o* have to return an `PropertyNotFound` (§12) response
 code if and only if the effective property list (§10) of *o* does not contain a property info object that matches in its `opendma:Name` and
 `opendma:Namespace` values to *pn*.
 
 ##### §12.2 Type safety
 
-The write operation (§5) for a qualified property name *pn* on an object *o* has to return an `InvalidDataType` (§11) response code if and only if
+The write operation (§5) for a qualified property name *pn* on an object *o* has to return an `InvalidDataType` (§12) response code if and only if
 
 1.  the effective property list (§10) of *o* does contain a property info object for *pn*, and
 2.  one of these conditions applies:
