@@ -311,7 +311,7 @@ The qualified name of the valid class info object that descibes property info ob
 These constraints apply to the property values of property info objects:
 - The `opendma:Class` property has to contain a reference to a valid class object (§8.3) that is or extends the valid class object with the qualified name `opendma:PropertyInfo`.
 - The value of `opendma:DataType` must be one of the list of numeric data type ids (§2.5).
-- The value of `opendma:ReferenceClass` must contain a refence to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of `opendma:DataType` is `8`. It must be `null` otherwise.
+- The value of `opendma:ReferenceClass` must contain a refence to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of `opendma:DataType` is `10`. It must be `null` otherwise.
 
 #### §10 Effective properties list
 
@@ -320,7 +320,7 @@ The *effective properties list* of a valid class object (§8.3) or valid aspect 
 1.  all property info objects (§9) of *c*’s `opendma:DeclaredProperties` property are part of the effective properties list, and
 2.  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass`
     property are part of the effective properties list, unless there is a property info object with the same `opendma:Name` and
-	`opendma:Namespace` in `opendma:DeclaredProperties` and the data type of both objects is `8` (“Reference”) and the valid class
+	`opendma:Namespace` in `opendma:DeclaredProperties` and the data type of both objects is `10` (“Reference”) and the valid class
 	object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
 	valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
 	valid class object referenced by *c*’s `opendma:SuperClass` property.
@@ -434,7 +434,7 @@ Objects of this class describe properties in OpenmDMA. Every object in OpenDMA h
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this property                                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this property                                                                 |
 | `opendma:DataType`           | Integer   | Single | Required | Numeric data type ID                                                                                              |
-| `opendma:ReferenceClass`     | Reference | Single | Optional | The `opendma:Class` values of the property must be an instance of if and only if the data type is "Reference" (8), null otherwise |
+| `opendma:ReferenceClass`     | Reference | Single | Optional | The `opendma:Class` values of the property must be an instance of if and only if the data type is "Reference" (10), null otherwise |
 | `opendma:MultiValue`         | Boolean   | Single | Required | Indicates if this property has single or multi cardinality                                                        |
 | `opendma:Required`           | Boolean   | Single | Required | Indicates if at least one value is required                                                                       |
 | `opendma:ReadOnly`           | Boolean   | Single | Required | Indicates if this property can be updated                                                                         |
