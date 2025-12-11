@@ -375,7 +375,8 @@ The write operation (§5) for a qualified property name *pn* on an object *o* ha
 
     1.  the value of `opendma:DataType` of that property info object does not match the data type of the value to be written, or
     2.  the value of `opendma:MultiValue` of that property info object does not match the cardinality of the value to be written, or
-    3.  the value of `opendma:Required` of that property info object is `true` and the value to be written is either `null` or an empty collection, or
+    3.  the value of `opendma:Required` of that property info object is `true` and the value to be written is `null` in the case of a single-valued
+	    property or an empty collection in the case of a multi valued property, or
     4.  the value of `opendma:Choices` of that property info object is not empty and does not contain a reference to a choice value object (§11) whose
 	    value property corresponding to the data type contains the value to be written.
 
