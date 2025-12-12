@@ -629,21 +629,30 @@ The `opendma:Container` aspect declares these properties:
 
 The `opendma:Folder` aspect extends `opendma:Container` and declares these additional properties:
 
-| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
-|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| `opendma:Parent`                 | Reference | Single | Optional | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                  |
-| `opendma:SubFolders`             | Reference | Multi  | Optional | Set of objects with the `opendma:Folder` aspect that reference this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
+| Property                         | Type      | Card   | Req/Opt  | Contents |
+|:---------------------------------|:----------|:-------|:---------|:----------|
+| `opendma:Parent`                 | Reference | Single | Optional | The parent folder that directly contains this folder. Reference class: `opendma:Folder`. |
+| `opendma:SubFolders`             | Reference | Multi  | Optional | The set of folders that are considered subfolders of this folder. Reference class: `opendma:Folder`. |
 
-The `opendma:Parent` property must not be `null`, except for the Folder referenced in the `opendma:RootFolder` property of the Repository (§14).
-The `opendma:Parent` property of the Folder referenced in the `opendma:RootFolder` property of the Repository (§14) must be `null`.
+The `opendma:Parent` property must not be `null`, except for the folder referenced in the `opendma:RootFolder` property of the Repository (§14).  
+The `opendma:Parent` property of the folder referenced in the `opendma:RootFolder` property of the Repository (§14) must be `null`.
 
-A folder can have multiple parents, one of which is the designated *primary* parent. Only this primary parent is referenced as `opendma:Parent`.
-Consequently, folders refenced in `opendma:SubFolders` of folder *f* does not need to reference *f* in their `opendma:Parent` property.
+The transitive closure of all `opendma:Parent` relationships must form a loop-free, single-rooted tree.
 
-All objects in the repository with the `opendma:Folder` aspect form a loop-free single-rooted tree.
+Folders that reference this folder in their `opendma:Parent` property should appear in its `opendma:SubFolders` set.  
+The `opendma:SubFolders` set may also contain additional folders that do not reference this folder in their `opendma:Parent` property.  
+These additional entries are used to represent secondary or alternative parent relationships.  
+The directed graph formed by all `opendma:SubFolders` links must be acyclic.  
+No folder may be reachable from itself by following one or more `opendma:SubFolders` references.
 
-It is undefined if the objects referenced in the `opendma:SubFolders` set are also contained in the `opendma:Containees` property.
-It is also undefined if there are corresponding association objects in `opendma:Associations` for each object in the `opendma:SubFolders` set.
+If the underlying ECM system represents folder relationships as a directed acyclic graph (multiple parents, but loop-free),
+the OpenDMA adaptor must select one of these parents to expose as the single `opendma:Parent`.  
+Many systems provide a notion of a “primary parent” to support this selection.  
+The adaptor may expose other parent relationships of the underlying system as additional entries in the `opendma:SubFolders` sets
+of the respective parent folders, subject to the acyclicity requirement.
+
+It is undefined whether the folders referenced in the `opendma:SubFolders` set are also contained in the `opendma:Containees` property.  
+It is also undefined whether there are corresponding association objects in `opendma:Associations` for each object in the `opendma:SubFolders` set.
 
 #### §24 Containable aspect
 
