@@ -634,8 +634,8 @@ The `opendma:Folder` aspect extends `opendma:Container` and declares these addit
 | `opendma:Parent`                 | Reference | Single | Optional | The parent folder this folder is contained in. Reference class: `opendma:Folder`                                  |
 | `opendma:SubFolders`             | Reference | Multi  | Optional | Set of objects with the `opendma:Folder` aspect that reference this folder in their `opendma:Parent` property. Reference class: `opendma:Folder` |
 
-The `opendma:Parent` property must not be `null`, except for the Folder referenced in the `opendma:RootFolder` property of the Repository (§13).
-The `opendma:Parent` property of the Folder referenced in the `opendma:RootFolder` property of the Repository (§13) must be `null`.
+The `opendma:Parent` property must not be `null`, except for the Folder referenced in the `opendma:RootFolder` property of the Repository (§14).
+The `opendma:Parent` property of the Folder referenced in the `opendma:RootFolder` property of the Repository (§14) must be `null`.
 
 A folder can have multiple parents, one of which is the designated *primary* parent. Only this primary parent is referenced as `opendma:Parent`.
 Consequently, folders refenced in `opendma:SubFolders` of folder *f* does not need to reference *f* in their `opendma:Parent` property.
