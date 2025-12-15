@@ -366,6 +366,10 @@ A *choice value object* is an object with at least theses properties:
 > extends (§8.5) the class info object referenced by the `opendma:ReferenceClass` property of the property info object (§9) it
 > is contained in.
 
+> Note:  
+> Choice value objects cover only a subset of scalar value types (§2.1). For example, there are no choice values for the “Content” data type.
+
+
 #### §12 Failure messages
 
 The object model knows a set of distinguished failure messages for the read / write operations (§5):
