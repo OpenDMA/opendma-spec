@@ -45,12 +45,8 @@ The OpenDMA class architecture knows these scalar data types:
 5.  Float
 6.  Double
 7.  Boolean
-8.  DateTime
+8.  DateTime in UTC
 9.  Binary
-
-> Note:  
-> Vendors can choose the timezone for DateTime values and need to document this properly. We strongly encourage vendors
-> to add an option to their OpenDMA adaptors to always treat DateTime values in UTC.
 
 ##### §2.2 Reference values
 
