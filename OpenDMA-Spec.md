@@ -340,7 +340,7 @@ A property declared in a super class is overridden by a property info object if 
 Only properties of the “Reference” data type can be overridden.
 
 > Conclusion:  
-> Properties defined in a super class cannot be overwritten by a classes declared properties, except for specific refernce properties. 
+> Properties defined in a super class cannot be overwritten by a classes declared properties, except for specific reference properties. 
 
 #### §11 Choice value object
 
