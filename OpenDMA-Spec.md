@@ -696,16 +696,13 @@ The `opendma:Association` aspect declares these properties:
 
 ### Section II.2: Extended document management model
 
-The set of extended document management classes consists of:
+Version 0.8 of this standard does not define document management data models beyond the basic model.
 
-- AccessControl
-  Describe me.
-
-- Rendition
-  Describe me.
-
-- Policy
-  Describe me.
-
-- Retention
-  Describe me.
+The following features are currently discussed to be added to this standard:
+- Renditions
+- Annotations or notes
+- Taxconomies like tags and categories
+- Compound documents
+- Legel holds
+- Retention and Disposition
+- Permissions and access control
