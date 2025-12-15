@@ -330,12 +330,12 @@ A property declared in a super class is overridden by a property info object if 
 1. the `opendma:Name` and `opendma:Namespace` equals the property declared in the super class
 2. the data type of both objects is `10` (“Reference”)
 3. the `opendma:ReferenceClass` is either narrowed down or widened, meaning that one of these conditions must be met:
-    a) the valid class object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
-       valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
-	   valid class object referenced by *c*’s `opendma:SuperClass` property.
-    b) the valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
-	   valid class object referenced by *c*’s `opendma:SuperClass` property is or extends the valid class object referenced by
-	   `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties`
+   1. the valid class object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
+      valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
+	  valid class object referenced by *c*’s `opendma:SuperClass` property.
+   2. the valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
+	  valid class object referenced by *c*’s `opendma:SuperClass` property is or extends the valid class object referenced by
+	  `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties`
 
 Only properties of the “Reference” data type can be overridden.
 
