@@ -319,15 +319,28 @@ The *effective properties list* of a valid class object (§8.3) or valid aspect 
 
 1.  all property info objects (§9) of *c*’s `opendma:DeclaredProperties` property are part of the effective properties list, and
 2.  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass`
-    property are part of the effective properties list, unless there is a property info object with the same `opendma:Name` and
-	`opendma:Namespace` in `opendma:DeclaredProperties` and the data type of both objects is `10` (“Reference”) and the valid class
-	object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
-	valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
-	valid class object referenced by *c*’s `opendma:SuperClass` property.
+    property are part of the effective properties list, unless the property is *overridden* as defined below
 3.  all property info objects (§9) of the effective properties list of the aspect objects referenced by *c*’s `opendma:IncludedAspects` property are part of the effective properties list.
 
 Constraints:  
 The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all property info objects of a valid class object or valid aspect object.
+
+Property override:  
+A property declared in a super class is overridden by a property info object if all these conditions are met:
+1. the `opendma:Name` and `opendma:Namespace` equals the property declared in the super class
+2. the data type of both objects is `10` (“Reference”)
+3. the `opendma:ReferenceClass` is either narrowed down or widened, meaning that one of these conditions must be met:
+    a) the valid class object referenced by `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties` is or extends the
+       valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
+	   valid class object referenced by *c*’s `opendma:SuperClass` property.
+    b) the valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
+	   valid class object referenced by *c*’s `opendma:SuperClass` property is or extends the valid class object referenced by
+	   `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties`
+
+Only properties of the “Reference” data type can be overridden.
+
+> Conclusion:  
+> Properties defined in a super class cannot be overwritten by a classes declared properties, except for specific refernce properties. 
 
 #### §11 Choice value object
 
