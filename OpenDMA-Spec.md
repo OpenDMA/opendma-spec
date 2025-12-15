@@ -137,7 +137,7 @@ Every object must have at least the following two properties:
 1. A single valued property (§3) with the qualified name `opendma:Class` of the “Reference” data type,
    which must contain a reference to a *valid class object* (§8.3).
 2. A multi valued property (§3) with the qualified name `opendma:Aspects` of the “Reference” data type,
-   which can contain a list of zero or more references to *valid aspect objects* (§8.4).
+   which can contain an unordered set of zero or more references to *valid aspect objects* (§8.4).
 
 The properties of every object must match exactly in number, data type, cardinality and nullability the combined *effective property lists* (§10)
 defined by these valid class and aspect objects. The qualified names of each property must be unique across all effective property lists.
@@ -502,7 +502,7 @@ The set of basic document management classes consists of:
   a tree of version, or any other versioning concept.
 
 - Container  
-  A *Container* holds a set of containable objects that are said to be contained in this Container. This list of containees is build up with Association objects based
+  A *Container* holds a set of containable objects that are said to be contained in this Container. This set of containees can be built up with Association objects based
   on references to the container and the containee. This allows an object to be contained in multiple Containers or in no Container at all. A Container does not enforce
   a loop-free single rooted tree. Use a folder instead for this requirement.
 
