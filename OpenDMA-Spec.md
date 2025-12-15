@@ -255,7 +255,7 @@ A *valid aspect object* is a class info object (§7) that meets these constraint
 
 1.  The `opendma:Aspect` property must contain the value `true`
 2.  The `opendma:IncludedAspects` property must contain an empty set
-3.  The `opendma:SuperClass` property must either contain `null` or a reference to a valid aspect object
+3.  The `opendma:SuperClass` property must either contain `null` or a reference to a valid aspect object. If not `null`, the transitive closure of `opendma:SuperClass` must be acyclic
 4.  The value of the tuple (`opendma:Namespace`, `opendma:Name`) must be unique across all valid class objects and valid aspect objects in a context.
 5.  The `opendma:Class` property must contain a reference to an object that is an instance of the class class object (§8.2)
 
