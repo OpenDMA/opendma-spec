@@ -147,7 +147,11 @@ described by one of the `opendma:ChoiceValue` objects.
 
 ##### §6.2 Identification
 
-Every object must have at least a single valued property (§3) with the qualified name `opendma:Id` and the “String” data type. This property must contain the String representation of the unique object identifier as defined in §4.
+Every object must have at least a single valued property (§3) with the qualified name `opendma:Id` and the “String” data type. This property must contain the
+String representation of the unique object identifier as defined in §4.
+
+> Implementation notes:  
+> APIs for OpenDMA are encouraged to introduce a special data type for Ids.
 
 #### §7 Class info object
 
@@ -560,6 +564,13 @@ The `opendma:Object` class is extended as follows:
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Guid`               | String    | Single | Required | Global unique identifier for this object as a combination of the Id of the Repository and the Id of the object.   |
+
+> Note:  
+> The Guid is a stable external identifier only, with no meaning within the scope of the repository. It is intended to help applications
+> that wish to work with objects from multiple repositories.
+
+> Implementation notes:  
+> APIs for OpenDMA are encouraged to introduce a special data type for Guids.
 
 #### §16 AuditStamped aspect
 
