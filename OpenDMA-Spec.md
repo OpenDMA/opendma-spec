@@ -442,7 +442,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 
 ##### §13.3 opendma:PropertyInfo
 
-Objects of this class describe properties in OpenmDMA. Every object in OpenDMA has a reference to an opendma:Class which has the opendma:Properties set of PropertyInfo objects. Each describes one of the properties on the object.
+Objects of this class describe properties in OpenDMA. Every object in OpenDMA has a reference to an opendma:Class which has the opendma:Properties set of PropertyInfo objects. Each describes one of the properties on the object.
 
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
@@ -451,7 +451,7 @@ Objects of this class describe properties in OpenmDMA. Every object in OpenDMA h
 | `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this property                                                         |
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this property                                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this property                                                                 |
-| `opendma:DataType`           | Integer   | Single | Required | Numeric data type ID                                                                                              |
+| `opendma:DataType`           | Integer   | Single | Required | Numeric data type Id                                                                                              |
 | `opendma:ReferenceClass`     | Reference | Single | Optional | The `opendma:Class` values of the property must be an instance of if and only if the data type is "Reference" (10), null otherwise |
 | `opendma:MultiValue`         | Boolean   | Single | Required | Indicates if this property has single or multi cardinality                                                        |
 | `opendma:Required`           | Boolean   | Single | Required | Indicates if at least one value is required                                                                       |
@@ -493,7 +493,7 @@ The set of basic document management classes consists of:
 
 - Repository  
   A *Repository* represents a place where all Objects are stored, representing the *context* defined in §4.  
-  It often constitues a data isolation boundary where objects with different management requirements or access restrictions are separated into different repositories.
+  It often constitutes a data isolation boundary where objects with different management requirements or access restrictions are separated into different repositories.
   Qualified names of classes and properties as well as unique object identifiers are only unique within a repository. They can be reused across different repositories.
   Object references are limited in scope within a single repository.  
   Each Repository is identified by its own unique repository identifier, representable as a text string. It allows client applications to tell different repositories
@@ -516,7 +516,7 @@ The set of basic document management classes consists of:
 
 - VersionCollection  
   A *VersionCollection* represents the set of all versions of a Document. Based on the actual document management system, it can represent a single series of versions,
-  a tree of version, or any other versioning concept.
+  a tree of versions, or any other versioning concept.
 
 - Container  
   A *Container* holds a set of containable objects that are said to be contained in this Container. This set of containees can be built up with Association objects based
@@ -546,8 +546,8 @@ The `opendma:Repository` class extends the `opendma:Object` class and declares t
 | `opendma:RootFolder`         | Reference | Single | Optional | Object that has the `opendma:Folder` aspect representing the single root if this repository has a dedicated folder tree, null otherwise |
 
 Objects of this class describe a Repository. As `opendma:Repository` inherits from `opendma:Object`, it has an `opendma:Id` property.
-It contains the unique object identifier of this repository descriptor object within its repository. This ID is different from
-the ID of the reposiotry.
+It contains the unique object identifier of this repository descriptor object within its repository. This Id is different from
+the Id of the repository.
 
 ##### §14.1 Repository reflection in the objects
 
@@ -590,7 +590,7 @@ The `opendma:Document` aspect declares these properties:
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Title`                  | String    | Single | Optional | The title of this document                                                                                        |
-| `opendma:Version`                | String    | Single | Optional | Identifier of this version consisting of a set of numbers separated by a point (e.g. 1.2.3)                       |
+| `opendma:Version`                | String    | Single | Optional | Identifier of this version consisting of a set of numbers separated by a dot (e.g. 1.2.3)                         |
 | `opendma:VersionCollection`      | Reference | Single | Optional | Reference to the collection of all versions or null if versioning is not supported. Reference class: `opendma:VersionCollection` |
 | `opendma:VersionIndependentId`   | String    | Single | Required | Id identifying this logical document independent from the specific version                                        |
 | `opendma:VersionIndependentGuid` | String    | Single | Required | Guid identifying this logical document independent from the specific version                                      |
@@ -685,7 +685,7 @@ The `opendma:Containable` aspect declares these properties:
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:ContainedIn`            | Reference | Multi  | Optional | Set of container objects this Containable is contained in. Reference class: `opendma:Container`                   |
-| `opendma:ContainedInAssociations`| Reference | Multi  | Optional | Set of associations that bind this Containable in the Conatiner objects. Reference class: `opendma:Association`   |
+| `opendma:ContainedInAssociations`| Reference | Multi  | Optional | Set of associations that bind this Containable in the Container objects. Reference class: `opendma:Association`   |
 
 #### §25 Association aspect
 
