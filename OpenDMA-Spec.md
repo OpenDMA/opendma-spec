@@ -701,7 +701,7 @@ Version 0.8 of this standard does not define document management data models bey
 The following features are currently discussed to be added to this standard:
 - Renditions
 - Annotations or notes
-- Taxconomies like tags and categories
+- Taxonomies like tags and categories
 - Compound documents
 - Legel holds
 - Retention and Disposition
