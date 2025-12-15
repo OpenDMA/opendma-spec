@@ -622,7 +622,7 @@ The `opendma:DataContentElement` aspect extends `opendma:ContentElement` and dec
 
 #### §20 ReferenceContentElement aspect
 
-The `opendma:RefernceContentElement` aspect extends `opendma:ContentElement` and declares these additional properties:
+The `opendma:ReferenceContentElement` aspect extends `opendma:ContentElement` and declares these additional properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
