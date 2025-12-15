@@ -107,7 +107,7 @@ Each object (§4) supports only these two operations:
 - Read property  
   input: qualified name (§1)  
   output: property (§3)  
-  Returns the entire description of this property  with its name, data type, cardinality and value(s).
+  Returns the entire description of this property with its name, data type, cardinality and value(s).
 
 - Write property  
   input: qualified name (§1) and value(s)  
@@ -306,7 +306,7 @@ A *property info object* is an object with at least theses properties:
 > Conclusion:  
 > There exists exactly one valid class object (§8.3) in each context (§4) that describes property info objects.
 
-The qualified name of the valid class info object that descibes property info objects is `opendma:PropertyInfo`.
+The qualified name of the valid class info object that describes property info objects is `opendma:PropertyInfo`.
 
 These constraints apply to the property values of property info objects:
 - The `opendma:Class` property has to contain a reference to a valid class object (§8.3) that is or extends the valid class object with the qualified name `opendma:PropertyInfo`.
@@ -339,12 +339,9 @@ A property declared in a super class is overridden by a property info object if 
 
 Only properties of the “Reference” data type can be overridden.
 
-> Conclusion:  
-> Properties defined in a super class cannot be overwritten by a classes declared properties, except for specific reference properties. 
-
 #### §11 Choice value object
 
-A *choice value object* is an object with at least theses properties:
+A *choice value object* is an object with at least these properties:
 
 1.  `opendma:Class`, single value, Reference, as defined in §6, not null
 2.  `opendma:Id`, single value, String, as defined in §6.2, not null
