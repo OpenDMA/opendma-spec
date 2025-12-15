@@ -373,6 +373,9 @@ The object model knows a set of distinguished failure messages for the read / wr
 
 1.  PropertyNotFound
 2.  InvalidDataType
+3.  ObjectNotFound
+4.  AccessDenied
+5.  ServiceFailure
 
 ##### §12.1 Property existence
 
