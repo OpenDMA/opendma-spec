@@ -709,3 +709,10 @@ The following features are currently discussed to be added to this standard:
 - Legel holds
 - Retention and Disposition
 - Permissions and access control
+
+
+## Copyright and Licensing
+
+Copyright :copyright: 2008-present, xaldon Technologies GmbH
+
+The OpenDMA Specification is licensed under the [Open Web Foundation Agreement 1.0 (Patent and Copyright Grants)](https://www.openwebfoundation.org/the-agreements/the-owf-1-0-agreements-granted-claims/owfa-1-0)
