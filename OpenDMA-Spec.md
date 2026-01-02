@@ -96,7 +96,9 @@ A *property* is defined as a triple consisting of
 
 #### §4 Objects
 
-An *object* is a list of zero or more properties (see §3). Each object can be uniquely identified in its *context* by some *unique object identifier* that must be presentable as String.
+An *object* is an unordered set of zero or more properties (see §3). Each property name must be unique within the object.
+
+Each object can be uniquely identified in its *context* by some *unique object identifier* that must be presentable as String.
 
 A *context* is an artificial boundary set up by the actual document management system around objects in the same management domain.
 
