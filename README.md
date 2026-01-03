@@ -8,6 +8,41 @@ OpenDMA defines an abstract model for Document Management and Enterprise Content
 The specification provides a unified architecture that enables applications to interact with different ECM
 systems through a consistent interface, similar to how database drivers provide a common interface for different databases.
 
+<details>
+  <summary>Sample Java code</summary>
+
+  ```java
+  // Discover suitable OpenDMA adaptor
+  OdmaAdaptorDiscovery adaptorDiscovery = new OdmaAdaptorDiscovery();
+  OdmaAdaptor xmlRepoAdaptor = adaptorDiscovery.getAdaptor("xmlrepo");
+
+  // Obtain a session
+  Properties props = new Properties();
+  props.put("classpathResource", "SampleRepository.xml");
+  props.put("enforceRequired", "false");
+  props.put("user", "tutorial");
+  props.put("password", "tutorialpw");
+  OdmaSession session = xmlRepoAdaptor.connect(props);
+  
+  // List all visible Repositories
+  List<OdmaId> visibleRepositories = session.getRepositoryIds();
+  
+  // Get a repository
+  OdmaId repoId = visibleRepositories.get(0);
+  OdmaRepository repo = session.getRepository(repoId);
+  
+  // Get root folder of repository
+  OdmaFolder rootFolder = repo.getRootFolder();
+  
+  // List names of sub folders
+  Iterable<OdmaFolder> subFolders = rootFolder.getSubFolders();
+  for(OdmaFolder subFolder : subFolders) {
+      System.out.println(subFolder.getTitle());
+  }
+  ```
+
+</details>
+
 The OpenDMA architecture is based on a strongly typed, reflective, object-oriented data model with a class hierarchy.
 The specification is organized in multiple layers, where each layer builds upon features provided by lower layers.
 
