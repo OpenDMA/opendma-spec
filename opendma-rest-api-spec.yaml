@@ -4,7 +4,7 @@ info:
   license:
     name: Open Web Foundation Agreement 1.0 (Patent and Copyright Grants)
     url: https://www.openwebfoundation.org/the-agreements/the-owf-1-0-agreements-granted-claims/owfa-1-0
-  version: 0.8.0
+  version: 0.8
 tags:
   - name: Service
   - name: Objects
