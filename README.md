@@ -48,11 +48,13 @@ The specification is organized in multiple layers, where each layer builds upon 
 
 ## Specification Document
 
-The complete specification is available in [OpenDMA-Spec.md](./OpenDMA-Spec.md).
+Latest version: [OpenDMA 0.7](https://github.com/OpenDMA/opendma-spec/blob/0.7/OpenDMA-Spec.md)
 
-A related OpenAPI specification for a RESTful service is available as part of the [opendma-rest-server](https://github.com/OpenDMA/opendma-rest-server).
+Latest [working draft (0.8)](./OpenDMA-Spec.md).
 
-**Current Version:** 0.8 (DRAFT)  
+Latest OpenAPI specification for a RESTful service: [0.7](https://github.com/OpenDMA/opendma-spec/blob/main/archive/opendma-rest-api-spec-070.yaml).
+([working draft](.//opendma-rest-api-spec.yaml))
+
 Previous versions are available as tags in this git repository.
 
 ## API Implementations
