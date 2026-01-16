@@ -1,8 +1,8 @@
 
 # OpenDMA – Open Document Management Architecture
 
-**Final**  
-Version: 0.8  
+**DRAFT**  
+Version: 0.9  
 Editor: Stefan Kopf  
 
 ## Preface

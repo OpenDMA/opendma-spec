@@ -1,10 +1,10 @@
 openapi: 3.0.4
 info:
-  title: OpenDMA
+  title: OpenDMA 0.9 DRAFT
   license:
     name: Open Web Foundation Agreement 1.0 (Patent and Copyright Grants)
     url: https://www.openwebfoundation.org/the-agreements/the-owf-1-0-agreements-granted-claims/owfa-1-0
-  version: 0.8
+  version: 0.9
 tags:
   - name: Service
   - name: Objects
