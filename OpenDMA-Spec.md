@@ -281,8 +281,9 @@ Properties that are declared by valid class objects that are extended by a valid
 
 ##### §8.6 InstanceOf relationship
 
-An object *o* is said to be an *instance of* a class info object *c* if the `opendma:Class` property of *o* contains a reference
-to a valid class info object that is or extends *c*.
+An object *o* is said to be an *instance of* a class info object *c* if (1) the `opendma:Class` property of *o* contains a reference
+to a valid class object that is or extends *c*, or (2) the `opendma:Aspects` property of *o* contains a reference to a valid
+aspect object that is or extends *c*.
 
 #### §9 Property info object
 
