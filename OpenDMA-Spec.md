@@ -495,7 +495,7 @@ This set is divided into two parts, a set of basic and a set of extended documen
 
 ### Section II.1: Basic document management model
 
-The set of basic document management classes consists of:
+The set of basic document management classes and aspects consists of:
 
 - Repository  
   A *Repository* represents a place where all Objects are stored, representing the *context* defined in §4.  
@@ -597,12 +597,12 @@ The `opendma:Document` aspect declares these properties:
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Title`                  | String    | Single | Optional | The title of this document                                                                                        |
 | `opendma:Version`                | String    | Single | Optional | Identifier of this version consisting of a set of numbers separated by a dot (e.g. 1.2.3)                         |
-| `opendma:VersionCollection`      | Reference | Single | Optional | Reference to the collection of all versions or null if versioning is not supported. Reference class: `opendma:VersionCollection` |
+| `opendma:VersionCollection`      | Reference | Single | Optional | Reference to the collection of all versions or null if versioning is not supported. Reference type: `opendma:VersionCollection`  |
 | `opendma:VersionIndependentId`   | String    | Single | Required | Id identifying this logical document independent from the specific version                                        |
 | `opendma:VersionIndependentGuid` | String    | Single | Required | Guid identifying this logical document independent from the specific version                                      |
-| `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference class: `opendma:ContentElement`                          |
+| `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference type: `opendma:ContentElement`                           |
 | `opendma:CombinedContentType`    | String    | Single | Optional | The combined content type of the whole Document, calculated from the content types of each ContentElement.         |
-| `opendma:PrimaryContentElement`  | Reference | Single | Optional | The dedicated primary ContentElement. May only be null if ContentElements is empty. Reference class: `opendma:ContentElement` |
+| `opendma:PrimaryContentElement`  | Reference | Single | Optional | The dedicated primary ContentElement. May only be null if ContentElements is empty. Reference type: `opendma:ContentElement`  |
 | `opendma:CheckedOut`             | Boolean   | Single | Required | Indicates if this document is checked out                                                                         |
 | `opendma:CheckedOutAt`           | DateTime  | Single | Optional | Timestamp when this version of the document has been checked out, null if this document is not checked out        |
 | `opendma:CheckedOutBy`           | String    | Single | Optional | User who checked out this version of this document, null if this document is not checked out                      |
@@ -640,10 +640,10 @@ The `opendma:VersionCollection` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| `opendma:Versions`               | Reference | Multi  | Required | Set of all versions of a document. Reference class: `opendma:Document`                                            |
-| `opendma:Latest`                 | Reference | Single | Optional | Latest version of a document. Reference class: `opendma:Document`                                                 |
-| `opendma:Released`               | Reference | Single | Optional | Latest released version of a document if a version has been released. Reference class: `opendma:Document`         |
-| `opendma:InProgress`             | Reference | Single | Optional | Latest checked out working copy of a document. Reference class: `opendma:Document`                                |
+| `opendma:Versions`               | Reference | Multi  | Required | Set of all versions of a document. Reference type: `opendma:Document`                                             |
+| `opendma:Latest`                 | Reference | Single | Optional | Latest version of a document. Reference type: `opendma:Document`                                                  |
+| `opendma:Released`               | Reference | Single | Optional | Latest released version of a document if a version has been released. Reference type: `opendma:Document`          |
+| `opendma:InProgress`             | Reference | Single | Optional | Latest checked out working copy of a document. Reference type: `opendma:Document`                                 |
 
 #### §22 Container aspect
 
@@ -652,8 +652,8 @@ The `opendma:Container` aspect declares these properties:
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Title`                  | String    | Single | Optional | The title of this container                                                                                       |
-| `opendma:Containees`             | Reference | Multi  | Optional | Set of containable objects contained in this container. Reference class: `opendma:Containable`                    |
-| `opendma:Associations`           | Reference | Multi  | Optional | Set of associations between this container and the contained objects. Reference class: `opendma:Association`      |
+| `opendma:Containees`             | Reference | Multi  | Optional | Set of containable objects contained in this container. Reference type: `opendma:Containable`                     |
+| `opendma:Associations`           | Reference | Multi  | Optional | Set of associations between this container and the contained objects. Reference type: `opendma:Association`       |
 
 #### §23 Folder aspect
 
@@ -661,8 +661,8 @@ The `opendma:Folder` aspect extends `opendma:Container` and declares these addit
 
 | Property                         | Type      | Card   | Req/Opt  | Contents |
 |:---------------------------------|:----------|:-------|:---------|:----------|
-| `opendma:Parent`                 | Reference | Single | Optional | The parent folder that directly contains this folder. Reference class: `opendma:Folder`. |
-| `opendma:SubFolders`             | Reference | Multi  | Optional | The set of folders that are considered subfolders of this folder. Reference class: `opendma:Folder`. |
+| `opendma:Parent`                 | Reference | Single | Optional | The parent folder that directly contains this folder. Reference type: `opendma:Folder`.  |
+| `opendma:SubFolders`             | Reference | Multi  | Optional | The set of folders that are considered subfolders of this folder. Reference type: `opendma:Folder`.  |
 
 The `opendma:Parent` property must not be `null`, except for the folder referenced in the `opendma:RootFolder` property of the Repository (§14).  
 The `opendma:Parent` property of the folder referenced in the `opendma:RootFolder` property of the Repository (§14) must be `null`.
@@ -690,8 +690,8 @@ The `opendma:Containable` aspect declares these properties:
 
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
-| `opendma:ContainedIn`            | Reference | Multi  | Optional | Set of container objects this Containable is contained in. Reference class: `opendma:Container`                   |
-| `opendma:ContainedInAssociations`| Reference | Multi  | Optional | Set of associations that bind this Containable in the Container objects. Reference class: `opendma:Association`   |
+| `opendma:ContainedIn`            | Reference | Multi  | Optional | Set of container objects this Containable is contained in. Reference type: `opendma:Container`                    |
+| `opendma:ContainedInAssociations`| Reference | Multi  | Optional | Set of associations that bind this Containable in the Container objects. Reference type: `opendma:Association`    |
 
 #### §25 Association aspect
 
@@ -700,8 +700,8 @@ The `opendma:Association` aspect declares these properties:
 | Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Name`                   | String    | Single | Required | The name of this association                                                                                      |
-| `opendma:Container`              | Reference | Single | Required | Source of this directed link. Reference class: `opendma:Container`                                                |
-| `opendma:Containable`            | Reference | Single | Required | Destination of this directed link. Reference class: `opendma:Containable`                                         |
+| `opendma:Container`              | Reference | Single | Required | Source of this directed link. Reference type: `opendma:Container`                                                 |
+| `opendma:Containable`            | Reference | Single | Required | Destination of this directed link. Reference type: `opendma:Containable`                                          |
 
 ### Section II.2: Extended document management model
 
