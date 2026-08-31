@@ -174,7 +174,8 @@ A *class info object* is an object with at least these properties:
 13. `opendma:System`, single value, Boolean, not null
 14. `opendma:Retrievable`, single value, Boolean, not null
 15. `opendma:Searchable`, single value, Boolean, not null
-16. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
+16. `opendma:FullTextSearchable`, single value, Boolean, not null
+17. `opendma:SubClasses`, multi value, Reference to a class info objects (§7), can be empty
 
 These constraints apply to the properties of valid class objects (§8.3) and valid aspect objects (§8.4):
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
@@ -447,6 +448,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are owned and managed by the system                                          |
 | `opendma:Retrievable`        | Boolean   | Single | Required | Indicates if instances of this class can be retrieved by their Id                                                 |
 | `opendma:Searchable`         | Boolean   | Single | Required | Indicates if instances of this class can be retrieved in a search                                                 |
+| `opendma:FullTextSearchable` | Boolean   | Single | Required | Indicates if instances of this class can be retrieved in a full-text search expression (FTSE)                     |
 | `opendma:SubClasses`         | Reference | Multi  | Optional | List of classes or aspects that extend this class                                                                 |
 
 ##### §13.3 opendma:PropertyInfo
@@ -468,6 +470,7 @@ Objects of this class describe properties in OpenDMA. Every object in OpenDMA ha
 | `opendma:ReadOnly`           | Boolean   | Single | Required | Indicates if this property can be updated                                                                         |
 | `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
 | `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this property are owned and managed by the system                                       |
+| `opendma:Filterable`         | Boolean   | Single | Required | Indicates if this property can be part of a filter expression (§36)                                               |
 | `opendma:Choices`            | Reference | Multi  | Optional | List of `opendma:ChoiceValue` instances each describing one valid value for this property                         |
 
 ##### §13.4 opendma:ChoiceValue
