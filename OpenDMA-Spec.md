@@ -183,10 +183,6 @@ These constraints apply to the properties of valid class objects (§8.3) and val
 4.  If `opendma:Aspect` is `true`, the value of the `opendma:SubClasses` property is exactly the set of valid aspect objects whose `opendma:SuperClass` property contains a reference to this class info object
 5.  The values of `opendma:IncludedAspects` are all valid aspect objects
 
-> Conclusion:  
-> The set of valid aspect objects of the `opendma:IncludedAspects` property contain the set of the `opendma:IncludedAspects` property of the class info object
-> referenced by `opendma:SuperClass`
-
 #### §8 Class hierarchy
 
 ##### §8.1 Class hierarchy root
