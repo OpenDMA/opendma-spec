@@ -157,7 +157,7 @@ String representation of the unique object identifier as defined in §4.
 
 #### §7 Class info object
 
-A *class info object* is an object with at least theses properties:
+A *class info object* is an object with at least these properties:
 
 1.  `opendma:Class`, single value, Reference, as defined in §6.1, not null
 2.  `opendma:Aspects`, multi value, Reference, as defined in §6.1, can be empty
@@ -289,7 +289,7 @@ to a valid class info object that is or extends *c*.
 
 #### §9 Property info object
 
-A *property info object* is an object with at least theses properties:
+A *property info object* is an object with at least these properties:
 
 1.  `opendma:Class`, single value, Reference, as defined in §6, not null
 2.  `opendma:Id`, single value, String, as defined in §6.2, not null
@@ -313,11 +313,11 @@ The qualified name of the valid class info object that describes property info o
 These constraints apply to the property values of property info objects:
 - The `opendma:Class` property has to contain a reference to a valid class object (§8.3) that is or extends the valid class object with the qualified name `opendma:PropertyInfo`.
 - The value of `opendma:DataType` must be one of the list of numeric data type ids (§2.5).
-- The value of `opendma:ReferenceClass` must contain a refence to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of `opendma:DataType` is `10`. It must be `null` otherwise.
+- The value of `opendma:ReferenceClass` must contain a reference to a valid class object (§8.3) or a valid aspect object (§8.4) if and only if the value of `opendma:DataType` is `10`. It must be `null` otherwise.
 
 #### §10 Effective properties list
 
-The *effective properties list* of a valid class object (§8.3) or valid aspect object ($8.4) *c* is a list of property info objects (§9) defined as follows:
+The *effective properties list* of a valid class object (§8.3) or valid aspect object (§8.4) *c* is a list of property info objects (§9) defined as follows:
 
 1.  all property info objects (§9) of *c*’s `opendma:DeclaredProperties` property are part of the effective properties list, and
 2.  all property info objects (§9) of the effective properties list of the class object referenced by *c*’s `opendma:SuperClass`
@@ -708,7 +708,7 @@ The following features are currently discussed to be added to this standard:
 - Annotations or notes
 - Taxonomies like tags and categories
 - Compound documents
-- Legel holds
+- Legal holds
 - Retention and Disposition
 - Permissions and access control
 
