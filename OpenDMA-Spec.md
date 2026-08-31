@@ -440,7 +440,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | `opendma:Aspect`             | Boolean   | Single | Required | Indicates if this object represents an Aspect or a Class                                                          |
 | `opendma:Hidden`             | Boolean   | Single | Required | Indicates if this class should be hidden from end users and probably administrators                               |
 | `opendma:System`             | Boolean   | Single | Required | Indicates if instances of this class are owned and managed by the system                                          |
-| `opendma:Retrievable`        | Boolean   | Single | Required | Indicates if instances of this class can by retrieved by their Id                                                 |
+| `opendma:Retrievable`        | Boolean   | Single | Required | Indicates if instances of this class can be retrieved by their Id                                                 |
 | `opendma:Searchable`         | Boolean   | Single | Required | Indicates if instances of this class can be retrieved in a search                                                 |
 | `opendma:SubClasses`         | Reference | Multi  | Optional | List of classes or aspects that extend this class                                                                 |
 
