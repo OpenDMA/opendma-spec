@@ -418,6 +418,7 @@ Root of the class hierarchy. Every class in OpenDMA extends this class. All obje
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | `opendma:Class`              | Reference | Single | Required | Reference to a valid class object describing this object                                                          |
+| `opendma:Aspects`            | Reference | Multi  | Optional | Reference to a valid aspect objects describing this object                                                        |
 | `opendma:Id`                 | String    | Single | Required | String representation of the unique object identifier as defined in §4                                            |
 
 ##### §13.2 opendma:Class
@@ -427,6 +428,7 @@ Objects of this class describe Classes and Aspects in OpenDMA. Every object in O
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Aspects`*          | *Reference* | *Multi*  | *Optional* | *Reference to a valid aspect objects describing this object*                                                |
 | *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this class                                                            |
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this class                                                       |
@@ -449,6 +451,7 @@ Objects of this class describe properties in OpenDMA. Every object in OpenDMA ha
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Aspects`*          | *Reference* | *Multi*  | *Optional* | *Reference to a valid aspect objects describing this object*                                                |
 | *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:Name`               | String    | Single | Required | The name part of the qualified name (§1) of this property                                                         |
 | `opendma:Namespace`          | String    | Single | Required | The namespace part of the qualified name (§1) of this property                                                    |
@@ -469,6 +472,7 @@ Objects of this class describe a possible value of a property.
 | Property                     | Type      | Card   | Req/Opt  | Contents                                                                                                          |
 |:-----------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
 | *`opendma:Class`*            | *Reference* | *Single* | *Required* | *Reference to a valid class object describing this object*                                                  |
+| *`opendma:Aspects`*          | *Reference* | *Multi*  | *Optional* | *Reference to a valid aspect objects describing this object*                                                |
 | *`opendma:Id`*               | *String*    | *Single* | *Required* | *String representation of the unique object identifier as defined in §4*                                    |
 | `opendma:DisplayName`        | String    | Single | Required | Text shown to end users to refer to this possible value option                                                    |
 | `opendma:StringValue`        | String    | Single | Optional | Value of the property if the data type of the property is "String", null otherwise                                |
