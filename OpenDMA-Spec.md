@@ -610,7 +610,7 @@ The `opendma:Document` aspect declares these properties:
 | `opendma:VersionIndependentId`   | String    | Single | Required | Id identifying this logical document independent from the specific version                                        |
 | `opendma:VersionIndependentGuid` | String    | Single | Required | Guid identifying this logical document independent from the specific version                                      |
 | `opendma:ContentElements`        | Reference | Multi  | Optional | References to multiple ContentElement objects. Reference type: `opendma:ContentElement`                           |
-| `opendma:CombinedContentType`    | String    | Single | Optional | The combined content type of the whole Document, calculated from the content types of each ContentElement.         |
+| `opendma:CombinedContentType`    | String    | Single | Optional | The combined content type of the whole Document, calculated from the content types of each ContentElement.        |
 | `opendma:PrimaryContentElement`  | Reference | Single | Optional | The dedicated primary ContentElement. May only be null if ContentElements is empty. Reference type: `opendma:ContentElement`  |
 | `opendma:CheckedOut`             | Boolean   | Single | Required | Indicates if this document is checked out                                                                         |
 | `opendma:CheckedOutAt`           | DateTime  | Single | Optional | Timestamp when this version of the document has been checked out, null if this document is not checked out        |
@@ -725,6 +725,1010 @@ The following features are currently discussed to be added to this standard:
 - Retention and Disposition
 - Permissions and access control
 
+## Section III: OpenDMA search model
+
+### §26 Search operation
+
+OpenDMA supports the following global operation
+
+- Search  
+  input: Id of the Repository, search query as string, qualified name (§1) of query language and optional set of options  
+  output: iterable set of objects (§4)  
+  Returns objects matching the search condition
+
+Both operations may succeed or fail. This result (success or failure) must be returned to the caller.
+
+This operation can produce the following failure messages:
+1. ObjectNotFound
+2. QuerySyntax
+
+Invalid `opendma:ose` JSON, unknown operators, invalid properties/types/values, and invalid FTSE syntax produce QuerySyntax failure messages.
+
+### Section III.1: OpenDMA Full-Text Search Expression
+
+The qualified name `opendma:ftse` identifies the **OpenDMA Full-Text Search Expression** syntax defined by this section.
+
+An OpenDMA Full-Text Search Expression represents a field-independent full-text search condition. It can be used to select searchable objects based on terms and phrases occurring in the full-text corpus made available by an OpenDMA context.
+
+The OpenDMA Full-Text Search Expression is intentionally limited. It does not provide access to individual properties, object classes, folders, locations, dates, ranges, or other structured search criteria. Such restrictions are outside the scope of this expression language and may be provided by other parts of the OpenDMA search model.
+
+An OpenDMA Full-Text Search Expression is independent of the native full-text query syntax of the underlying document management system. An OpenDMA adaptor must preserve the semantics defined by this section when translating an expression to a native query language.
+
+#### §27 Full-text search semantics
+
+An OpenDMA Full-Text Search Expression defines the logical conditions for matching objects against an implementation-provided full-text corpus. OpenDMA defines the logical semantics of the expression, while the composition of the full-text corpus, linguistic interpretation of terms and phrases, and relevance calculation are implementation dependent as defined below.
+
+##### §27.1 Full-text corpus
+
+A Full-Text Search Expression is evaluated against the **full-text corpus** provided by the underlying OpenDMA implementation for a searchable object.
+
+The full-text corpus may contain document content, textual metadata, or both, depending on the capabilities and configuration of the underlying document management system.
+
+The exact composition of the full-text corpus is implementation dependent unless further restricted by another OpenDMA search facility.
+
+A Full-Text Search Expression does not identify properties or other individual parts of the full-text corpus.
+
+For example,
+
+`invoice`
+
+searches the full-text corpus for the term `invoice`. It does not specify whether the term has to occur in document content, a title, a description, or another indexed value.
+
+##### §27.2 Matching and linguistic behavior
+
+The following behavior is implementation dependent:
+
+* case sensitivity;
+* Unicode normalization;
+* accent and diacritic sensitivity;
+* tokenization;
+* stemming;
+* lemmatization;
+* stop-word handling;
+* synonym expansion;
+* language detection;
+* word breaking;
+* compound-word processing;
+* punctuation handling within terms and phrases.
+
+For example, OpenDMA does not define whether a search for
+
+`run`
+
+also matches `runs`, `running`, or `ran`.
+
+Likewise, OpenDMA does not define whether
+
+`resume`
+
+and `résumé`
+
+are equivalent.
+
+Implementations should expose relevant full-text capabilities or configuration information where possible, but differences in linguistic analysis do not by themselves constitute violations of the Full-Text Search Expression semantics.
+
+##### §27.3 Relevance and ordering
+
+A Full-Text Search Expression defines whether an object matches a full-text condition. It does not define a portable relevance-scoring algorithm.
+
+An underlying full-text search engine may calculate relevance scores and may use them to order results.
+
+Unless another OpenDMA search option specifies an ordering, an implementation may return matching objects in the relevance order supplied by the underlying full-text engine.
+
+Relevance scores produced by different OpenDMA adaptors, repositories, search engines, or separate result sets are not required to be numerically comparable.
+
+#### §28 Lexical elements
+
+An OpenDMA Full-Text Search Expression is composed of terms, phrases, whitespace, operators, grouping characters, and escape sequences.
+
+##### §28.1 Terms
+
+A **term** represents a single full-text search term.
+
+A term is a non-empty sequence of ordinary characters and escape sequences. An ordinary character is any Unicode character other than whitespace, `"`, `(`, `)`, or `\`.
+An escape sequence represents the corresponding literal character as defined in §27.4.
+
+The uppercase token `OR` is interpreted as an operator where the conditions of §28.2 apply and is not a term in that position.
+
+The character `-` as first character of a clause because denotes exclusion (§28.3) and does not belong to the term. 
+
+Examples are:
+
+`invoice`
+
+`contract`
+
+`OpenDMA`
+
+`ISO-9001`
+
+Multiple adjacent terms are connected by logical conjunction.
+
+Therefore,
+
+`purchase contract Acme`
+
+is equivalent to:
+
+`purchase AND contract AND Acme`
+
+in Boolean notation.
+
+Whitespace between adjacent positive expressions therefore represents logical `AND`.
+
+The linguistic interpretation of a term is implementation dependent as defined in §26.2.
+
+OpenDMA does not require two implementations to consider linguistic variants of a term equivalent.
+
+##### §28.2 Phrases
+
+A **phrase** is a sequence of one or more words enclosed in double quotation marks (`"`).
+
+For example:
+
+`"annual report"`
+
+represents a phrase search for the words `annual` and `report`.
+
+The words of a phrase must occur as a phrase according to the phrase-search semantics of the underlying full-text search engine.
+
+Phrase analysis, including tokenization, stemming, stop-word handling, and the treatment of punctuation, is implementation dependent.
+
+An empty phrase is invalid.
+
+##### §28.3 Whitespace
+
+Whitespace separates adjacent clauses and therefore represents conjunction where applicable.
+
+Implementations must recognize at least the Unicode characters normally classified as horizontal or vertical whitespace.
+
+Leading and trailing whitespace is ignored.
+
+Multiple whitespace characters between clauses have the same meaning as a single whitespace character.
+
+Whitespace inside a quoted phrase is part of the phrase.
+
+##### §28.4 Escaping
+
+The backslash character (`\`) is used to escape characters that would otherwise have syntactic meaning.
+
+This version of the specification defines the following escape sequences:
+
+`\"` represents a literal double quotation mark.
+
+`\\` represents a literal backslash.
+
+`\(` represents a literal opening parenthesis.
+
+`\)` represents a literal closing parenthesis.
+
+A backslash followed by a character for which no escape sequence is defined is invalid syntax.
+
+An implementation must remove OpenDMA escaping before translating the value to the native full-text search representation and must apply any escaping required by the native query language.
+
+Native escaping rules must not change the semantics of the OpenDMA expression.
+
+##### §28.5 Reserved syntax
+
+The following characters or character sequences have syntactic meaning in an OpenDMA Full-Text Search Expression when used in the positions defined by this section:
+
+`"`
+
+`(`
+
+`)`
+
+`-`
+
+`\`
+
+`OR`
+
+Other characters have no OpenDMA-defined special meaning unless introduced by a later version of this specification.
+
+In particular, the colon character (`:`) has no field-selection semantics.
+
+Therefore,
+
+`title:invoice`
+
+is a single search term and must not be interpreted as a request to search a property named `title`.
+
+An adaptor must not expose native field-selection syntax through an OpenDMA Full-Text Search Expression.
+
+#### §29 Boolean expressions
+
+Terms and phrases can be combined into Boolean expressions using conjunction, disjunction, and exclusion.
+Grouped expressions can be combined into Boolean expressions using conjunction and disjunction only.
+
+##### §29.1 Logical conjunction
+
+Logical conjunction is represented implicitly by whitespace between adjacent expressions.
+
+For example:
+
+`invoice contract`
+
+means that both `invoice` and `contract` must match.
+
+Likewise,
+
+`"annual report" budget`
+
+means that both the phrase `"annual report"` and the term `budget` must match.
+
+The keyword `AND` is not part of the OpenDMA Full-Text Search Expression syntax. Applications must use whitespace for conjunction.
+
+An OpenDMA adaptor must preserve this conjunction independently of the default Boolean operator of the underlying full-text search system.
+
+An adaptor must not assume that adjacent native search terms have conjunction semantics. It must explicitly express conjunction in the native query language where required.
+
+##### §29.2 Logical disjunction
+
+Logical disjunction is represented by the uppercase keyword `OR`.
+
+For example:
+
+`invoice OR receipt`
+
+matches an object if either `invoice` or `receipt` matches.
+
+The `OR` operator must be separated from adjacent expressions by whitespace.
+
+`OR` is recognized as an operator only in uppercase.
+
+Consequently,
+
+`war or peace`
+
+contains three ordinary terms, while
+
+`war OR peace`
+
+contains two alternatives.
+
+The literal uppercase term `OR` can be searched by representing it as a phrase:
+
+`"OR"`
+
+##### §29.3 Exclusion
+
+A term or phrase can be excluded by prefixing it with a minus sign (`-`).
+
+For example:
+
+`invoice -draft`
+
+matches objects containing `invoice` but excludes objects matching `draft`.
+
+Likewise,
+
+`invoice -"internal use"`
+
+matches objects containing `invoice` but excludes objects matching the phrase `"internal use"`.
+
+The minus sign has operator meaning only when it occurs at the beginning of a clause.
+
+A minus sign occurring inside a term is an ordinary character. Consequently, terms such as
+
+`ISO-9001`
+
+and
+
+`state-of-the-art`
+
+do not require escaping.
+
+An exclusion expression applies as logical negation within the conjunction containing it.
+
+For example,
+
+`invoice contract -draft`
+
+has the Boolean meaning:
+
+`invoice AND contract AND NOT draft`
+
+A Full-Text Search Expression must contain at least one positive term, phrase, or parenthesized positive expression.
+
+Expressions consisting exclusively of exclusions are invalid.
+
+For example,
+
+`-draft`
+
+and
+
+`-draft -obsolete`
+
+are invalid Full-Text Search Expressions.
+
+##### §29.4 Grouping
+
+Parentheses can be used to group expressions.
+
+For example:
+
+`(invoice OR receipt) customer`
+
+means:
+
+`(invoice OR receipt) AND customer`
+
+Parentheses may be nested.
+
+An OpenDMA implementation must preserve the expression tree represented by parentheses and operator precedence when translating the expression to a native full-text query language.
+
+In particular, an adaptor must not rely on native operator precedence if the underlying query language uses different precedence rules.
+
+##### §29.5 Operator precedence
+
+The operators of an OpenDMA Full-Text Search Expression have the following precedence, from highest to lowest:
+
+1. terms, phrases, and parenthesized expressions;
+2. exclusion using `-`;
+3. implicit conjunction;
+4. `OR`.
+
+Consequently,
+
+`alpha beta OR gamma -delta`
+
+means:
+
+`(alpha AND beta) OR (gamma AND NOT delta)`
+
+and
+
+`(alpha OR beta) gamma`
+
+means:
+
+`(alpha OR beta) AND gamma`.
+
+Parentheses can be used whenever a different grouping is required or when explicit grouping improves clarity.
+
+#### §30 Grammar
+
+The syntax can be described by the following EBNF.
+
+```text
+query               ::= optional-whitespace
+                        or-expression
+                        optional-whitespace
+
+or-expression       ::= and-expression
+                        { whitespace "OR" whitespace and-expression }
+
+and-expression      ::= clause
+                        { whitespace clause }
+
+clause              ::= term
+                      | phrase
+                      | group
+                      | exclusion
+
+exclusion           ::= "-" term
+                      | "-" phrase
+
+group               ::= "("
+                        optional-whitespace
+                        or-expression
+                        optional-whitespace
+                        ")"
+```
+
+`term`, `phrase`, and `whitespace` are defined by the lexical rules in §27.
+
+An implementation may use an equivalent grammar provided that it accepts and rejects the same expressions and produces the same expression semantics.
+
+#### §31 Portability
+
+An OpenDMA adaptor must preserve the semantics of a Full-Text Search Expression independently of the syntax, default operators, operator precedence, and additional capabilities of the underlying full-text search system.
+
+##### §31.1 Unsupported full-text features
+
+The following features are not defined by this version of the OpenDMA Full-Text Search Expression:
+
+* property or field selection;
+* type restrictions;
+* folder or location restrictions;
+* range expressions;
+* wildcard matching;
+* prefix or suffix matching;
+* regular expressions;
+* fuzzy matching;
+* phonetic matching;
+* proximity or phrase-slop expressions;
+* term boosting;
+* relevance modifiers;
+* optional terms;
+* native query-language extensions.
+
+A native full-text engine may support any of these features, but an adaptor must not assign such native semantics to otherwise valid OpenDMA terms.
+
+For example, if an underlying search system interprets `*` as a wildcard, an OpenDMA adaptor must not expose that interpretation unless wildcard semantics are defined by a later OpenDMA specification.
+
+This restriction ensures that the same Full-Text Search Expression has portable semantics across OpenDMA implementations.
+
+##### §31.2 Expression model
+
+A Full-Text Search Expression represents an abstract Boolean full-text expression.
+
+Conceptually, an implementation may represent an expression using nodes equivalent to:
+
+`Term`
+
+`Phrase`
+
+`And`
+
+`Or`
+
+`Not`
+
+For example,
+
+`("annual report" OR forecast) budget -draft`
+
+represents the following conceptual expression:
+
+```text
+And
+ ├─ Or
+ │   ├─ Phrase("annual report")
+ │   └─ Term("forecast")
+ ├─ Term("budget")
+ └─ Not
+     └─ Term("draft")
+```
+
+The textual syntax defined by this section must be interpreted according to this expression structure before it is translated to an underlying document management system.
+
+An adaptor must translate the resulting expression semantics and must not perform textual substitution of operators where such substitution could change grouping, precedence, escaping, or Boolean meaning.
+
+##### §31.3 Native query translation
+
+An OpenDMA adaptor is responsible for translating a Full-Text Search Expression into facilities provided by the underlying document management system.
+
+The native representation does not have to resemble the OpenDMA syntax.
+
+For example, the OpenDMA expression
+
+`invoice contract -draft`
+
+may be translated by one implementation to a native Boolean expression equivalent to:
+
+`invoice AND contract AND NOT draft`
+
+and by another implementation to a native mandatory-term representation equivalent to:
+
+`+invoice +contract -draft`.
+
+Both implementations conform to this specification if they preserve the OpenDMA-defined matching semantics.
+
+An adaptor must not depend on a configurable or implementation-specific native default Boolean operator.
+
+An adaptor must also explicitly preserve grouping when the native query language uses operator-precedence rules that differ from those defined by OpenDMA.
+
+#### §32 Error handling
+
+A syntactically invalid Full-Text Search Expression must result in a query syntax error and must not be silently reinterpreted as a different valid expression.
+
+Examples of invalid expressions include:
+
+`"unfinished phrase`
+
+`(invoice OR receipt`
+
+`invoice OR`
+
+`OR invoice`
+
+`""`
+
+`-draft`
+
+`invo\xe`
+
+An OpenDMA implementation may provide additional diagnostic information indicating the location and nature of the syntax error.
+
+An adaptor must not rely on a native query parser to repair, ignore, or reinterpret invalid OpenDMA syntax.
+
+#### Examples
+
+The following examples illustrate the normative semantics of the OpenDMA Full-Text Search Expression.
+
+| Expression                                  | Meaning                                                                                                          |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `invoice`                                   | Contains the term `invoice`                                                                                      |
+| `invoice contract`                          | Contains both `invoice` and `contract`                                                                           |
+| `"annual report"`                           | Contains the phrase `annual report`                                                                              |
+| `invoice OR receipt`                        | Contains `invoice` or `receipt`                                                                                  |
+| `invoice -draft`                            | Contains `invoice` and does not contain `draft`                                                                  |
+| `invoice -"internal use"`                   | Contains `invoice` and does not contain the phrase `internal use`                                                |
+| `(invoice OR receipt) customer`             | Contains `customer` and either `invoice` or `receipt`                                                            |
+| `("annual report" OR forecast) 2025 -draft` | Contains `2025`, contains either the phrase `annual report` or the term `forecast`, and does not contain `draft` |
+
+### Section III.2: OpenDMA Object Search Expression
+
+The OpenDMA Object Search Expression defines a portable query language for searching objects in an OpenDMA Repository.
+
+The query language is identified by the qualified name `opendma:ose`.
+
+An OpenDMA Search Query is represented as a JSON object. This JSON representation is intentionally kept simple and does not define a textual query grammar beyond JSON itself.
+
+A query can restrict the result by:
+
+1. the class of the objects,
+2. a folder or container scope,
+3. structured metadata filters, and
+4. a full-text search expression (III.1).
+
+These restrictions are independent and are logically combined using `AND`.
+
+#### §33 Query object
+
+An OpenDMA Search Query is a JSON object with these members:
+
+| Member     | Type   | Required | Meaning                                            |
+| :--------- | :----- | :------- | :------------------------------------------------- |
+| `class`    | String | Yes      | Qualified name of the class or aspect to search    |
+| `scope`    | Object | No       | Restricts the search to a container or folder tree |
+| `filter`   | Object | No       | Structured metadata filter expression              |
+| `fulltext` | String | No       | OpenDMA Full-Text Search Expression (III.1)        |
+
+Example:
+
+```json
+{
+  "class": "acme:Invoice",
+  "scope": {
+    "id": "4711",
+    "recursive": true
+  },
+  "filter": {
+    "op": "and",
+    "args": [
+      {
+        "op": "eq",
+        "property": "acme:Status",
+        "value": "approved"
+      },
+      {
+        "op": "gt",
+        "property": "acme:Amount",
+        "value": 1000
+      }
+    ]
+  },
+  "fulltext": "contract renewal"
+}
+```
+
+An object matches the query if and only if it matches the `class` restriction and all present optional restrictions.
+
+Consequently, the example above has the semantics:
+
+```text
+class
+AND scope
+AND filter
+AND fulltext
+```
+
+An omitted optional member does not restrict the result.
+
+Members not defined by this specification are invalid unless introduced by a later version of this specification.
+
+#### §34 Class restriction
+
+The value of the `class` member must be the qualified name (§1) of a valid class object (§8.3) or a valid aspect object (§8.4).
+
+An object matches the class restriction if it is an instance of the specified class according to the InstanceOf relationship defined in §8.6.
+
+The class restriction therefore includes instances of subclasses of the specified class.
+
+The specified class must be searchable as indicated by its `opendma:Searchable` property.
+
+#### §35 Folder scope
+
+The optional `scope` member restricts the search to objects contained in a Container (§22) or Folder tree (§23).
+
+A container scope is represented as:
+
+```json
+{
+  "id": "4711",
+  "recursive": true
+}
+```
+
+A folder scope contains these members:
+
+| Member      | Type    | Required | Meaning                                                    |
+| :---------- | :------ | :------- | :--------------------------------------------------------- |
+| `id`        | String  | Yes      | `opendma:Id` of the `opendma:Container` defining the scope |
+| `recursive` | Boolean | No       | Whether descendant folders are included                    |
+
+If `recursive` is omitted, its value is `false`.
+
+If `recursive` is `false`, only objects referenced in `opendma:Containees` or `opendma:SubFolders` of the `opendma:Container` referenced by `id` are in scope.
+
+If `recursive` is `true`, additionally objects referenced in `opendma:Containees` or `opendma:SubFolders` of a descendant Folder are in scope.
+
+A descendant Folder is a Folder for which the specified Folder is reachable by following one or more `opendma:Parent` references (§23).
+
+Note: Setting `recursive` to `true` has no effect if the object referenced by `id` does not have the `opendma:Folder` aspect.
+
+The scope restriction is logically combined with the class, filter, and full-text restrictions using `AND`.
+
+#### §36 Filter expressions
+
+The optional `filter` member restricts objects based on their OpenDMA properties.
+
+A filter is a tree of *filter expressions*. Every filter expression evaluates to either `true` or `false` for an object.
+
+Every filter expression is represented by a JSON object containing an `op` member.
+
+The value of `op` identifies the operation performed by the expression and determines which additional members are valid.
+
+For example:
+
+```json
+{
+  "op": "eq",
+  "property": "acme:Status",
+  "value": "approved"
+}
+```
+
+The set of operations is defined by this specification. Unknown operations are invalid. Additional members other than those defined by the `op` are invalid.
+
+Filter expressions do not support custom or implementation-specific operations. Implementation-specific search functionality can instead be exposed through implementation-specific query languages.
+
+##### §36.1 Boolean filter expressions
+
+Boolean filter expressions combine other filter expressions.
+
+The following Boolean operations are defined:
+
+* `and`
+* `or`
+* `not`
+
+An `and` expression contains an `args` array containing two or more filter expressions:
+
+```json
+{
+  "op": "and",
+  "args": [
+    {
+      "op": "eq",
+      "property": "acme:Status",
+      "value": "approved"
+    },
+    {
+      "op": "gt",
+      "property": "acme:Priority",
+      "value": 5
+    }
+  ]
+}
+```
+
+The expression evaluates to `true` if all expressions in `args` evaluate to `true`.
+
+An `or` expression has the same structure:
+
+```json
+{
+  "op": "or",
+  "args": [
+    {
+      "op": "eq",
+      "property": "acme:Status",
+      "value": "approved"
+    },
+    {
+      "op": "eq",
+      "property": "acme:Status",
+      "value": "released"
+    }
+  ]
+}
+```
+
+The expression evaluates to `true` if at least one expression in `args` evaluates to `true`.
+
+A `not` expression contains exactly one filter expression in the `arg` member:
+
+```json
+{
+  "op": "not",
+  "arg": {
+    "op": "eq",
+    "property": "acme:Status",
+    "value": "draft"
+  }
+}
+```
+
+The expression evaluates to the Boolean negation of the expression in `arg`.
+
+There is no implicit Boolean combination of filter expressions. Every combination must be expressed explicitly using `and`, `or`, or `not`.
+
+##### §36.2 Single-valued property predicates
+
+The following predicates operate on single-valued properties:
+
+| Operation | Members                      | Meaning                                         |
+| :-------- | :--------------------------- | :---------------------------------------------- |
+| `eq`      | `property`, `value`          | Property equals value                           |
+| `lt`      | `property`, `value`          | Property is less than value                     |
+| `le`      | `property`, `value`          | Property is less than or equal to value         |
+| `gt`      | `property`, `value`          | Property is greater than value                  |
+| `ge`      | `property`, `value`          | Property is greater than or equal to value      |
+| `between` | `property`, `lower`, `upper` | Property is between the two values, inclusively |
+| `in`      | `property`, `values`         | Property equals one of the supplied values      |
+| `isNull`  | `property`                   | Property has the value `null`                   |
+
+The `property` member contains the qualified name (§1) of an OpenDMA property.
+
+Example of equality:
+
+```json
+{
+  "op": "eq",
+  "property": "acme:Status",
+  "value": "approved"
+}
+```
+
+Example of comparison:
+
+```json
+{
+  "op": "ge",
+  "property": "acme:Amount",
+  "value": 1000
+}
+```
+
+A `between` expression contains explicit lower and upper values:
+
+```json
+{
+  "op": "between",
+  "property": "acme:InvoiceDate",
+  "lower": "2026-01-01T00:00:00Z",
+  "upper": "2026-12-31T23:59:59Z"
+}
+```
+
+Both boundaries are inclusive.
+
+An `in` expression contains a non-empty array of values:
+
+```json
+{
+  "op": "in",
+  "property": "acme:Status",
+  "values": [
+    "approved",
+    "released"
+  ]
+}
+```
+
+It is semantically equivalent to applying `eq` between the property and each supplied value and combining these comparisons with `or`.
+
+An `isNull` expression does not contain a value:
+
+```json
+{
+  "op": "isNull",
+  "property": "acme:DueDate"
+}
+```
+
+Negative variants such as `ne`, `notIn`, `notBetween`, and `isNotNull` are not defined. The equivalent expressions are constructed using the `not` operation.
+
+For example:
+
+```json
+{
+  "op": "not",
+  "arg": {
+    "op": "isNull",
+    "property": "acme:DueDate"
+  }
+}
+```
+
+##### §36.3 Multi-valued property predicates
+
+The following predicates operate on multi-valued properties:
+
+| Operation  | Members              | Meaning                                         |
+| :--------- | :------------------- | :---------------------------------------------- |
+| `hasValue` | `property`, `value`  | Collection contains the supplied value          |
+| `hasAny`   | `property`, `values` | Collection contains at least one supplied value |
+| `isEmpty`  | `property`           | Collection is empty                             |
+
+Example:
+
+```json
+{
+  "op": "hasValue",
+  "property": "acme:Tags",
+  "value": "important"
+}
+```
+
+A `hasAny` expression contains a non-empty array of values:
+
+```json
+{
+  "op": "hasAny",
+  "property": "acme:Tags",
+  "values": [
+    "important",
+    "legal",
+    "finance"
+  ]
+}
+```
+
+The expression evaluates to `true` if at least one value occurs in the multi-valued property.
+
+An `isEmpty` expression is represented as:
+
+```json
+{
+  "op": "isEmpty",
+  "property": "acme:Tags"
+}
+```
+
+As multi-valued OpenDMA properties cannot be `null` (§2.6), `isNull` cannot be applied to a multi-valued property.
+
+The inverse of these predicates is expressed using `not`.
+
+##### §36.4 Property and value types
+
+The property referenced by a filter expression must be compatible with the operation, as defined here:
+
+| **Data type**        | **Cardinality** | `eq` | `lt` | `le` | `gt` | `ge` | `between` | `in` | `isNull` | `hasValue` | `hasAny` | `isEmpty` |
+|:---------------------|:----------------|------|------|------|------|------|-----------|------|----------|------------|----------|-----------|
+| String (§2.1)        | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Integer (§2.1)       | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Short integer (§2.1) | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Long integer (§2.1)  | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Float (§2.1)         | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Double (§2.1)        | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Boolean (§2.1)       | Single          |  X   |  -   |  -   |  -   |  -   |     -     |  X   |    X     |     -      |    -     |     -     |
+| DateTime (§2.1)      | Single          |  X   |  X   |  X   |  X   |  X   |     X     |  X   |    X     |     -      |    -     |     -     |
+| Binary (§2.1)        | Single          |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    X     |     -      |    -     |     -     |
+| Reference (§2.2)     | Single          |  X   |  -   |  -   |  -   |  -   |     -     |  X   |    X     |     -      |    -     |     -     |
+| Content (§2.3)       | Single          |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    X     |     -      |    -     |     -     |
+| String (§2.1)        | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Integer (§2.1)       | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Short integer (§2.1) | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Long integer (§2.1)  | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Float (§2.1)         | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Double (§2.1)        | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Boolean (§2.1)       | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| DateTime (§2.1)      | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Binary (§2.1)        | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     -      |    -     |     X     |
+| Reference (§2.2)     | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     X      |    X     |     X     |
+| Content (§2.3)       | Multi           |  -   |  -   |  -   |  -   |  -   |     -     |  -   |    -     |     -      |    -     |     X     |
+
+Values supplied to a predicate must be compatible with the OpenDMA data type of the referenced property.
+
+All values in a `values` array must be compatible with the data type of the referenced property.
+
+The JSON value `null` is not valid as `value`, `upper`, `lower` or in the `values` array. Use the `isNull` operation instead.
+
+Properties of type Reference are compared against the object identifier represented as string.
+
+Properties of type DateTime are compared against ISO-8601 formatted string values.
+
+The ordering/collation of string properties is implementation-dependent.
+
+Case sensitivity and Unicode normalization for the `eq` operation between two strings is implementation dependent.
+
+JSON numeric values are interpreted according to the referenced property's OpenDMA numeric type.
+
+##### §36.5 Boolean and null semantics
+
+OpenDMA filter expressions use Boolean `true` and `false` semantics and do not use SQL three-valued Boolean logic.
+
+A comparison against a single-valued property whose value is `null` evaluates to `false`, except for `isNull`.
+
+For example, if `acme:Status` is `null`:
+
+```json
+{
+  "op": "eq",
+  "property": "acme:Status",
+  "value": "draft"
+}
+```
+
+evaluates to `false`.
+
+Consequently:
+
+```json
+{
+  "op": "not",
+  "arg": {
+    "op": "eq",
+    "property": "acme:Status",
+    "value": "draft"
+  }
+}
+```
+
+evaluates to `true`.
+
+A property referenced by a filter expression is not required to be part of the effective property list of the class or aspect specified by the query's `class` member.
+
+For each candidate object, a property predicate is evaluated against the properties actually present on that object.
+
+If the referenced property is not part of the combined effective property lists (§10) of the object's class and applied aspects (§6.1), the predicate evaluates to `false`.
+
+This allows filters to reference properties introduced by subclasses or aspects without requiring explicit class or aspect predicates.
+
+#### §37 Full-text restriction
+
+The optional `fulltext` member contains an OpenDMA Full-Text Search Expression as defined in Section III.1.
+
+Example:
+
+```json
+{
+  "class": "opendma:Document",
+  "fulltext": "\"annual report\" hydrogen"
+}
+```
+
+The full-text expression is evaluated independently from the metadata `filter`.
+
+If both `filter` and `fulltext` are present, both must match.
+
+For example:
+
+```json
+{
+  "class": "opendma:Document",
+  "filter": {
+    "op": "eq",
+    "property": "acme:Status",
+    "value": "approved"
+  },
+  "fulltext": "contract"
+}
+```
+
+has the semantics:
+
+```text
+class
+AND (acme:Status = "approved")
+AND fulltext("contract")
+```
+
+A full-text search expression cannot occur inside a `filter` expression.
+
+Consequently, this query model intentionally cannot express arbitrary Boolean combinations between metadata predicates and full-text predicates, such as:
+
+```text
+fulltext("draft") OR acme:Status = "draft"
+```
+
+Such combinations are outside the portable OpenDMA Search Query model and may be exposed by an adaptor through an implementation-specific query language.
 
 ## Copyright and Licensing
 
