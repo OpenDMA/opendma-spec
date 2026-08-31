@@ -336,8 +336,13 @@ A property declared in a super class is overridden by a property info object if 
    2. the valid class object referenced by `opendma:ReferenceClass` of the property info object in the effective properties list of the
 	  valid class object referenced by *c*’s `opendma:SuperClass` property is or extends the valid class object referenced by
 	  `opendma:ReferenceClass` of the property info object in `opendma:DeclaredProperties`
+4. the value of `opendma:MultiValue` equals the value declared in the super class
 
 Only properties of the “Reference” data type can be overridden.
+
+> Notes on property override:
+> - The value of these properties can differ in overridden property info objects: `opendma:DisplayName`, `opendma:Required`, `opendma:ReadOnly`, `opendma:Hidden`, `opendma:System`, `opendma:Choices`
+> - ECM systems of some vendors allow property overrides to narrow and widen ` opendma:ReferenceClass`. Hence, this standard needs to adopt this although this weakens the `InstanceOf` relationship
 
 #### §11 Choice value object
 
