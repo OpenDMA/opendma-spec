@@ -362,6 +362,8 @@ A *choice value object* is an object with at least these properties:
 12. `opendma:BinaryValue`, single value, Binary, nullable
 13. `opendma:ReferenceValue`, single value, Reference, nullable
 
+Exactly one of the `opendma:...Value` properties must be non null.
+
 > Note:  
 > Due to the reflection limitations (§6.1), the `opendma:ReferenceValue` property must only contain valid references. It must
 > only contain references to objects whose `opendma:Class` property contains a reference to a class info object that is or
