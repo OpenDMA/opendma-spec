@@ -179,7 +179,8 @@ A *class info object* is an object with at least these properties:
 These constraints apply to the properties of valid class objects (§8.3) and valid aspect objects (§8.4):
 1.  The restrictions of the `opendma:SuperClass` property are defined in §8.
 2.  The set of property info objects referenced by the `opendma:Properties` matches exactly the effective properties list (§10) of this class, making it effectively a derived read-only property
-3.  The value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
+3.  If `opendma:Aspect` is `false`, the value of the `opendma:SubClasses` property is exactly the set of valid class objects whose `opendma:SuperClass` property contains a reference to this class info object
+4.  If `opendma:Aspect` is `true`, the value of the `opendma:SubClasses` property is exactly the set of valid aspect objects whose `opendma:SuperClass` property contains a reference to this class info object
 5.  The values of `opendma:IncludedAspects` are all valid aspect objects
 
 > Conclusion:  
