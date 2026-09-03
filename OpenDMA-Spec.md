@@ -714,20 +714,235 @@ The `opendma:Association` aspect declares these properties:
 
 ### Section II.2: Extended document management model
 
-Version 0.8 of this standard does not define document management data models beyond the basic model.
+The set of extended document management classes and aspects consists of:
 
-The following features are currently discussed to be added to this standard:
-- Renditions
-- Annotations or notes
-- Taxonomies like tags and categories
-- Compound documents
-- Legal holds
-- Retention and Disposition
-- Permissions and access control
+- CompositeDocument
+  A *CompositeDocument* is a document that defines an ordered hierarchical structure of references to other documents,
+  which may themselves be CompositeDocuments, allowing multiple independently managed documents to be treated as a single
+  logical document.
+
+- ComponentLink
+  A *ComponentLink* is a relationship that associates a CompositeDocument with one of its component documents and may define
+  properties such as ordering, version binding, or selection rules for that component.
+
+- LegalHold
+  A *LegalHold* represents a legal or regulatory hold and defines the reason or context for preserving associated items
+  from deletion or disposition.
+
+- HoldLink
+  A *HoldLink* is a relationship that associates a LegalHold with an item, causing that item to remain protected while the
+  relationship exists.
+
+- Holdable
+  The *Holdable* aspect indicates that objects can be part of a legal hold. 
+
+- Note
+  A *Note* is a user-authored text comment associated with a document as a whole.
+
+- Commentable
+  The *Commentable* aspect indicates that objects can have associated user-authored notes or comments. 
+
+- Annotation
+  An *Annotation* is a graphical markup associated with a specific position or region within a document’s rendered content.
+
+- Annotatable
+  The *Annotatable* aspect indicates that objects can have associated graphical annotations. 
+
+- Rendition
+  A *Rendition* represents an alternative binary representation of an object’s content, typically derived from its original
+  content in a different format or form.
+
+- Renditionable
+  The *Renditionable* aspect indicates that objects can have associated renditions. 
+
+- EffectiveAccess
+  The *EffectiveAccess* aspect exposes the resolved item-scoped access-control state of an object by identifying the
+  principals that are allowed or denied specific operations.
+
+- TypeBasedAccess
+  The *TypeBasedAccess* aspect identifies the principals that are allowed or denied specific operations on objects of the
+  class this aspect is applied to.
+
+- SearchTemplate
+  A *SearchTemplate* represents a reusable, parameterized search definition that combines fixed search criteria with values
+  supplied at execution time.
+
+#### §26 CompositeDocument
+
+The `opendma:CompositeDocument` aspect extends `opendma:Document` and declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Components`             | Reference | Multi  | Optional | Set of directly contained/referenced child documents. Reference type: `opendma:Document`                          |
+| `opendma:ComponentLinks`         | Reference | Multi  | Optional | Set of links between this Composite Document and the contained documents. Reference type: `opendma:ComponentLink` |
+
+The `opendma:ComponentLinks` property is the authoritative relationship. The `opendma:Components` property is a derived property for convenience.
+
+Component links are not guaranteed to be loop free.
+
+#### §27 ComponentLink
+
+The `opendma:ComponentLink` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:ParentComposite`        | Reference | Single | Required | The Composite Document that owns this Link. Reference type: `opendma:CompositeDocument`                           |
+| `opendma:Component`              | Reference | Single | Required | Component Document contained in the Composite Document. Reference type: `opendma:Document`                        |
+| `opendma:ComponentOrder`         | Integer   | Single | Required | Defines the component's ordering among the other components of the same parent composite document.                |
+
+#### §28 LegalHold
+
+The `opendma:LegalHold` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:HoldTitle`              | String    | Single | Required | Display title  of the hold.                                                                                       |
+| `opendma:HoldDescription`        | String    | Single | Optional | Explanatory text describing the reason, case, or purpose of the hold.                                             |
+| `opendma:HoldObjects`            | Reference | Multi  | Optional | Set of objects currently subject to the hold. Reference type: `opendma:Holdable`                                  |
+| `opendma:HoldLinks`              | Reference | Multi  | Optional | Set of links between this Hold and the objects under hold. Reference type: `opendma:HoldLink`                     |
+
+##### §28.1 Legal hold discovery
+
+The `opendma:Repository` class is extended as follows to provide the set of all defined legal holds:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:AllLegalHolds`          | Reference | Multi  | Optional | Set of all legal holds defined in this repository. Reference type: `opendma:LegalHold`                            |
+
+#### §29 HoldLink
+
+The `opendma:HoldLink` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:LegalHold`              | Reference | Single | Required | The Legal Hold that owns this Link. Reference type: `opendma:LegalHold`                                           |
+| `opendma:HoldObject`             | Reference | Single | Required | The object under legal hold. Reference type: `opendma:Holdable`                                                   |
+
+#### §30 Holdable
+
+The `opendma:Holdable` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:AppliedLegalHolds`      | Reference | Multi  | Optional | The set of Legal Holds this object is currently subject to. Reference type: `opendma:LegalHold`                   |
+| `opendma:LegalHoldLinks`         | Reference | Multi  | Optional | Set of links between this object and the Holds this object is subject to. Reference type: `opendma:HoldLink`      |
+
+#### §31 Note
+
+The `opendma:Note` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:NoteText`               | String    | Single | Optional | Plain text of this note                                                                                           |
+| `opendma:NoteOrder`              | Integer   | Single | Required | Defines the notes's ordering among the other notes of the same commentable object.                                |
+
+Implementations that support notes in rich text formats like HTML or markdown are required to make the plain text available as `opendma:NoteText`.
+
+#### §32 Commentable
+
+The `opendma:Commentable` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Notes`                  | Reference | Multi  | Optional | Set of notes associated with this object. Reference type: `opendma:Note`                                          |
+
+#### §33 Annotation
+
+The `opendma:Annotation` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:AnnotatedContent`       | Reference | Single | Optional | The content element this annotation applies to, or null for primary content element. Reference type: `opendma:ContentElement` |
+| `opendma:AnnotationData`         | Content   | Single | Optional | The native viewer specific data.                                                                                  |
+| `opendma:AnnotationFormat`       | String    | Single | Optional | The format of the native viewer specific data.                                                                    |
+| `opendma:PortableAnnotation`     | Content   | Single | Optional | Annotation in the OpenDMA Portable Annotation Format (OPAF)                                                       |
+
+#### §34 Annotatable
+
+The `opendma:Annotatable` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Annotations`            | Reference | Multi  | Optional | Set of graphical annotations associated with this object. Reference type: `opendma:Annotation`                    |
+
+#### §35 Renditionable
+
+The `opendma:Renditionable` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:Renditions`             | Reference | Multi  | Optional | Set of renditions derived from this object. Reference type: `opendma:Rendition`                                   |
+
+#### §36 Rendition
+
+The `opendma:Rendition` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:RenditionData`          | Content   | Single | Optional | Binary data of rendition, if online.                                                                              |
+| `opendma:RenditionContentType`   | String    | Single | Required | The content type (aka MIME type) of the rendition data                                                            |
+| `opendma:RenditionName`          | String    | Single | Optional | Internal name of this rendition.                                                                                  |
+| `opendma:RenditionOnLine`        | Boolean   | Single | Required | Indicates if the rendition data is available on the server, or if it is created on request                        |
+| `opendma:RenditionFailed`        | Boolean   | Single | Optional | Indicates that the generation of this rendition has failed                                                        |
+
+Repositories can allow renditions to be externally provided or generate Renditions internally. In the latter case, they can decide to generate
+renditions upfront or on request. The flag `opendma:RenditionOnLine` indicates if the rendition is available on the server and can immediately be
+downloaded. Otherwise, the server will generate the rendition in the background if either the `opendma:RenditionData` property is read or if the
+`opendma:RenditionOnLine` property is set to true. A positive value of `opendma:RenditionFailed` indicates that the server has already tried to
+generate this rendition and failed. It will not attempt to create the rendition if requested. Reading the `opendma:RenditionData` property of a
+rendition that is not yet available can either take longer than usual, might run in a timeout, or can even fail with an error message.
+
+If a server knows that it cannot provide a rendition, it should not provide a `opendma:Rendition` object for this type of rendition.
+
+#### §37 EffectiveAccess
+
+The `opendma:EffectiveAccess` aspect declares these properties:
+
+| Property                         | Type      | Card   | Req/Opt  | Contents                                                                                                          |
+|:---------------------------------|:----------|:-------|:---------|:------------------------------------------------------------------------------------------------------------------|
+| `opendma:ReadAllowedPrincipals`  | String    | Multi  | Optional | Set of principal IDs with read access to this object                                                              |
+| `opendma:ReadDeniedPrincipals`   | String    | Multi  | Optional | Set of principal IDs which are explicitly denied read access to this object                                       |
+
+This aspect is used per object by systems defining permissions per item.
+
+A user account has read access to this object if its user ID or one of the group IDs are contained in `opendma:ReadAllowedPrincipals`,
+but none of them are contained in `opendma:ReadDeniedPrincipals`.
+
+#### §38 TypeBasedAccess
+
+The `opendma:TypeBasedAccess` aspect declares these properties:
+
+| Property                                | Type      | Card   | Req/Opt  | Contents                                                                                                   |
+|:----------------------------------------|:----------|:-------|:---------|:-----------------------------------------------------------------------------------------------------------|
+| `opendma:InstanceReadAllowedPrincipals` | String    | Multi  | Optional | Set of principal IDs with read access to instances of this class                                           |
+| `opendma:InstanceReadDeniedPrincipals`  | String    | Multi  | Optional | Set of principal IDs which are explicitly denied read access to instances of this class                    |
+| `opendma:InstanceAccessEvaluationMode`  | String    | Single | Required | Defines how EffectiveAccess and TypeBasedAccess are evaluated in access decisions                          |
+
+This aspect is used on `opendma:Class` instances by systems defining permissions per type.
+
+A user account has read access to instances of the class if its user ID or one of the group IDs are contained in `opendma:InstanceReadAllowedPrincipals`,
+but none of them are contained in `opendma:InstanceReadDeniedPrincipals`.
+
+The value of `opendma:InstanceAccessEvaluationMode` defines how `opendma:EffectiveAccess` and `opendma:TypeBasedAccess` are combined based on this table:
+
+| `InstanceAccessEvaluationMode` | Access Decision                                                                 |
+|--------------------------------|---------------------------------------------------------------------------------|
+| `item`                         | Only `opendma:EffectiveAccess` is used and `opendma:TypeBasedAccess` is ignored |
+| `type`                         | Only `opendma:TypeBasedAccess` is used and `opendma:EffectiveAccess` is ignored |
+
+#### §39 SearchTemplate
+
+The `opendma:SearchTemplate` aspect declares these properties:
+
+| Property                            | Type      | Card   | Req/Opt  | Contents                                                                                                       |
+|:------------------------------------|:----------|:-------|:---------|:---------------------------------------------------------------------------------------------------------------|
+| `opendma:SearchTemplateName`        | String    | Single | Required | Display name of this search template                                                                           |
+| `opendma:SearchTemplateDescription` | String    | Single | Optional | Description of this search plate                                                                               |
+| `opendma:PortableSearchTemplate`    | Content   | Single | Required | Search Template in the OpenDMA Portable Search Template Format (OPSTF)                                         |
 
 ## Section III: OpenDMA search model
 
-### §26 Search operation
+### §40 Search operation
 
 OpenDMA supports the following global operation
 
@@ -754,11 +969,11 @@ The OpenDMA Full-Text Search Expression is intentionally limited. It does not pr
 
 An OpenDMA Full-Text Search Expression is independent of the native full-text query syntax of the underlying document management system. An OpenDMA adaptor must preserve the semantics defined by this section when translating an expression to a native query language.
 
-#### §27 Full-text search semantics
+#### §41 Full-text search semantics
 
 An OpenDMA Full-Text Search Expression defines the logical conditions for matching objects against an implementation-provided full-text corpus. OpenDMA defines the logical semantics of the expression, while the composition of the full-text corpus, linguistic interpretation of terms and phrases, and relevance calculation are implementation dependent as defined below.
 
-##### §27.1 Full-text corpus
+##### §41.1 Full-text corpus
 
 A Full-Text Search Expression is evaluated against the **full-text corpus** provided by the underlying OpenDMA implementation for a searchable object.
 
@@ -774,7 +989,7 @@ For example,
 
 searches the full-text corpus for the term `invoice`. It does not specify whether the term has to occur in document content, a title, a description, or another indexed value.
 
-##### §27.2 Matching and linguistic behavior
+##### §41.2 Matching and linguistic behavior
 
 The following behavior is implementation dependent:
 
@@ -807,7 +1022,7 @@ are equivalent.
 
 Implementations should expose relevant full-text capabilities or configuration information where possible, but differences in linguistic analysis do not by themselves constitute violations of the Full-Text Search Expression semantics.
 
-##### §27.3 Relevance and ordering
+##### §41.3 Relevance and ordering
 
 A Full-Text Search Expression defines whether an object matches a full-text condition. It does not define a portable relevance-scoring algorithm.
 
@@ -817,11 +1032,11 @@ Unless another OpenDMA search option specifies an ordering, an implementation ma
 
 Relevance scores produced by different OpenDMA adaptors, repositories, search engines, or separate result sets are not required to be numerically comparable.
 
-#### §28 Lexical elements
+#### §42 Lexical elements
 
 An OpenDMA Full-Text Search Expression is composed of terms, phrases, whitespace, operators, grouping characters, and escape sequences.
 
-##### §28.1 Terms
+##### §42.1 Terms
 
 A **term** represents a single full-text search term.
 
@@ -860,7 +1075,7 @@ The linguistic interpretation of a term is implementation dependent as defined i
 
 OpenDMA does not require two implementations to consider linguistic variants of a term equivalent.
 
-##### §28.2 Phrases
+##### §42.2 Phrases
 
 A **phrase** is a sequence of one or more words enclosed in double quotation marks (`"`).
 
@@ -876,7 +1091,7 @@ Phrase analysis, including tokenization, stemming, stop-word handling, and the t
 
 An empty phrase is invalid.
 
-##### §28.3 Whitespace
+##### §42.3 Whitespace
 
 Whitespace separates adjacent clauses and therefore represents conjunction where applicable.
 
@@ -888,7 +1103,7 @@ Multiple whitespace characters between clauses have the same meaning as a single
 
 Whitespace inside a quoted phrase is part of the phrase.
 
-##### §28.4 Escaping
+##### §42.4 Escaping
 
 The backslash character (`\`) is used to escape characters that would otherwise have syntactic meaning.
 
@@ -908,7 +1123,7 @@ An implementation must remove OpenDMA escaping before translating the value to t
 
 Native escaping rules must not change the semantics of the OpenDMA expression.
 
-##### §28.5 Reserved syntax
+##### §42.5 Reserved syntax
 
 The following characters or character sequences have syntactic meaning in an OpenDMA Full-Text Search Expression when used in the positions defined by this section:
 
@@ -936,12 +1151,12 @@ is a single search term and must not be interpreted as a request to search a pro
 
 An adaptor must not expose native field-selection syntax through an OpenDMA Full-Text Search Expression.
 
-#### §29 Boolean expressions
+#### §43 Boolean expressions
 
 Terms and phrases can be combined into Boolean expressions using conjunction, disjunction, and exclusion.
 Grouped expressions can be combined into Boolean expressions using conjunction and disjunction only.
 
-##### §29.1 Logical conjunction
+##### §43.1 Logical conjunction
 
 Logical conjunction is represented implicitly by whitespace between adjacent expressions.
 
@@ -963,7 +1178,7 @@ An OpenDMA adaptor must preserve this conjunction independently of the default B
 
 An adaptor must not assume that adjacent native search terms have conjunction semantics. It must explicitly express conjunction in the native query language where required.
 
-##### §29.2 Logical disjunction
+##### §43.2 Logical disjunction
 
 Logical disjunction is represented by the uppercase keyword `OR`.
 
@@ -991,7 +1206,7 @@ The literal uppercase term `OR` can be searched by representing it as a phrase:
 
 `"OR"`
 
-##### §29.3 Exclusion
+##### §43.3 Exclusion
 
 A term or phrase can be excluded by prefixing it with a minus sign (`-`).
 
@@ -1043,7 +1258,7 @@ and
 
 are invalid Full-Text Search Expressions.
 
-##### §29.4 Grouping
+##### §43.4 Grouping
 
 Parentheses can be used to group expressions.
 
@@ -1061,7 +1276,7 @@ An OpenDMA implementation must preserve the expression tree represented by paren
 
 In particular, an adaptor must not rely on native operator precedence if the underlying query language uses different precedence rules.
 
-##### §29.5 Operator precedence
+##### §43.5 Operator precedence
 
 The operators of an OpenDMA Full-Text Search Expression have the following precedence, from highest to lowest:
 
@@ -1088,7 +1303,7 @@ means:
 
 Parentheses can be used whenever a different grouping is required or when explicit grouping improves clarity.
 
-#### §30 Grammar
+#### §44 Grammar
 
 The syntax can be described by the following EBNF.
 
@@ -1122,11 +1337,11 @@ group               ::= "("
 
 An implementation may use an equivalent grammar provided that it accepts and rejects the same expressions and produces the same expression semantics.
 
-#### §31 Portability
+#### §45 Portability
 
 An OpenDMA adaptor must preserve the semantics of a Full-Text Search Expression independently of the syntax, default operators, operator precedence, and additional capabilities of the underlying full-text search system.
 
-##### §31.1 Unsupported full-text features
+##### §45.1 Unsupported full-text features
 
 The following features are not defined by this version of the OpenDMA Full-Text Search Expression:
 
@@ -1151,7 +1366,7 @@ For example, if an underlying search system interprets `*` as a wildcard, an Ope
 
 This restriction ensures that the same Full-Text Search Expression has portable semantics across OpenDMA implementations.
 
-##### §31.2 Expression model
+##### §45.2 Expression model
 
 A Full-Text Search Expression represents an abstract Boolean full-text expression.
 
@@ -1187,7 +1402,7 @@ The textual syntax defined by this section must be interpreted according to this
 
 An adaptor must translate the resulting expression semantics and must not perform textual substitution of operators where such substitution could change grouping, precedence, escaping, or Boolean meaning.
 
-##### §31.3 Native query translation
+##### §45.3 Native query translation
 
 An OpenDMA adaptor is responsible for translating a Full-Text Search Expression into facilities provided by the underlying document management system.
 
@@ -1211,7 +1426,7 @@ An adaptor must not depend on a configurable or implementation-specific native d
 
 An adaptor must also explicitly preserve grouping when the native query language uses operator-precedence rules that differ from those defined by OpenDMA.
 
-#### §32 Error handling
+#### §46 Error handling
 
 A syntactically invalid Full-Text Search Expression must result in a query syntax error and must not be silently reinterpreted as a different valid expression.
 
@@ -1267,7 +1482,7 @@ A query can restrict the result by:
 
 These restrictions are independent and are logically combined using `AND`.
 
-#### §33 Query object
+#### §47 Query object
 
 An OpenDMA Search Query is a JSON object with these members:
 
@@ -1321,7 +1536,7 @@ An omitted optional member does not restrict the result.
 
 Members not defined by this specification are invalid unless introduced by a later version of this specification.
 
-#### §34 Class restriction
+#### §48 Class restriction
 
 The value of the `class` member must be the qualified name (§1) of a valid class object (§8.3) or a valid aspect object (§8.4).
 
@@ -1331,7 +1546,7 @@ The class restriction therefore includes instances of subclasses of the specifie
 
 The specified class must be searchable as indicated by its `opendma:Searchable` property.
 
-#### §35 Folder scope
+#### §49 Folder scope
 
 The optional `scope` member restricts the search to objects contained in a Container (§22) or Folder tree (§23).
 
@@ -1363,7 +1578,7 @@ Note: Setting `recursive` to `true` has no effect if the object referenced by `i
 
 The scope restriction is logically combined with the class, filter, and full-text restrictions using `AND`.
 
-#### §36 Filter expressions
+#### §50 Filter expressions
 
 The optional `filter` member restricts objects based on their OpenDMA properties.
 
@@ -1387,7 +1602,7 @@ The set of operations is defined by this specification. Unknown operations are i
 
 Filter expressions do not support custom or implementation-specific operations. Implementation-specific search functionality can instead be exposed through implementation-specific query languages.
 
-##### §36.1 Boolean filter expressions
+##### §50.1 Boolean filter expressions
 
 Boolean filter expressions combine other filter expressions.
 
@@ -1458,7 +1673,7 @@ The expression evaluates to the Boolean negation of the expression in `arg`.
 
 There is no implicit Boolean combination of filter expressions. Every combination must be expressed explicitly using `and`, `or`, or `not`.
 
-##### §36.2 Single-valued property predicates
+##### §50.2 Single-valued property predicates
 
 The following predicates operate on single-valued properties:
 
@@ -1546,7 +1761,7 @@ For example:
 }
 ```
 
-##### §36.3 Multi-valued property predicates
+##### §50.3 Multi-valued property predicates
 
 The following predicates operate on multi-valued properties:
 
@@ -1595,7 +1810,7 @@ As multi-valued OpenDMA properties cannot be `null` (§2.6), `isNull` cannot be 
 
 The inverse of these predicates is expressed using `not`.
 
-##### §36.4 Property and value types
+##### §50.4 Property and value types
 
 The property referenced by a filter expression must be compatible with the operation, as defined here:
 
@@ -1640,7 +1855,7 @@ Case sensitivity and Unicode normalization for the `eq` operation between two st
 
 JSON numeric values are interpreted according to the referenced property's OpenDMA numeric type.
 
-##### §36.5 Boolean and null semantics
+##### §50.5 Boolean and null semantics
 
 OpenDMA filter expressions use Boolean `true` and `false` semantics and do not use SQL three-valued Boolean logic.
 
@@ -1681,7 +1896,7 @@ If the referenced property is not part of the combined effective property lists 
 
 This allows filters to reference properties introduced by subclasses or aspects without requiring explicit class or aspect predicates.
 
-#### §37 Full-text restriction
+#### §51 Full-text restriction
 
 The optional `fulltext` member contains an OpenDMA Full-Text Search Expression as defined in Section III.1.
 
