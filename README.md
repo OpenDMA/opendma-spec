@@ -57,6 +57,14 @@ Latest OpenAPI specification for a RESTful service: [0.8](https://github.com/Ope
 
 Previous versions are available as tags in this git repository.
 
+## Design Rational and Research
+
+This standard is based on extensive [research](https://github.com/OpenDMA/opendma-spec/blob/main/research/README.md)
+across the most important ECM systems.
+
+The specification is backed by a [Design Rational](https://github.com/OpenDMA/opendma-spec/blob/main/design-rational.md)
+document with an extensive architectural decision documentation.
+
 ## API Implementations
 
 OpenDMA APIs are available for multiple programming languages:
